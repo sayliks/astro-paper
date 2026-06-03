@@ -62,3 +62,24 @@ Error: Failed to load url astro:server-app.js (resolved id: astro:server-app.js)
 [2m22:50:57[22m [34m[200][39m / [2m32ms[22m
 [2m22:51:07[22m [34m[200][39m / [2m8ms[22m
 [2m22:51:08[22m [34m[200][39m /about/ [2m26ms[22m
+[2m22:51:56[22m [34m[200][39m /about/ [2m4ms[22m
+[2m22:52:28[22m [34m[watch][39m src/components/Main.astro
+[2m22:52:29[22m [34m[200][39m /about/ [2m28ms[22m
+[2m22:52:32[22m [34m[200][39m /about/ [2m7ms[22m
+[2m22:52:35[22m [34m[watch][39m /src/styles/global.css
+[2m22:52:35[22m [34m[200][39m /about/ [2m23ms[22m
+[2m22:52:45[22m [34m[200][39m /about [2m5ms[22m
+[2m22:53:05[22m [34m[200][39m /about/ [2m4ms[22m
+[2m22:53:15[22m [34m[200][39m / [2m11ms[22m
+[2m22:53:16[22m [34m[200][39m /posts/ [2m39ms[22m
+[2m22:53:17[22m [34m[200][39m /tags/ [2m32ms[22m
+[2m22:53:17[22m [34m[200][39m /posts/ [2m11ms[22m
+[2m22:53:18[22m [34m[200][39m /tags/ [2m7ms[22m
+[2m22:53:18[22m [34m[200][39m /about/ [2m5ms[22m
+[2m22:53:20[22m [34m[200][39m / [2m8ms[22m
+[2m22:53:22[22m [34m[200][39m /search/ [2m22ms[22m
+[2m22:53:22[22m [34m[vite][39m [32m✨ new dependencies optimized: [33m@pagefind/default-ui[32m[39m
+[2m22:53:22[22m [34m[vite][39m [32m✨ optimized dependencies changed. reloading[39m
+[2m22:53:22[22m [34m[200][39m /search/ [2m6ms[22m
+[2m22:53:26[22m [34m[200][39m / [2m5ms[22m
+[2m22:53:28[22m [34m[200][39m / [2m7ms[22m

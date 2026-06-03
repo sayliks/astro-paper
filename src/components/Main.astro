@@ -6,14 +6,28 @@ type Props = {
   pageTitle: string | [string, string];
   pageDesc?: string;
   class?: string;
+  animateWave?: boolean;
 };
 
-const { pageTitle, pageDesc, class: className } = Astro.props;
+const {
+  pageTitle,
+  pageDesc,
+  class: className,
+  animateWave = false,
+} = Astro.props;
 
 const locale = Astro.currentLocale ?? config.site.lang;
 const backUrl = config.features.showBackButton
   ? Astro.url.pathname
   : getRelativeLocaleUrl(locale, "");
+const titleText = Array.isArray(pageTitle) ? pageTitle.join("") : pageTitle;
+const waveEmoji = "👋";
+const waveIndex = animateWave ? titleText.indexOf(waveEmoji) : -1;
+const hasAnimatedWave = waveIndex >= 0;
+const titleBeforeWave = hasAnimatedWave ? titleText.slice(0, waveIndex) : "";
+const titleAfterWave = hasAnimatedWave
+  ? titleText.slice(waveIndex + waveEmoji.length)
+  : "";
 ---
 
 <main
@@ -21,10 +35,64 @@ const backUrl = config.features.showBackButton
   id="main-content"
   class:list={["app-layout pb-4", className]}
 >
-  <h1 class="text-2xl font-semibold sm:text-3xl">{pageTitle}</h1>
+  <h1
+    class="text-2xl font-semibold sm:text-3xl"
+    aria-label={hasAnimatedWave ? titleText : undefined}
+  >
+    {
+      hasAnimatedWave ? (
+        <>
+          {titleBeforeWave}
+          <span class="wave-hand" aria-hidden="true">{waveEmoji}</span>
+          {titleAfterWave}
+        </>
+      ) : (
+        pageTitle
+      )
+    }
+  </h1>
   <p class="mt-2 mb-6 italic">{pageDesc}</p>
   <slot />
 </main>
+
+<style>
+  .wave-hand {
+    display: inline-block;
+    transform-origin: 70% 70%;
+    animation: wave-hand 1.8s ease-in-out infinite;
+  }
+
+  @keyframes wave-hand {
+    0%,
+    60%,
+    100% {
+      transform: rotate(0deg);
+    }
+
+    10%,
+    30% {
+      transform: rotate(14deg);
+    }
+
+    20% {
+      transform: rotate(-8deg);
+    }
+
+    40% {
+      transform: rotate(-4deg);
+    }
+
+    50% {
+      transform: rotate(10deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wave-hand {
+      animation: none;
+    }
+  }
+</style>
 
 <script>
   document.addEventListener("astro:page-load", () => {
