@@ -26,6 +26,7 @@ export const GET: APIRoute = async context => {
   const svg = await satori(
     {
       type: "div",
+      key: null,
       props: {
         style: {
           background: "#fefbfb",
