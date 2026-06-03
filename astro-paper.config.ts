@@ -3,13 +3,13 @@ import { defineAstroPaperConfig } from "./src/types/config";
 export default defineAstroPaperConfig({
   site: {
     url: "https://astro-paper.pages.dev/",
-    title: "sayliks corner",
-    description: "A minimal, responsive and SEO-friendly Astro blog theme.",
+    title: "sayliks 的角落",
+    description: "一个用来记录学习、项目、阅读、音乐和日常想法的个人空间。",
     author: "sayliks",
     profile: "https://github.com/sayliks",
     ogImage: "default-og.jpg",
-    lang: "en",
-    timezone: "Asia/Bangkok",
+    lang: "zh-CN",
+    timezone: "Asia/Hong_Kong",
     dir: "ltr",
   },
   posts: {
@@ -29,9 +29,21 @@ export default defineAstroPaperConfig({
     search: "pagefind",
   },
   socials: [
-    { name: "github", url: "https://github.com/sayliks" },
-    { name: "x", url: "https://x.com/frsayliks" },
-    { name: "mail", url: "mailto:sayliks@outlook.com" },
+    {
+      name: "github",
+      url: "https://github.com/sayliks",
+      linkTitle: "GitHub 上的 sayliks",
+    },
+    {
+      name: "x",
+      url: "https://x.com/frsayliks",
+      linkTitle: "X 上的 sayliks",
+    },
+    {
+      name: "mail",
+      url: "mailto:sayliks@outlook.com",
+      linkTitle: "给 sayliks 发邮件",
+    },
   ],
   shareLinks: [
     { name: "whatsapp", url: "https://wa.me/?text=" },

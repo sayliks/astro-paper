@@ -32,13 +32,18 @@ const navLabels: Record<string, string> = {
   search: t.nav.search,
 };
 
+const pageLabel = (page: string) =>
+  locale.toLowerCase().startsWith("zh")
+    ? `第 ${page} 页`
+    : `${t.pagination.page.toLowerCase()} ${page}`;
+
 // if breadcrumb is Home > Posts > [page] <etc>
 // replace Posts with localized "Posts (page number)"
 if (breadcrumbList[0] === "posts") {
-  breadcrumbList.splice(
+breadcrumbList.splice(
     0,
     2,
-    `${t.nav.posts} (${t.pagination.page.toLowerCase()} ${breadcrumbList[1] || 1})`
+    `${t.nav.posts} (${pageLabel(breadcrumbList[1] || "1")})`
   );
 }
 
@@ -51,13 +56,13 @@ if (breadcrumbList[0] === "tags" && !isNaN(Number(breadcrumbList[2]))) {
     `${decodeSegment(breadcrumbList[1])} ${
       Number(breadcrumbList[2]) === 1
         ? ""
-        : `(${t.pagination.page.toLowerCase()} ${breadcrumbList[2]})`
+        : `(${pageLabel(breadcrumbList[2])})`
     }`
   );
 }
 ---
 
-<nav class="app-layout mt-8 mb-1" aria-label="breadcrumb">
+<nav class="app-layout mt-8 mb-1" aria-label="面包屑导航">
   <ul
     class="font-light [&>li]:inline [&>li:not(:last-child)>a]:hover:opacity-100"
   >

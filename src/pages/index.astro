@@ -41,30 +41,29 @@ const homePath = getRelativeLocaleUrl(locale, "");
         target="_blank"
         href={`${import.meta.env.BASE_URL.replace(/\/?$/, "/")}rss.xml`}
         class="inline-block"
-        aria-label="sayliks RSS Feed"
-        title="sayliks RSS Feed"
+        aria-label="sayliks 的 RSS 订阅"
+        title="sayliks 的 RSS 订阅"
       >
         <IconRss
           width={20}
           height={20}
           class="stroke-accent scale-125 stroke-3 rtl:-rotate-90"
         />
-        <span class="sr-only">sayliks RSS Feed</span>
+        <span class="sr-only">sayliks 的 RSS 订阅</span>
       </a>
 
       <p>
-        sayliks corner is a personal space for notes, projects, and things I'm
-        learning. It keeps the reading experience simple, fast, and comfortable
-        in light or dark mode.
+        这里是 sayliks 的个人空间，用来记录学习、项目和一些正在慢慢理解的东西。
+        我希望这里保持简单、快速，也能在明暗主题下都有舒服的阅读体验。
       </p>
       <p class="mt-2">
-        Read the blog posts or visit
+        你可以阅读文章，或者访问我的
         <LinkButton
           class="hover:text-accent underline decoration-dashed underline-offset-4"
           href={config.site.profile}
         >
           GitHub
-        </LinkButton> for more.
+        </LinkButton> 了解更多。
       </p>
       {
         socials.length > 0 && (
