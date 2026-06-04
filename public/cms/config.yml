@@ -4,7 +4,7 @@ backend:
   branch: main
   squash_merges: true
   auth_type: implicit
-  base_url: https://matsumae.top/api/auth
+  base_url: https://matsumae.top/api
   # GitHub OAuth App settings (https://github.com/settings/developers):
   #   Homepage URL:              https://matsumae.top
   #   Authorization callback URL: https://matsumae.top/api/auth/callback
