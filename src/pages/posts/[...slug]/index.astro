@@ -109,7 +109,11 @@ const ogImage = ogImageUrl
 
   <main
     id="main-content"
-    class:list={["app-layout", { "mt-8": !config.features.showBackButton }]}
+    class:list={[
+      "app-layout",
+      "bg-giscus-surface",
+      { "mt-8": !config.features.showBackButton },
+    ]}
     data-pagefind-body
   >
     <h1
