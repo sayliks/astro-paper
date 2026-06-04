@@ -3,7 +3,9 @@
     "allow": [
       "Bash(netstat -ano)",
       "Bash(netsh interface *)",
-      "Bash(pnpm dev *)"
+      "Bash(pnpm dev *)",
+      "Bash(cd *)",
+      "Bash(pnpm build *)"
     ]
   }
 }
