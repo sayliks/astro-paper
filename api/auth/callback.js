@@ -3,7 +3,12 @@
  *
  * GitHub redirects here after the user authorizes the app.
  * Exchanges the authorization code for an access token and
- * sends it back to the CMS popup via postMessage.
+ * sends it back to the CMS opener window via postMessage
+ * using the Decap external-OAuth handshake protocol:
+ *
+ *   1. popup  → opener: "authorizing:github"
+ *   2. opener → popup:  (any message — signals readiness)
+ *   3. popup  → opener: 'authorization:github:success:{"token":"...","provider":"github"}'
  *
  * Requires Vercel env vars:
  *   GITHUB_OAUTH_CLIENT_ID
@@ -51,8 +56,8 @@ export default async function handler(req, res) {
 </body></html>`);
     }
 
-    const token = data.access_token;
-    if (!token) {
+    const accessToken = data.access_token;
+    if (!accessToken) {
       res.setHeader("Content-Type", "text/html");
       return res.status(500).send(`<!DOCTYPE html>
 <html><head><title>Auth Error</title></head>
@@ -63,7 +68,10 @@ export default async function handler(req, res) {
 </body></html>`);
     }
 
-    const msg = `authorization:github:success:${JSON.stringify({ token, provider: "github" })}`;
+    /* The auth success message Decap CMS expects */
+    const authMessage =
+      "authorization:github:success:" +
+      JSON.stringify({ token: accessToken, provider: "github" });
 
     res.setHeader("Content-Type", "text/html");
     res.send(`<!DOCTYPE html>
@@ -73,21 +81,28 @@ export default async function handler(req, res) {
 <script>
 (function() {
   var status = document.getElementById("status");
-  try {
-    if (!window.opener) {
-      status.textContent = "Error: opener window not found. Please close this window and try again.";
-      status.style.color = "red";
-      return;
-    }
-    var msg = ${JSON.stringify(msg)};
-    window.opener.postMessage(msg, "https://matsumae.top");
+
+  if (!window.opener) {
+    status.textContent = "Error: opener window not found. Close this window and try again.";
+    status.style.color = "red";
+    return;
+  }
+
+  var authMessage = ${JSON.stringify(authMessage)};
+
+  /* Step 2: wait for the opener to reply, then send the token. */
+  function receiveMessage(event) {
+    window.removeEventListener("message", receiveMessage);
+    /* Step 3: send the token back to the opener's origin. */
+    window.opener.postMessage(authMessage, event.origin);
     status.textContent = "Login successful. Closing...";
     setTimeout(function() { window.close(); }, 300);
-  } catch (e) {
-    status.textContent = "Error sending login token: " + e.message;
-    status.style.color = "red";
-    console.error("Decap CMS OAuth callback error:", e);
   }
+
+  window.addEventListener("message", receiveMessage, false);
+
+  /* Step 1: tell the opener we are ready. */
+  window.opener.postMessage("authorizing:github", "*");
 })();
 </script>
 </body></html>`);
