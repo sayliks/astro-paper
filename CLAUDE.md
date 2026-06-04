@@ -44,7 +44,7 @@ When `features.dynamicOgImage` is on, each post without an explicit `ogImage` ge
 
 ## i18n
 
-`src/i18n/` auto-loads every `lang/*.ts` file via `import.meta.glob`. `useTranslations(locale)` returns the strings object (falls back to `en`); `tplStr(template, vars)` fills `{{key}}` placeholders. Astro i18n is configured in `astro.config.ts` (`locales: ["en"]`, `prefixDefaultLocale: false`). To add a locale: add it to `astro.config.ts` and drop a `src/i18n/lang/<locale>.ts` matching the `UIStrings` type.
+`src/i18n/` auto-loads every `lang/*.ts` file via `import.meta.glob`. `useTranslations(locale)` returns the strings object (falls back to `zh-CN`, then `en`); `tplStr(template, vars)` fills `{{key}}` placeholders. This fork is **Chinese-first**: the primary locale is `zh-CN` (default, no URL prefix), and `en.ts` re-exports `zh-CN` strings. Astro i18n is configured in `astro.config.ts` (`locales: ["zh-CN"]`, `defaultLocale: "zh-CN"`, `prefixDefaultLocale: false`). To add a locale: add it to `astro.config.ts` and drop a `src/i18n/lang/<locale>.ts` matching the `UIStrings` type.
 
 ## Base path & locale helpers
 
@@ -56,9 +56,19 @@ When `features.dynamicOgImage` is on, each post without an explicit `ogImage` ge
 - **Dark mode** is driven by `data-theme` on `<html>`. An inline `is:inline` script in `src/layouts/Layout.astro` sets it before first paint (FOUC prevention); `src/scripts/theme.ts` handles the toggle afterward. The `dark:` variant maps to `[data-theme=dark]` (see `@custom-variant` in global.css).
 - Markdown code blocks use Shiki with `min-light`/`night-owl` themes and notation transformers (diff/highlight/word-highlight) plus a custom filename transformer (`src/utils/transformers/fileName.js`), all configured in `astro.config.ts`.
 
+## CMS & comments
+
+- **Decap CMS** is integrated at `/admin` (redirects to `/cms/`). Config lives in `public/cms/config.yml` (GitHub backend, editorial workflow). A custom Vite plugin `serveCmsIndex()` rewrites `/cms/` in dev/preview.
+- **Giscus** comments (GitHub Discussions) are in `src/components/Giscus.astro`, configured for repo `sayliks/blog-comments`. Theme syncs with site dark/light mode via MutationObserver.
+
+## View transitions
+
+Uses Astro's `ClientRouter` for SPA-like navigation. `transition:name` on post titles and tags; `transition:persist` on search container. Theme state is carried across transitions via `astro:before-swap` / `astro:after-swap` events in `src/scripts/theme.ts`.
+
 ## Conventions
 
 - Path alias `@/*` → `src/*` (plus `@/astro-paper.config`). Prefer it over relative imports.
 - Layouts: `Layout.astro` (base `<head>`, meta, OG, theme bootstrap) → `PostLayout.astro` (adds article/JSON-LD) → page.
 - Route-private components/utils are co-located under `_components/` and `_utils/` inside `src/pages/...` (underscore keeps them out of routing).
 - Static search is **Pagefind**; the index is generated at build time and copied into `public/pagefind/` (don't hand-edit it). `data-pagefind-body` on the article marks indexable content.
+- Commits follow **Conventional Commits** (configured via `cz.yaml` with Commitizen).
