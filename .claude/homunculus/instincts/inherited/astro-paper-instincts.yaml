@@ -1,0 +1,297 @@
+# Instincts generated from https://github.com/sayliks/astro-paper
+# Generated: 2026-06-04T14:03:51.312Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: astro-paper-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/sayliks/astro-paper
+---
+
+# Astro Paper Commit Length
+
+## Action
+
+Keep commit messages concise (~43 characters)
+
+## Evidence
+
+- Average commit message length: 43 chars
+- Based on 1 commits
+
+---
+id: astro-paper-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/sayliks/astro-paper
+---
+
+# Astro Paper Naming Files
+
+## Action
+
+Use camelCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: camelCase
+
+---
+id: astro-paper-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/sayliks/astro-paper
+---
+
+# Astro Paper Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: astro-paper-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/sayliks/astro-paper
+---
+
+# Astro Paper Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: astro-paper-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/sayliks/astro-paper
+---
+
+# Astro Paper Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: astro-paper-instinct-file-naming
+trigger: "When creating a new file in the codebase"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct File Naming
+
+## Action
+
+Name the file using camelCase
+
+## Evidence
+
+- Pattern in namingConventions.files: camelCase
+
+---
+id: astro-paper-instinct-function-naming
+trigger: "When defining a new function"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Function Naming
+
+## Action
+
+Name the function using camelCase
+
+## Evidence
+
+- Pattern in namingConventions.functions: camelCase
+
+---
+id: astro-paper-instinct-class-naming
+trigger: "When defining a new class"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Class Naming
+
+## Action
+
+Name the class using PascalCase
+
+## Evidence
+
+- Pattern in namingConventions.classes: PascalCase
+
+---
+id: astro-paper-instinct-constant-naming
+trigger: "When defining a constant"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Constant Naming
+
+## Action
+
+Name the constant using SCREAMING_SNAKE_CASE
+
+## Evidence
+
+- Pattern in namingConventions.constants: SCREAMING_SNAKE_CASE
+
+---
+id: astro-paper-instinct-import-style
+trigger: "When importing modules"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Import Style
+
+## Action
+
+Use relative import paths
+
+## Evidence
+
+- Pattern in importStyle: relative
+
+---
+id: astro-paper-instinct-export-style
+trigger: "When exporting modules or functions"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Export Style
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in exportStyle: named
+
+---
+id: astro-paper-instinct-typescript
+trigger: "When writing code"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Typescript
+
+## Action
+
+Use TypeScript as the programming language
+
+## Evidence
+
+- Pattern in language: TypeScript
+
+---
+id: astro-paper-instinct-test-location
+trigger: "When adding tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Test Location
+
+## Action
+
+Place test files in a separate location from source files
+
+## Evidence
+
+- Pattern in testLocation: separate
+
+---
+id: astro-paper-instinct-commit-format
+trigger: "When writing a commit message"
+confidence: 0.8
+domain: git
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Commit Format
+
+## Action
+
+Write a freeform message without a required prefix
+
+## Evidence
+
+- Pattern in commits.type: freeform
+- Pattern in commits.prefixes: []
+
+---
+id: astro-paper-instinct-commit-length
+trigger: "When writing a commit message"
+confidence: 0.7
+domain: git
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Commit Length
+
+## Action
+
+Keep the commit message concise, around 43 characters on average
+
+## Evidence
+
+- Pattern in commits.averageLength: 43
+
