@@ -3,7 +3,6 @@ import { getEntry, render } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
-import Main from "@/components/Main.astro";
 import Footer from "@/components/Footer.astro";
 import config from "@/config";
 
@@ -28,9 +27,86 @@ const { Content } = await render(about);
 
   <Breadcrumb />
 
-  <Main pageTitle={about.data.title} class="app-prose" animateWave>
+  <main
+    data-backUrl="/"
+    id="main-content"
+    class="app-layout app-prose pb-4"
+  >
+    <div class="flex items-start gap-3">
+      <div class="min-w-0">
+        <h1
+          class="text-2xl font-semibold sm:text-3xl"
+          aria-label={about.data.title}
+        >
+          {
+            (() => {
+              const t = about.data.title;
+              const waveEmoji = "👋";
+              const idx = t.indexOf(waveEmoji);
+              if (idx >= 0) {
+                return (
+                  <>
+                    {t.slice(0, idx)}
+                    <span class="wave-hand" aria-hidden="true">{waveEmoji}</span>
+                    {t.slice(idx + waveEmoji.length)}
+                  </>
+                );
+              }
+              return t;
+            })()
+          }
+        </h1>
+        <p class="mt-2 mb-6 italic">{about.data.description}</p>
+      </div>
+      <img
+        src="/image.jpg"
+        alt="sayliks"
+        width="96"
+        height="96"
+        class="h-20 w-20 shrink-0 rounded-full object-cover sm:h-24 sm:w-24"
+      />
+    </div>
     <Content />
-  </Main>
+  </main>
 
   <Footer />
 </Layout>
+
+<style>
+  .wave-hand {
+    display: inline-block;
+    transform-origin: 70% 70%;
+    animation: wave-hand 1.8s ease-in-out infinite;
+  }
+
+  @keyframes wave-hand {
+    0%,
+    60%,
+    100% {
+      transform: rotate(0deg);
+    }
+
+    10%,
+    30% {
+      transform: rotate(14deg);
+    }
+
+    20% {
+      transform: rotate(-8deg);
+    }
+
+    40% {
+      transform: rotate(-4deg);
+    }
+
+    50% {
+      transform: rotate(10deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wave-hand {
+      animation: none;
+    }
+  }
+</style>
