@@ -4,6 +4,7 @@ import PostLayout from "@/layouts/PostLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Datetime from "@/components/Datetime.astro";
+import Giscus from "@/components/Giscus.astro";
 import Tag from "@/components/Tag.astro";
 import { getPostSlug, getPostUrl } from "@/utils/getPostPaths";
 import { getSortedPosts } from "@/utils/getSortedPosts";
@@ -154,6 +155,8 @@ const ogImage = ogImageUrl
     </ul>
 
     <ShareLinks />
+
+    <Giscus />
 
     <hr class="my-8 border-dashed" />
 
