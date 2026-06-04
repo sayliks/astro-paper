@@ -9,7 +9,7 @@ backend:
   # Set "Homepage URL" to https://matsumae.top
   # Set "Authorization callback URL" to https://matsumae.top/
   # Paste the Client ID below:
-  app_id: YOUR_GITHUB_OAUTH_APP_CLIENT_ID
+  app_id: Ov23liQE6dNYIUrrWQLX
 
 publish_mode: editorial_workflow
 
