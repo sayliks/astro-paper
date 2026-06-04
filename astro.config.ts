@@ -27,9 +27,7 @@ export default defineConfig({
     mdx(),
     sitemap({
       filter: page =>
-        !page.endsWith("/admin/") &&
-        (config.features?.showArchives !== false ||
-          !page.endsWith("/archives/")),
+        config.features?.showArchives !== false || !page.endsWith("/archives/"),
     }),
   ],
   i18n: {
