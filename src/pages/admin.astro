@@ -7,21 +7,24 @@ import config from "@/config";
 ---
 
 <Layout
-  title={`编辑页面 | ${config.site.title}`}
-  description="博客文章通过 GitHub 直接编辑。"
+  title={`内容管理 | ${config.site.title}`}
+  description="通过 Sveltia CMS 或 GitHub 管理博客文章。"
 >
   <Header />
 
   <Breadcrumb />
 
   <main id="main-content" class="app-layout pb-4">
-    <h1 class="text-2xl font-semibold sm:text-3xl">编辑页面</h1>
+    <h1 class="text-2xl font-semibold sm:text-3xl">内容管理</h1>
 
-    <p class="mt-4 text-muted-foreground">
-      CMS 管理后台已被移除，博客文章现已通过 GitHub 直接编辑。
+    <p class="text-muted-foreground mt-4">
+      可以使用 Sveltia CMS 管理文章，也可以直接通过 GitHub 编辑源文件。
     </p>
 
-    <p class="mt-2">
+    <div class="mt-3 flex flex-wrap gap-4">
+      <a href="/cms/" class="text-accent hover:underline">
+        打开 Sveltia CMS &rarr;
+      </a>
       <a
         href="https://github.com/sayliks/astro-paper/tree/main/src/content/posts"
         target="_blank"
@@ -30,18 +33,28 @@ import config from "@/config";
       >
         前往 GitHub 编辑文章 &rarr;
       </a>
-    </p>
+    </div>
 
     <hr class="my-8 border-dashed" />
 
-    <div class="space-y-4 text-sm text-muted-foreground">
-      <h2 class="text-lg font-semibold text-foreground">如何编辑文章</h2>
+    <div class="text-muted-foreground space-y-4 text-sm">
+      <h2 class="text-foreground text-lg font-semibold">如何编辑文章</h2>
       <ol class="list-decimal space-y-2 pl-5">
-        <li>点击上方链接，进入 GitHub 文章目录。</li>
-        <li>找到要编辑的 <code>.md</code> 文件，点击右上角铅笔图标。</li>
-        <li>修改内容后将自动创建 Pull Request 或直接提交到 main 分支。</li>
-        <li>提交后 Vercel 会自动部署更新。</li>
+        <li>打开 Sveltia CMS，并使用 GitHub 登录。</li>
+        <li>在文章集合中新建或编辑 Markdown 文章。</li>
+        <li>保存后通过 GitHub 提交变更，站点会自动部署更新。</li>
+        <li>如果 CMS 登录受限，也可以进入 GitHub 文章目录手动编辑。</li>
       </ol>
+      <p>
+        <a
+          href="https://sveltiacms.app/en/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-accent hover:underline"
+        >
+          Sveltia CMS 官网
+        </a>
+      </p>
     </div>
   </main>
 

@@ -1,0 +1,93 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
+backend:
+  name: github
+  repo: sayliks/astro-paper
+  branch: main
+
+publish_mode: editorial_workflow
+
+site_url: "https://www.matsumae.top"
+display_url: "https://www.matsumae.top"
+logo_url: /favicon.svg
+
+media_folder: public/assets/uploads
+public_folder: /assets/uploads
+
+slug:
+  encoding: unicode
+  clean_accents: true
+  sanitize_replacement: "-"
+
+collections:
+  - name: posts
+    label: 文章
+    label_singular: 文章
+    folder: src/content/posts
+    create: true
+    delete: false
+    extension: md
+    format: frontmatter
+    identifier_field: title
+    summary: "{{title}} - {{pubDatetime}}"
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    preview_path: "posts/{{slug}}/"
+    editor:
+      preview: false
+    fields:
+      - label: 标题
+        name: title
+        widget: string
+
+      - label: 发布时间
+        name: pubDatetime
+        widget: datetime
+        format: "YYYY-MM-DDTHH:mm:ssZ"
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm"
+        default: "{{now}}"
+
+      - label: 摘要
+        name: description
+        widget: text
+
+      - label: 标签
+        name: tags
+        widget: list
+        min: 1
+        default:
+          - 随笔
+        field:
+          label: 标签
+          name: tag
+          widget: string
+
+      - label: 草稿
+        name: draft
+        widget: boolean
+        default: true
+
+      - label: 精选
+        name: featured
+        widget: boolean
+        default: false
+
+      - label: Open Graph 图片
+        name: ogImage
+        widget: image
+        required: false
+
+      - label: 规范链接
+        name: canonicalURL
+        widget: string
+        required: false
+
+      - label: 时区
+        name: timezone
+        widget: string
+        required: false
+        default: Asia/Hong_Kong
+
+      - label: 正文
+        name: body
+        widget: markdown
