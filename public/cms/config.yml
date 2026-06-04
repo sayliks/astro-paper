@@ -3,11 +3,18 @@ backend:
   repo: sayliks/astro-paper
   branch: main
   squash_merges: true
+  auth_type: implicit
+  base_url: https://matsumae.top
+  # Create a GitHub OAuth App at https://github.com/settings/developers
+  # Set "Homepage URL" to https://matsumae.top
+  # Set "Authorization callback URL" to https://matsumae.top/
+  # Paste the Client ID below:
+  app_id: YOUR_GITHUB_OAUTH_APP_CLIENT_ID
 
 publish_mode: editorial_workflow
 
-site_url: "https://YOUR_DOMAIN_HERE"
-display_url: "https://YOUR_DOMAIN_HERE"
+site_url: "https://matsumae.top"
+display_url: "https://matsumae.top"
 logo_url: /favicon.svg
 
 media_folder: public/assets/uploads
