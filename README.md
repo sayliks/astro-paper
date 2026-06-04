@@ -46,19 +46,20 @@ Inside of AstroPaper, you'll see the following folders and files:
 ```bash
 /
 ├── public/
+│   ├── cms/               # Decap CMS config & entry page
 │   ├── pagefind/          # auto-generated on build
 │   ├── favicon.svg
 │   └── default-og.jpg
 ├── src/
 │   ├── assets/
-│   │   ├── icons/
-│   │   └── images/
+│   │   └── icons/
 │   ├── components/
+│   │   └── Giscus.astro   # GitHub Discussions comment widget
 │   ├── content/
 │   │   ├── pages/
 │   │   │   └── about.md
 │   │   └── posts/
-│   │       └── some-blog-posts.md
+│   │       └── *.md       # blog posts
 │   ├── i18n/
 │   ├── layouts/
 │   ├── pages/
@@ -76,12 +77,12 @@ All blog posts are stored in the `src/content/posts/` directory. You can organis
 
 ## 📖 Documentation
 
-Documentation can be read in two formats\_ _markdown_ & _blog post_.
+For theme documentation, see the upstream [AstroPaper docs](https://astro-paper.pages.dev/posts/).
 
-- Configuration - [markdown](src/content/posts/how-to-configure-astropaper-theme.md) | [blog post](https://astro-paper.pages.dev/posts/how-to-configure-astropaper-theme/)
-- Add Posts - [markdown](src/content/posts/adding-new-post.md) | [blog post](https://astro-paper.pages.dev/posts/adding-new-posts-in-astropaper-theme/)
-- Customize Color Schemes - [markdown](src/content/posts/customizing-astropaper-theme-color-schemes.md) | [blog post](https://astro-paper.pages.dev/posts/customizing-astropaper-theme-color-schemes/)
-- Predefined Color Schemes - [markdown](src/content/posts/predefined-color-schemes.md) | [blog post](https://astro-paper.pages.dev/posts/predefined-color-schemes/)
+- [Configuration](https://astro-paper.pages.dev/posts/how-to-configure-astropaper-theme/)
+- [Adding Posts](https://astro-paper.pages.dev/posts/adding-new-posts-in-astropaper-theme/)
+- [Customize Color Schemes](https://astro-paper.pages.dev/posts/customizing-astropaper-theme-color-schemes/)
+- [Predefined Color Schemes](https://astro-paper.pages.dev/posts/predefined-color-schemes/)
 
 ## 💻 Tech Stack
 
@@ -98,31 +99,12 @@ Documentation can be read in two formats\_ _markdown_ & _blog post_.
 
 ## 👨🏻‍💻 Running Locally
 
-You can start using this project locally by running the following command in your desired directory:
-
 ```bash
-# pnpm
-pnpm create astro@latest --template satnaing/astro-paper
-
-# npm
-npm create astro@latest -- --template satnaing/astro-paper
-
-# yarn
-yarn create astro --template satnaing/astro-paper
-
-# bun
-bun create astro@latest -- --template satnaing/astro-paper
-```
-
-Then start the project by running the following commands:
-
-```bash
-# install dependencies if you haven't done so in the previous step.
 pnpm install
-
-# start running the project
 pnpm dev
 ```
+
+The dev server starts at `localhost:5173`. Drafts and scheduled posts are visible in dev mode.
 
 ## Google Site Verification (optional)
 
@@ -147,7 +129,7 @@ All commands are run from the root of the project, from a terminal:
 | Command          | Action                                                                                                                           |
 | :--------------- | :------------------------------------------------------------------------------------------------------------------------------- |
 | `pnpm install`   | Installs dependencies                                                                                                            |
-| `pnpm dev`       | Starts local dev server at `localhost:4321`                                                                                      |
+| `pnpm dev`       | Starts local dev server at `localhost:5173`                                                                                      |
 | `pnpm build`     | Type-checks, builds the site, runs Pagefind indexing, and copies the index to `public/pagefind/`                                 |
 | `pnpm preview`   | Preview your build locally, before deploying                                                                                     |
 | `pnpm sync`      | Generates TypeScript types for all Astro modules. [Learn more](https://docs.astro.build/en/reference/cli-reference/#astro-sync). |

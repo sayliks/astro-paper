@@ -17,17 +17,23 @@ pnpm-debug.log*
 .env
 .env.production
 
-# macOS-specific files
+# macOS / Windows
 .DS_Store
+Thumbs.db
+Desktop.ini
 
-# jetbrains setting folder
+# editors
 .idea/
+.vscode/
 
 # pagefind
 public/pagefind
 
 # pnpm
 .pnpm-store
+
+# Claude Code
+.claude/
 
 # docker compose
 compose.override.yaml
