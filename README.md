@@ -33,7 +33,6 @@ Inside of AstroPaper, you'll see the following folders and files:
 ```bash
 /
 ├── public/
-│   ├── cms/               # Decap CMS config & entry page
 │   ├── pagefind/          # auto-generated on build
 │   ├── favicon.svg
 │   └── default-og.jpg
@@ -81,7 +80,6 @@ For theme documentation, see the upstream [AstroPaper docs](https://astro-paper.
 **Code Formatting** - [Prettier](https://prettier.io/)
 **Linting** - [ESLint](https://eslint.org)
 **Comments** - [Giscus](https://giscus.app/)
-**CMS** - [Decap CMS](https://decapcms.org/)
 **Dynamic OG images** - [Satori](https://github.com/vercel/satori) + [Sharp](https://sharp.pixelplumbing.com/) + [Astro Fonts](https://docs.astro.build/en/guides/fonts/)
 
 ## 👨🏻‍💻 Running Locally

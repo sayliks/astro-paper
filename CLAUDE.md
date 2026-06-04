@@ -56,9 +56,8 @@ When `features.dynamicOgImage` is on, each post without an explicit `ogImage` ge
 - **Dark mode** is driven by `data-theme` on `<html>`. An inline `is:inline` script in `src/layouts/Layout.astro` sets it before first paint (FOUC prevention); `src/scripts/theme.ts` handles the toggle afterward. The `dark:` variant maps to `[data-theme=dark]` (see `@custom-variant` in global.css).
 - Markdown code blocks use Shiki with `min-light`/`night-owl` themes and notation transformers (diff/highlight/word-highlight) plus a custom filename transformer (`src/utils/transformers/fileName.js`), all configured in `astro.config.ts`.
 
-## CMS & comments
+## Comments
 
-- **Decap CMS** is integrated at `/admin` (redirects to `/cms/`). Config lives in `public/cms/config.yml` (GitHub backend, editorial workflow). A custom Vite plugin `serveCmsIndex()` rewrites `/cms/` in dev/preview.
 - **Giscus** comments (GitHub Discussions) are in `src/components/Giscus.astro`, configured for repo `sayliks/blog-comments`. Theme syncs with site dark/light mode via MutationObserver.
 
 ## View transitions
