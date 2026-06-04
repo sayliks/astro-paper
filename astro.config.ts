@@ -18,6 +18,37 @@ import {
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import config from "./astro-paper.config";
 
+type CmsIndexMiddleware = (
+  req: { url?: string },
+  res: unknown,
+  next: () => void
+) => void;
+
+type MiddlewareServer = {
+  middlewares: {
+    use: (middleware: CmsIndexMiddleware) => void;
+  };
+};
+
+function serveCmsIndex() {
+  const rewriteCmsIndex: CmsIndexMiddleware = (req, _res, next) => {
+    if (req.url === "/cms/" || req.url === "/cms") {
+      req.url = "/cms/index.html";
+    }
+    next();
+  };
+
+  return {
+    name: "serve-cms-index",
+    configureServer(server: MiddlewareServer) {
+      server.middlewares.use(rewriteCmsIndex);
+    },
+    configurePreviewServer(server: MiddlewareServer) {
+      server.middlewares.use(rewriteCmsIndex);
+    },
+  };
+}
+
 export default defineConfig({
   site: config.site.url,
   // 4321 sits inside a Windows-reserved TCP range (winnat/Hyper-V), which
@@ -57,7 +88,7 @@ export default defineConfig({
     },
   },
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), serveCmsIndex()],
   },
   fonts: [
     {
