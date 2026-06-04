@@ -4,6 +4,7 @@ import { ClientRouter } from "astro:transitions";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
 import { getAssetPath } from "@/utils/withBase";
+import SpeedInsights from "@vercel/speed-insights/astro";
 import config from "@/config";
 import "@/styles/global.css";
 
@@ -94,6 +95,8 @@ const rssHref = getRelativeLocaleUrl(
         />
       )
     }
+
+    <SpeedInsights />
 
     <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
