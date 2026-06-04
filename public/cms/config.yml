@@ -1,19 +1,11 @@
 backend:
-  name: github
-  repo: sayliks/astro-paper
+  name: git-gateway
   branch: main
-  squash_merges: true
-  auth_type: implicit
-  base_url: https://matsumae.top/api
-  # GitHub OAuth App settings (https://github.com/settings/developers):
-  #   Homepage URL:              https://matsumae.top
-  #   Authorization callback URL: https://matsumae.top/api/auth/callback
-  app_id: Ov23liQE6dNYIUrrWQLX
 
 publish_mode: editorial_workflow
 
-site_url: "https://matsumae.top"
-display_url: "https://matsumae.top"
+site_url: "https://astro-papers.netlify.app"
+display_url: "https://astro-papers.netlify.app"
 logo_url: /favicon.svg
 
 media_folder: public/assets/uploads
