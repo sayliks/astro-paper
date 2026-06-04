@@ -3,7 +3,7 @@ import { defineAstroPaperConfig } from "./src/types/config";
 export default defineAstroPaperConfig({
   site: {
     url: "https://astro-paper.pages.dev/",
-    title: "sayliks 的角落",
+    title: "sayliks corner",
     description: "一个用来记录学习、项目、阅读、音乐和日常想法的个人空间。",
     author: "sayliks",
     profile: "https://github.com/sayliks",
