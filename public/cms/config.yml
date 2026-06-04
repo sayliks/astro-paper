@@ -1,6 +1,11 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: sayliks/astro-paper
   branch: main
+  squash_merges: true
+  auth_type: implicit
+  base_url: https://astro-papers.netlify.app/api
+  app_id: Ov23liQE6dNYIUrrWQLX
 
 publish_mode: editorial_workflow
 
