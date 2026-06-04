@@ -6,8 +6,8 @@ backend:
 
 publish_mode: editorial_workflow
 
-site_url: https://astro-paper.pages.dev
-display_url: https://astro-paper.pages.dev
+site_url: "https://YOUR_DOMAIN_HERE"
+display_url: "https://YOUR_DOMAIN_HERE"
 logo_url: /favicon.svg
 
 media_folder: public/assets/uploads
