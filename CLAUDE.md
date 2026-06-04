@@ -7,7 +7,7 @@ AstroPaper is a minimal, SEO-friendly Astro blog theme. Package manager is **pnp
 ## Commands
 
 ```bash
-pnpm dev            # dev server at localhost:4321 (shows drafts + scheduled posts)
+pnpm dev            # dev server at localhost:5173 (shows drafts + scheduled posts)
 pnpm build          # astro check (typecheck) + astro build + pagefind index + copy index to public/pagefind/
 pnpm preview        # preview the production build
 pnpm lint           # eslint .

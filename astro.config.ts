@@ -20,6 +20,9 @@ import config from "./astro-paper.config";
 
 export default defineConfig({
   site: config.site.url,
+  // 4321 sits inside a Windows-reserved TCP range (winnat/Hyper-V), which
+  // makes the default bind fail with EACCES. 5173 is outside the reserved ranges.
+  server: { port: 5173 },
   integrations: [
     mdx(),
     sitemap({

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(netstat -ano)",
+      "Bash(netsh interface *)",
+      "Bash(pnpm dev *)"
+    ]
+  }
+}
