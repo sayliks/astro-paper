@@ -4,11 +4,10 @@ backend:
   branch: main
   squash_merges: true
   auth_type: implicit
-  base_url: https://matsumae.top
-  # Create a GitHub OAuth App at https://github.com/settings/developers
-  # Set "Homepage URL" to https://matsumae.top
-  # Set "Authorization callback URL" to https://matsumae.top/
-  # Paste the Client ID below:
+  base_url: https://matsumae.top/api/auth
+  # GitHub OAuth App settings (https://github.com/settings/developers):
+  #   Homepage URL:              https://matsumae.top
+  #   Authorization callback URL: https://matsumae.top/api/auth/callback
   app_id: Ov23liQE6dNYIUrrWQLX
 
 publish_mode: editorial_workflow
