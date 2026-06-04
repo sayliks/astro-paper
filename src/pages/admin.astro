@@ -1,15 +1,49 @@
-<!doctype html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex, nofollow" />
-    <title>已移除</title>
-  </head>
-  <body>
-    <main>
-      <p>CMS 管理后台已被移除。博客文章现通过 GitHub 直接编辑。</p>
-      <p><a href="https://github.com/sayliks/astro-paper/tree/main/src/content/posts">前往 GitHub 编辑文章</a></p>
-    </main>
-  </body>
-</html>
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import Footer from "@/components/Footer.astro";
+import config from "@/config";
+---
+
+<Layout
+  title={`编辑页面 | ${config.site.title}`}
+  description="博客文章通过 GitHub 直接编辑。"
+>
+  <Header />
+
+  <Breadcrumb />
+
+  <main id="main-content" class="app-layout pb-4">
+    <h1 class="text-2xl font-semibold sm:text-3xl">编辑页面</h1>
+
+    <p class="mt-4 text-muted-foreground">
+      CMS 管理后台已被移除，博客文章现已通过 GitHub 直接编辑。
+    </p>
+
+    <p class="mt-2">
+      <a
+        href="https://github.com/sayliks/astro-paper/tree/main/src/content/posts"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-accent hover:underline"
+      >
+        前往 GitHub 编辑文章 &rarr;
+      </a>
+    </p>
+
+    <hr class="my-8 border-dashed" />
+
+    <div class="space-y-4 text-sm text-muted-foreground">
+      <h2 class="text-lg font-semibold text-foreground">如何编辑文章</h2>
+      <ol class="list-decimal space-y-2 pl-5">
+        <li>点击上方链接，进入 GitHub 文章目录。</li>
+        <li>找到要编辑的 <code>.md</code> 文件，点击右上角铅笔图标。</li>
+        <li>修改内容后将自动创建 Pull Request 或直接提交到 main 分支。</li>
+        <li>提交后 Vercel 会自动部署更新。</li>
+      </ol>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

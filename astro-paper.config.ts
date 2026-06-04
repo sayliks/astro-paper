@@ -2,7 +2,7 @@ import { defineAstroPaperConfig } from "./src/types/config";
 
 export default defineAstroPaperConfig({
   site: {
-    url: "https://astro-paper.pages.dev/",
+    url: "https://www.matsumae.top/",
     title: "sayliks corner",
     description: "一个用来记录学习、项目、阅读、音乐和日常想法的个人空间。",
     author: "sayliks",
@@ -24,7 +24,7 @@ export default defineAstroPaperConfig({
     showBackButton: true,
     editPost: {
       enabled: true,
-      url: "https://github.com/satnaing/astro-paper/edit/main/",
+      url: "https://github.com/sayliks/astro-paper/edit/main/",
     },
     search: "pagefind",
   },
