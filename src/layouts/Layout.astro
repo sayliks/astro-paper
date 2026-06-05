@@ -1,7 +1,6 @@
 ---
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
-import { getRelativeLocaleUrl } from "astro:i18n";
 import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
 import { getAssetPath } from "@/utils/withBase";
 import SpeedInsights from "@vercel/speed-insights/astro";
@@ -13,6 +12,7 @@ type Props = {
   description?: string;
   ogImage?: string;
   canonicalURL?: string;
+  ogType?: "website" | "article";
 };
 
 const { site } = config;
@@ -22,16 +22,14 @@ const {
   description = site.description,
   ogImage: initOgImage,
   canonicalURL: initCanonicalURL,
+  ogType = "website",
 } = Astro.props;
 
 const ogImage = initOgImage?.trim() || resolveDefaultOgImagePath(config);
 const canonicalURL =
   initCanonicalURL?.trim() || new URL(Astro.url.pathname, Astro.site).href;
 const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
-const rssHref = getRelativeLocaleUrl(
-  Astro.currentLocale ?? config.site.lang,
-  "rss.xml"
-);
+const rssHref = getAssetPath("rss.xml");
 ---
 
 <!doctype html>
@@ -64,7 +62,7 @@ const rssHref = getRelativeLocaleUrl(
     <link rel="sitemap" href={getAssetPath("sitemap-index.xml")} />
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={site.title} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

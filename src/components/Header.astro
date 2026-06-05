@@ -176,7 +176,7 @@ const isActive = (path: string) => {
     const openLabel = menuBtn.dataset.labelOpen ?? "Open menu";
     const closeLabel = menuBtn.dataset.labelClose ?? "Close menu";
 
-    menuBtn.addEventListener("click", () => {
+    menuBtn.onclick = () => {
       const openMenu = menuBtn.getAttribute("aria-expanded") === "true";
 
       menuBtn.setAttribute("aria-expanded", openMenu ? "false" : "true");
@@ -186,7 +186,7 @@ const isActive = (path: string) => {
       menuItems.classList.toggle("grid");
       menuIcon.classList.toggle("hidden");
       closeIcon.classList.toggle("hidden");
-    });
+    };
   }
 
   toggleNav();
