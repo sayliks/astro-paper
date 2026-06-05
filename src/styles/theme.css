@@ -27,13 +27,12 @@
 
 /* Dark theme values */
 [data-theme="dark"] {
-  --background: #212737;
+  --background: #1b1f24;
   --foreground: #eaedf3;
   --accent: #ff6b01;
   --accent-foreground: #ffffff;
   --muted: #343f60;
   --muted-foreground: #afb9ca;
   --border: #ab4b08;
-  /* Matches giscus noborder_dark theme background */
-  --giscus-surface: #1b1f24;
+  --giscus-surface: var(--background);
 }
