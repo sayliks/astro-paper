@@ -1,127 +1,94 @@
-# AstroPaper 📄
+# sayliks corner
 
-![AstroPaper](public/default-og.jpg)
-![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![GitHub](https://img.shields.io/github/license/satnaing/astro-paper?color=%232F3741&style=for-the-badge)
+sayliks corner is my personal blog and small web corner for learning notes, project records, reading, music, and everyday thoughts.
 
-A personal blog built with [AstroPaper](https://github.com/satnaing/astro-paper), a minimal, responsive, accessible and SEO-friendly Astro blog theme.
+The site is intentionally simple: fast pages, clean typography, a restrained dark theme, warm orange accents, search, RSS, and comments. It is built on AstroPaper, but this repository is maintained as a personal publishing space rather than a reusable theme template.
 
-See the [upstream AstroPaper docs](https://astro-paper.pages.dev/posts/) for theme documentation.
+## What This Site Is For
 
-## 🔥 Features
+- Writing notes about software engineering, projects, and things I am slowly figuring out.
+- Keeping a public archive of essays, fragments, interests, and personal updates.
+- Publishing with a workflow that works both from local files and from the web CMS.
+- Preserving a quiet reading experience with minimal UI and limited accent color.
 
-- [x] type-safe markdown
-- [x] super fast performance
-- [x] accessible (Keyboard/VoiceOver)
-- [x] responsive (mobile ~ desktops)
-- [x] SEO-friendly
-- [x] light & dark mode
-- [x] static search ([Pagefind](https://pagefind.app/))
-- [x] draft posts & pagination
-- [x] sitemap & rss feed
-- [x] MDX support
-- [x] collapsible table of contents
-- [x] followed best practices
-- [x] highly customizable
-- [x] dynamic OG image generation for blog posts ([Blog Post](https://astro-paper.pages.dev/posts/dynamic-og-image-generation-in-astropaper-blog-posts/))
-- [x] i18n ready
+## Content
 
-## 🚀 Project Structure
+Blog posts live in:
 
-Inside of AstroPaper, you'll see the following folders and files:
-
-```bash
-/
-├── public/
-│   ├── pagefind/          # auto-generated on build
-│   ├── favicon.svg
-│   └── default-og.jpg
-├── src/
-│   ├── assets/
-│   │   └── icons/
-│   ├── components/
-│   │   └── Giscus.astro   # GitHub Discussions comment widget
-│   ├── content/
-│   │   ├── pages/
-│   │   │   └── about.md
-│   │   └── posts/
-│   │       └── *.md       # blog posts
-│   ├── i18n/
-│   ├── layouts/
-│   ├── pages/
-│   ├── scripts/
-│   ├── styles/
-│   ├── types/
-│   ├── utils/
-│   ├── config.ts
-│   └── content.config.ts
-├── astro-paper.config.ts  # user-defined configurations
-└── astro.config.ts
+```txt
+src/content/posts/
 ```
 
-All blog posts are stored in the `src/content/posts/` directory. You can organise posts into subdirectories — the subdirectory name becomes part of the post URL.
+Pages live in:
 
-## 📖 Documentation
+```txt
+src/content/pages/
+```
 
-For theme documentation, see the upstream [AstroPaper docs](https://astro-paper.pages.dev/posts/).
+The About page is:
 
-- [Configuration](https://astro-paper.pages.dev/posts/how-to-configure-astropaper-theme/)
-- [Adding Posts](https://astro-paper.pages.dev/posts/adding-new-posts-in-astropaper-theme/)
-- [Customize Color Schemes](https://astro-paper.pages.dev/posts/customizing-astropaper-theme-color-schemes/)
-- [Predefined Color Schemes](https://astro-paper.pages.dev/posts/predefined-color-schemes/)
+```txt
+src/content/pages/about.md
+```
 
-## 💻 Tech Stack
+Root-level Markdown posts can be created through Decap CMS at:
 
-**Main Framework** - [Astro](https://astro.build/)
-**Type Checking** - [TypeScript](https://www.typescriptlang.org/)
-**Styling** - [TailwindCSS](https://tailwindcss.com/)
-**Static Search** - [Pagefind](https://pagefind.app/)
-**Icons** - [Tablers](https://tabler-icons.io/)
-**Code Formatting** - [Prettier](https://prettier.io/)
-**Linting** - [ESLint](https://eslint.org)
-**Comments** - [Giscus](https://giscus.app/)
-**Dynamic OG images** - [Satori](https://github.com/vercel/satori) + [Sharp](https://sharp.pixelplumbing.com/) + [Astro Fonts](https://docs.astro.build/en/guides/fonts/)
+```txt
+/cms/
+```
 
-## 👨🏻‍💻 Running Locally
+The `/admin/` route is only a static shortcut to `/cms/`.
+
+Advanced `.mdx` posts and nested post paths are still edited manually so existing URLs stay stable for Giscus comments.
+
+## Local Development
+
+This project uses `pnpm` and expects Node `>=22.12.0 <24`.
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-The dev server starts at `localhost:5173`. Drafts and scheduled posts are visible in dev mode.
+The local dev server runs at:
 
-## Google Site Verification (optional)
-
-You can add your [Google Site Verification HTML tag](https://support.google.com/webmasters/answer/9008080#meta_tag_verification&zippy=%2Chtml-tag) by setting `site.googleVerification` in `astro-paper.config.ts`:
-
-```ts file="astro-paper.config.ts"
-export default defineAstroPaperConfig({
-  site: {
-    // ...
-    googleVerification: "your-google-site-verification-value",
-  },
-  // ...
-});
+```txt
+http://localhost:5173/
 ```
 
-> See [this discussion](https://github.com/satnaing/astro-paper/discussions/334#discussioncomment-10139247) for adding AstroPaper to the Google Search Console.
+## Commands
 
-## 🧞 Commands
+| Command | Action |
+| --- | --- |
+| `pnpm dev` | Start the local dev server |
+| `pnpm astro check` | Run Astro type checking |
+| `pnpm build` | Type-check, build, generate Pagefind search index, and copy it to `public/pagefind/` |
+| `pnpm preview` | Preview the production build locally |
+| `pnpm lint` | Run ESLint |
+| `pnpm format` | Format the project with Prettier |
+| `pnpm sync` | Regenerate Astro content/module types |
 
-All commands are run from the root of the project, from a terminal:
+## Tech Stack
 
-| Command          | Action                                                                                                                           |
-| :--------------- | :------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm install`   | Installs dependencies                                                                                                            |
-| `pnpm dev`       | Starts local dev server at `localhost:5173`                                                                                      |
-| `pnpm build`     | Type-checks, builds the site, runs Pagefind indexing, and copies the index to `public/pagefind/`                                 |
-| `pnpm preview`   | Preview your build locally, before deploying                                                                                     |
-| `pnpm sync`      | Generates TypeScript types for all Astro modules. [Learn more](https://docs.astro.build/en/reference/cli-reference/#astro-sync). |
-| `pnpm astro ...` | Run CLI commands like `astro add`, `astro check`                                                                                 |
+- [Astro](https://astro.build/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Pagefind](https://pagefind.app/) for static search
+- [Decap CMS](https://decapcms.org/) for web-based post creation
+- [Giscus](https://giscus.app/) for comments
+- [Satori](https://github.com/vercel/satori) and [Sharp](https://sharp.pixelplumbing.com/) for dynamic Open Graph images
 
-## 📜 License
+## Project Notes
 
-Licensed under the MIT License, Copyright © 2026 sayliks
+- Site-level settings are managed in `astro-paper.config.ts`.
+- Content schemas are defined in `src/content.config.ts`.
+- Generated search files in `public/pagefind/` should not be edited by hand.
+- Dynamic OG images are generated from the routes under `src/pages/og.png.ts` and `src/pages/posts/[...slug]/index.png.ts`.
 
-Based on [AstroPaper](https://github.com/satnaing/astro-paper) by [Sat Naing](https://satnaing.dev).
+## Acknowledgements
+
+This site is based on [AstroPaper](https://github.com/satnaing/astro-paper) by [Sat Naing](https://satnaing.dev), with local customization for sayliks corner.
+
+## License
+
+MIT License. Copyright (c) 2026 sayliks.
