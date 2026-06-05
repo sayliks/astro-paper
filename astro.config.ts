@@ -68,8 +68,8 @@ export default defineConfig({
       provider: fontProviders.google(),
       fallbacks: ["monospace"],
       weights: [400, 500, 700],
-      styles: ["normal", "italic"],
-      formats: ["ttf"],
+      styles: ["normal"],
+      formats: ["woff2", "ttf"],
     },
   ],
   env: {

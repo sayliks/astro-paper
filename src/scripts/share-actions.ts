@@ -17,29 +17,8 @@ async function copyText(text: string) {
     }
   }
 
-  const textarea = document.createElement("textarea");
-  textarea.value = text;
-  textarea.setAttribute("readonly", "");
-  textarea.style.position = "fixed";
-  textarea.style.inset = "0 auto auto -9999px";
-  document.body.appendChild(textarea);
-  textarea.focus();
-  textarea.select();
-
-  try {
-    const copied = document.execCommand("copy");
-
-    if (!copied) {
-      window.prompt("复制链接", text);
-    }
-
-    return copied;
-  } catch {
-    window.prompt("复制链接", text);
-    return false;
-  } finally {
-    textarea.remove();
-  }
+  window.prompt("复制链接", text);
+  return false;
 }
 
 function showFeedback(root: HTMLElement, message: string) {
@@ -121,11 +100,13 @@ if (!shareWindow.__astroPaperShareActionsReady) {
 
     if (!(target instanceof Element)) return;
 
-    document.querySelectorAll<HTMLElement>("[data-share-root]").forEach(root => {
-      if (!root.contains(target)) {
-        setWechatPopover(root, false);
-      }
-    });
+    document
+      .querySelectorAll<HTMLElement>("[data-share-root]")
+      .forEach(root => {
+        if (!root.contains(target)) {
+          setWechatPopover(root, false);
+        }
+      });
   });
   document.addEventListener("keydown", event => {
     if (event.key === "Escape") {

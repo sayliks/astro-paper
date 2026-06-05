@@ -27,11 +27,7 @@ const { Content } = await render(about);
 
   <Breadcrumb />
 
-  <main
-    data-backUrl="/"
-    id="main-content"
-    class="app-layout app-prose pb-4"
-  >
+  <main data-backUrl="/" id="main-content" class="app-layout app-prose pb-4">
     <div
       class="not-prose mb-8 grid items-center gap-4 sm:grid-cols-[auto_1fr] sm:gap-8"
     >
@@ -48,7 +44,9 @@ const { Content } = await render(about);
               return (
                 <>
                   {t.slice(0, idx)}
-                  <span class="wave-hand" aria-hidden="true">{waveEmoji}</span>
+                  <span class="wave-hand" aria-hidden="true">
+                    {waveEmoji}
+                  </span>
                   {t.slice(idx + waveEmoji.length)}
                 </>
               );
@@ -60,11 +58,11 @@ const { Content } = await render(about);
       <div class="flex justify-center sm:min-w-48">
         <div class="h-20 w-20 overflow-hidden rounded-full sm:h-24 sm:w-24">
           <img
-            src="/image.jpg"
+            src="/avatar.webp"
             alt="sayliks"
-            width="96"
-            height="96"
-            class="m-0 h-full w-full scale-125 object-cover object-center"
+            width="256"
+            height="256"
+            class="m-0 h-full w-full object-cover object-center"
           />
         </div>
       </div>

@@ -41,6 +41,23 @@ The `/admin/` route is only a static shortcut to `/cms/`.
 
 Advanced `.mdx` posts and nested post paths are still edited manually so existing URLs stay stable for Giscus comments.
 
+## CMS GitHub Login
+
+Sveltia CMS is served at `/cms/`. GitHub OAuth is handled by Vercel Functions under `/api/cms-auth/`, with access-token login kept as a fallback.
+
+For production OAuth login, create a GitHub OAuth App with:
+
+- Homepage URL: `https://www.matsumae.top`
+- Authorization callback URL: `https://www.matsumae.top/api/cms-auth/callback`
+
+Then set these Vercel environment variables:
+
+```txt
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+ALLOWED_DOMAINS=www.matsumae.top,matsumae.top
+```
+
 ## Local Development
 
 This project uses `pnpm` and expects Node `>=22.12.0 <24`.
@@ -58,15 +75,15 @@ http://localhost:5173/
 
 ## Commands
 
-| Command | Action |
-| --- | --- |
-| `pnpm dev` | Start the local dev server |
-| `pnpm astro check` | Run Astro type checking |
-| `pnpm build` | Type-check, build, generate Pagefind search index, and copy it to `public/pagefind/` |
-| `pnpm preview` | Preview the production build locally |
-| `pnpm lint` | Run ESLint |
-| `pnpm format` | Format the project with Prettier |
-| `pnpm sync` | Regenerate Astro content/module types |
+| Command            | Action                                                                               |
+| ------------------ | ------------------------------------------------------------------------------------ |
+| `pnpm dev`         | Start the local dev server                                                           |
+| `pnpm astro check` | Run Astro type checking                                                              |
+| `pnpm build`       | Type-check, build, generate Pagefind search index, and copy it to `public/pagefind/` |
+| `pnpm preview`     | Preview the production build locally                                                 |
+| `pnpm lint`        | Run ESLint                                                                           |
+| `pnpm format`      | Format the project with Prettier                                                     |
+| `pnpm sync`        | Regenerate Astro content/module types                                                |
 
 ## Tech Stack
 

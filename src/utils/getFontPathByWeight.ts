@@ -9,11 +9,15 @@ export function getFontPathByWeight(
   }
 ): string | undefined {
   const style = options?.style ?? "normal";
-  const format = options?.format ?? "truetype";
+  const formats = options?.format
+    ? [options.format]
+    : ["truetype", "ttf", "opentype", "otf"];
 
   for (const font of fonts) {
     if (font.weight === String(weight) && font.style === style) {
-      const src = font.src.find(file => file.format === format) ?? font.src[0];
+      const src = font.src.find(file =>
+        file.format ? formats.includes(file.format) : false
+      );
       if (src) return src.url;
     }
   }

@@ -45,10 +45,16 @@ const t = useTranslations(Astro.currentLocale);
     if (!rootElement || !btnContainer || !backToTopBtn || !progressIndicator)
       return;
 
-    backToTopBtn.addEventListener("click", () => {
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
-    });
+    const controller = new AbortController();
+
+    backToTopBtn.addEventListener(
+      "click",
+      () => {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      },
+      { signal: controller.signal }
+    );
 
     let lastVisible = null;
     function handleScroll() {
@@ -73,14 +79,22 @@ const t = useTranslations(Astro.currentLocale);
     }
 
     let ticking = false;
-    document.addEventListener("scroll", () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
-      }
+    document.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            handleScroll();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      },
+      { passive: true, signal: controller.signal }
+    );
+
+    document.addEventListener("astro:before-swap", () => controller.abort(), {
+      once: true,
     });
   }
   backToTop();
