@@ -4,21 +4,66 @@ const DEFAULT_ALLOWED_DOMAINS =
 
 const escapeRegExp = str => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+const normalizeDomain = value => {
+  const domain = value?.trim().toLowerCase();
+
+  if (!domain) return "";
+
+  try {
+    const url = new URL(domain.includes("://") ? domain : `https://${domain}`);
+    return url.hostname;
+  } catch {
+    return domain.split("/")[0].split(":")[0];
+  }
+};
+
+const getAllowedDomainPatternSources = allowedDomains =>
+  allowedDomains
+    .split(",")
+    .map(normalizeDomain)
+    .filter(Boolean)
+    .map(domain => `^${escapeRegExp(domain).replaceAll("\\*", ".+")}$`);
+
 const outputHTML = (
   { provider = "unknown", token, error, errorCode },
-  request
+  request,
+  env = process.env
 ) => {
   const state = error ? "error" : "success";
   const content = error ? { provider, error, errorCode } : { provider, token };
   const readyMessage = `authorizing:${provider}`;
   const resultMessage = `authorization:${provider}:${state}:${JSON.stringify(content)}`;
   const secure = new URL(request.url).protocol === "https:" ? "; Secure" : "";
+  const allowedDomainPatterns = getAllowedDomainPatternSources(
+    env.ALLOWED_DOMAINS || DEFAULT_ALLOWED_DOMAINS
+  );
 
   return new Response(
     `<!doctype html><html><body><script>
 (() => {
+  const allowedDomainPatterns = ${JSON.stringify(allowedDomainPatterns)}.map(
+    source => new RegExp(source, "i")
+  );
+  const isAllowedOrigin = origin => {
+    try {
+      const url = new URL(origin);
+      const isLocal =
+        url.hostname === "localhost" ||
+        url.hostname === "127.0.0.1" ||
+        url.hostname === "[::1]";
+
+      if (url.protocol !== "https:" && !(url.protocol === "http:" && isLocal)) {
+        return false;
+      }
+
+      return allowedDomainPatterns.some(pattern => pattern.test(url.hostname));
+    } catch {
+      return false;
+    }
+  };
+
   window.addEventListener("message", ({ data, origin }) => {
-    if (data === ${JSON.stringify(readyMessage)}) {
+    if (data === ${JSON.stringify(readyMessage)} && isAllowedOrigin(origin)) {
       window.opener?.postMessage(
         ${JSON.stringify(resultMessage)},
         origin
@@ -39,18 +84,12 @@ const outputHTML = (
 };
 
 const isAllowedDomain = (domain, allowedDomains) =>
-  allowedDomains
-    .split(",")
-    .map(str => str.trim())
-    .filter(Boolean)
-    .some(str =>
-      (domain ?? "").match(
-        new RegExp(`^${escapeRegExp(str).replace("\\*", ".+")}$`)
-      )
-    );
+  getAllowedDomainPatternSources(allowedDomains).some(pattern =>
+    new RegExp(pattern, "i").test(normalizeDomain(domain))
+  );
 
-const createError = (request, provider, error, errorCode) =>
-  outputHTML({ provider, error, errorCode }, request);
+const createError = (request, provider, error, errorCode, env) =>
+  outputHTML({ provider, error, errorCode }, request, env);
 
 export const handleAuth = async (request, env = process.env) => {
   if (request.method !== "GET") {
@@ -66,7 +105,8 @@ export const handleAuth = async (request, env = process.env) => {
       request,
       provider ?? "unknown",
       "Your Git backend is not supported by the authenticator.",
-      "UNSUPPORTED_BACKEND"
+      "UNSUPPORTED_BACKEND",
+      env
     );
   }
 
@@ -77,7 +117,8 @@ export const handleAuth = async (request, env = process.env) => {
       request,
       provider,
       "Your domain is not allowed to use the authenticator.",
-      "UNSUPPORTED_DOMAIN"
+      "UNSUPPORTED_DOMAIN",
+      env
     );
   }
 
@@ -86,7 +127,8 @@ export const handleAuth = async (request, env = process.env) => {
       request,
       provider,
       "OAuth app client ID or secret is not configured.",
-      "MISCONFIGURED_CLIENT"
+      "MISCONFIGURED_CLIENT",
+      env
     );
   }
 
@@ -95,7 +137,7 @@ export const handleAuth = async (request, env = process.env) => {
   const params = new URLSearchParams({
     client_id: env.GITHUB_CLIENT_ID,
     redirect_uri: callbackUrl.toString(),
-    scope: "repo,user",
+    scope: "repo",
     state: csrfToken,
   });
   const githubHost = env.GITHUB_HOSTNAME || "github.com";
@@ -129,7 +171,8 @@ export const handleCallback = async (request, env = process.env) => {
       request,
       provider ?? "unknown",
       "Your Git backend is not supported by the authenticator.",
-      "UNSUPPORTED_BACKEND"
+      "UNSUPPORTED_BACKEND",
+      env
     );
   }
 
@@ -138,7 +181,8 @@ export const handleCallback = async (request, env = process.env) => {
       request,
       provider,
       "Failed to receive an authorization code. Please try again later.",
-      "AUTH_CODE_REQUEST_FAILED"
+      "AUTH_CODE_REQUEST_FAILED",
+      env
     );
   }
 
@@ -147,7 +191,8 @@ export const handleCallback = async (request, env = process.env) => {
       request,
       provider,
       "Potential CSRF attack detected. Authentication flow aborted.",
-      "CSRF_DETECTED"
+      "CSRF_DETECTED",
+      env
     );
   }
 
@@ -156,7 +201,8 @@ export const handleCallback = async (request, env = process.env) => {
       request,
       provider,
       "OAuth app client ID or secret is not configured.",
-      "MISCONFIGURED_CLIENT"
+      "MISCONFIGURED_CLIENT",
+      env
     );
   }
 
@@ -183,7 +229,8 @@ export const handleCallback = async (request, env = process.env) => {
       request,
       provider,
       "Failed to request an access token. Please try again later.",
-      "TOKEN_REQUEST_FAILED"
+      "TOKEN_REQUEST_FAILED",
+      env
     );
   }
 
@@ -196,7 +243,8 @@ export const handleCallback = async (request, env = process.env) => {
       request,
       provider,
       "Server responded with malformed data. Please try again later.",
-      "MALFORMED_RESPONSE"
+      "MALFORMED_RESPONSE",
+      env
     );
   }
 
@@ -207,9 +255,10 @@ export const handleCallback = async (request, env = process.env) => {
       payload.error_description ||
         payload.error ||
         "GitHub did not return an access token.",
-      payload.error ? "TOKEN_REQUEST_FAILED" : "MALFORMED_RESPONSE"
+      payload.error ? "TOKEN_REQUEST_FAILED" : "MALFORMED_RESPONSE",
+      env
     );
   }
 
-  return outputHTML({ provider, token: payload.access_token }, request);
+  return outputHTML({ provider, token: payload.access_token }, request, env);
 };
