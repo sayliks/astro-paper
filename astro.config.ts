@@ -69,7 +69,16 @@ export default defineConfig({
       fallbacks: ["monospace"],
       weights: [400, 500, 700],
       styles: ["normal"],
-      formats: ["woff2", "ttf"],
+      formats: ["woff2"],
+    },
+    {
+      name: "Google Sans Code",
+      cssVariable: "--font-google-sans-code-og",
+      provider: fontProviders.google(),
+      fallbacks: ["monospace"],
+      weights: [400, 700],
+      styles: ["normal"],
+      formats: ["woff"],
     },
   ],
   env: {

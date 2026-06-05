@@ -48,6 +48,7 @@
 
   const HITOKOTO_API =
     "https://v1.hitokoto.cn/?c=d&c=e&c=k&max_length=42&encode=json";
+  const HITOKOTO_REFRESH_MS = 5 * 60 * 1000;
   const FALLBACK_QUOTE: HitokotoResponse = {
     id: 0,
     uuid: "",
@@ -131,6 +132,17 @@
         card.dataset.hitokotoReady = "true";
 
         fetchQuote(card);
+
+        const refreshId = window.setInterval(() => {
+          if (document.hidden) return;
+          fetchQuote(card, { showLoading: false });
+        }, HITOKOTO_REFRESH_MS);
+
+        document.addEventListener(
+          "astro:before-swap",
+          () => window.clearInterval(refreshId),
+          { once: true }
+        );
       });
   }
 

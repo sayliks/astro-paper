@@ -11,7 +11,7 @@ export function getFontPathByWeight(
   const style = options?.style ?? "normal";
   const formats = options?.format
     ? [options.format]
-    : ["truetype", "ttf", "opentype", "otf"];
+    : ["woff", "truetype", "ttf", "opentype", "otf"];
 
   for (const font of fonts) {
     if (font.weight === String(weight) && font.style === style) {

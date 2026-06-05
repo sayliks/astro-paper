@@ -8,7 +8,7 @@ AstroPaper is a minimal, SEO-friendly Astro blog theme. Package manager is **pnp
 
 ```bash
 pnpm dev            # dev server at localhost:4321 (shows drafts + scheduled posts)
-pnpm build          # astro check (typecheck) + astro build + pagefind index + copy index to public/pagefind/
+pnpm build          # astro check (typecheck) + astro build + pagefind index in dist/pagefind/
 pnpm preview        # preview the production build
 pnpm lint           # eslint .
 pnpm format         # prettier --write .   (format:check for CI)
@@ -40,7 +40,7 @@ There is no test suite. "Type checking" means `astro check` (run via `pnpm build
 When `features.dynamicOgImage` is on, each post without an explicit `ogImage` gets a generated `index.png` via **Satori** (HTML→SVG) + **Sharp** (SVG→PNG):
 - Per-post: `src/pages/posts/[...slug]/index.png.ts`.
 - Site default: `src/pages/og.png.ts`.
-- The post page (`[...slug]/index.astro`) resolves the OG URL: explicit `ogImage` frontmatter wins, otherwise it points at the generated `…/index.png`. Fonts come from Astro's font pipeline (`astro:assets`), keyed by the `--font-google-sans-code` CSS variable declared in `astro.config.ts`.
+- The post page (`[...slug]/index.astro`) resolves the OG URL: explicit `ogImage` frontmatter wins, otherwise it points at the generated `…/index.png`. Browser fonts use the `--font-google-sans-code` CSS variable, while generated OG images read the Satori-compatible `--font-google-sans-code-og` font data from Astro's font pipeline (`astro:assets`).
 
 ## i18n
 
@@ -61,4 +61,4 @@ When `features.dynamicOgImage` is on, each post without an explicit `ogImage` ge
 - Path alias `@/*` → `src/*` (plus `@/astro-paper.config`). Prefer it over relative imports.
 - Layouts: `Layout.astro` (base `<head>`, meta, OG, theme bootstrap) → `PostLayout.astro` (adds article/JSON-LD) → page.
 - Route-private components/utils are co-located under `_components/` and `_utils/` inside `src/pages/...` (underscore keeps them out of routing).
-- Static search is **Pagefind**; the index is generated at build time and copied into `public/pagefind/` (don't hand-edit it). `data-pagefind-body` on the article marks indexable content.
+- Static search is **Pagefind**; the index is generated into `dist/pagefind/` at build time. `data-pagefind-body` on the article marks indexable content.

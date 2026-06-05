@@ -75,15 +75,15 @@ http://localhost:5173/
 
 ## Commands
 
-| Command            | Action                                                                               |
-| ------------------ | ------------------------------------------------------------------------------------ |
-| `pnpm dev`         | Start the local dev server                                                           |
-| `pnpm astro check` | Run Astro type checking                                                              |
-| `pnpm build`       | Type-check, build, generate Pagefind search index, and copy it to `public/pagefind/` |
-| `pnpm preview`     | Preview the production build locally                                                 |
-| `pnpm lint`        | Run ESLint                                                                           |
-| `pnpm format`      | Format the project with Prettier                                                     |
-| `pnpm sync`        | Regenerate Astro content/module types                                                |
+| Command            | Action                                                                        |
+| ------------------ | ----------------------------------------------------------------------------- |
+| `pnpm dev`         | Start the local dev server                                                    |
+| `pnpm astro check` | Run Astro type checking                                                       |
+| `pnpm build`       | Type-check, build, and generate the Pagefind search index in `dist/pagefind/` |
+| `pnpm preview`     | Preview the production build locally                                          |
+| `pnpm lint`        | Run ESLint                                                                    |
+| `pnpm format`      | Format the project with Prettier                                              |
+| `pnpm sync`        | Regenerate Astro content/module types                                         |
 
 ## Tech Stack
 
@@ -99,7 +99,7 @@ http://localhost:5173/
 
 - Site-level settings are managed in `astro-paper.config.ts`.
 - Content schemas are defined in `src/content.config.ts`.
-- Generated search files in `public/pagefind/` should not be edited by hand.
+- Generated search files in `dist/pagefind/` are build output and should not be edited by hand.
 - Dynamic OG images are generated from the routes under `src/pages/og.png.ts` and `src/pages/posts/[...slug]/index.png.ts`.
 
 ## Acknowledgements
