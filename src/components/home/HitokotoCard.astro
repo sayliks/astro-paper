@@ -1,0 +1,155 @@
+<section
+  data-hitokoto-card
+  class="group border-border hover:border-accent/45 rounded-lg border bg-slate-950/90 p-4 text-slate-100 shadow-sm shadow-slate-950/10 backdrop-blur transition-colors sm:p-5"
+  aria-labelledby="hitokoto-heading"
+>
+  <div class="flex items-start justify-between gap-4">
+    <div>
+      <p
+        class="text-muted-foreground text-xs font-medium tracking-wide uppercase"
+      >
+        Hitokoto
+      </p>
+      <h1 id="hitokoto-heading" class="mt-1 text-2xl font-semibold sm:text-3xl">
+        每日一言
+      </h1>
+    </div>
+    <button
+      type="button"
+      data-hitokoto-refresh
+      class="hover:border-accent/60 rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-slate-200 transition-colors hover:text-white disabled:cursor-wait disabled:opacity-60"
+      aria-label="刷新一言"
+    >
+      换一句
+    </button>
+  </div>
+
+  <blockquote class="mt-4">
+    <p
+      data-hitokoto-text
+      class="text-base leading-8 text-slate-100 sm:text-lg"
+      aria-live="polite"
+    >
+      正在获取一言...
+    </p>
+  </blockquote>
+
+  <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+    <p data-hitokoto-source class="text-slate-300"></p>
+    <a
+      data-hitokoto-link
+      href="https://hitokoto.cn/"
+      target="_blank"
+      rel="noreferrer"
+      class="hover:text-accent text-slate-300 underline decoration-dashed underline-offset-4 transition-colors"
+      hidden
+    >
+      查看出处
+    </a>
+  </div>
+
+  <p data-hitokoto-error class="sr-only" aria-live="polite"></p>
+</section>
+
+<script>
+  type HitokotoResponse = {
+    id: number;
+    uuid: string;
+    hitokoto: string;
+    type: string;
+    from: string;
+    from_who: string | null;
+    creator: string;
+    creator_uid: number;
+    reviewer: number;
+    commit_from: string;
+    created_at: string;
+    length: number;
+  };
+
+  const HITOKOTO_API =
+    "https://v1.hitokoto.cn/?c=d&c=e&c=k&max_length=42&encode=json";
+  const FALLBACK_QUOTE: HitokotoResponse = {
+    id: 0,
+    uuid: "",
+    hitokoto: "慢慢来，认真走，今天也会有一点新的光。",
+    type: "e",
+    from: "sayliks corner",
+    from_who: null,
+    creator: "sayliks",
+    creator_uid: 0,
+    reviewer: 0,
+    commit_from: "fallback",
+    created_at: "",
+    length: 20,
+  };
+
+  function formatSource(data: HitokotoResponse): string {
+    if (data.from_who && data.from) return `${data.from_who} · ${data.from}`;
+    if (data.from_who) return data.from_who;
+    if (data.from) return data.from;
+    return "一言";
+  }
+
+  function applyQuote(card: HTMLElement, data: HitokotoResponse): void {
+    const text = card.querySelector<HTMLElement>("[data-hitokoto-text]");
+    const source = card.querySelector<HTMLElement>("[data-hitokoto-source]");
+    const link = card.querySelector<HTMLAnchorElement>("[data-hitokoto-link]");
+
+    if (text) text.textContent = `“${data.hitokoto}”`;
+    if (source) source.textContent = `来自 ${formatSource(data)}`;
+
+    if (link) {
+      if (data.uuid) {
+        link.href = `https://hitokoto.cn/?uuid=${encodeURIComponent(data.uuid)}`;
+        link.hidden = false;
+      } else {
+        link.hidden = true;
+      }
+    }
+  }
+
+  async function fetchQuote(card: HTMLElement): Promise<void> {
+    const refresh = card.querySelector<HTMLButtonElement>(
+      "[data-hitokoto-refresh]"
+    );
+    const text = card.querySelector<HTMLElement>("[data-hitokoto-text]");
+    const error = card.querySelector<HTMLElement>("[data-hitokoto-error]");
+
+    if (refresh) refresh.disabled = true;
+    if (text) text.textContent = "正在获取一言...";
+    if (error) error.textContent = "";
+
+    try {
+      const response = await fetch(HITOKOTO_API, { cache: "no-store" });
+      if (!response.ok) throw new Error("Hitokoto request failed");
+      const data = (await response.json()) as HitokotoResponse;
+      applyQuote(card, data);
+    } catch {
+      applyQuote(card, FALLBACK_QUOTE);
+      if (error) {
+        error.textContent = "一言获取失败，已显示备用句子。";
+      }
+    } finally {
+      if (refresh) refresh.disabled = false;
+    }
+  }
+
+  function setupHitokotoCards(): void {
+    document
+      .querySelectorAll<HTMLElement>("[data-hitokoto-card]")
+      .forEach(card => {
+        if (card.dataset.hitokotoReady === "true") return;
+        card.dataset.hitokotoReady = "true";
+
+        card
+          .querySelector<HTMLButtonElement>("[data-hitokoto-refresh]")
+          ?.addEventListener("click", () => fetchQuote(card));
+
+        fetchQuote(card);
+      });
+  }
+
+  setupHitokotoCards();
+  document.addEventListener("astro:page-load", setupHitokotoCards);
+</script>
