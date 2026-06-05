@@ -4,6 +4,7 @@ backend:
   name: github
   repo: sayliks/astro-paper
   branch: main
+  open_authoring: false
 
 publish_mode: editorial_workflow
 
