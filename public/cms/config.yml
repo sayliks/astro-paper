@@ -5,7 +5,7 @@ backend:
   repo: sayliks/astro-paper
   branch: main
   open_authoring: false
-  auth_methods: [token]
+  auth_methods: [oauth, token]
 
 app_title: "sayliks 内容管理"
 site_url: "https://www.matsumae.top"
