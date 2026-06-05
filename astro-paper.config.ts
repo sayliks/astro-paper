@@ -3,7 +3,7 @@ import { defineAstroPaperConfig } from "./src/types/config";
 export default defineAstroPaperConfig({
   site: {
     url: "https://www.matsumae.top/",
-    title: "sayliks corner",
+    title: "sayliks's corner",
     description: "一个用来记录学习、项目、阅读、音乐和日常想法的个人空间。",
     author: "sayliks",
     profile: "https://github.com/sayliks",
@@ -46,10 +46,18 @@ export default defineAstroPaperConfig({
     },
   ],
   shareLinks: [
-    { name: "whatsapp", url: "https://wa.me/?text=" },
-    { name: "facebook", url: "https://www.facebook.com/sharer.php?u=" },
-    { name: "x",        url: "https://x.com/intent/post?url=" },
-    { name: "telegram", url: "https://t.me/share/url?url=" },
-    { name: "mail",     url: "mailto:?subject=See%20this%20post&body=" },
+    { name: "wechat", url: "", linkTitle: "分享到微信" },
+    {
+      name: "weibo",
+      url: "https://service.weibo.com/share/share.php",
+      linkTitle: "分享到微博",
+    },
+    {
+      name: "telegram",
+      url: "https://t.me/share/url",
+      linkTitle: "分享到 Telegram",
+    },
+    { name: "mail", url: "mailto:", linkTitle: "通过邮件分享这篇文章" },
+    { name: "copy", url: "", linkTitle: "复制文章链接" },
   ],
 });

@@ -79,10 +79,10 @@ interface SocialLink {
 interface ShareLink {
   /**
    * Must match an SVG filename in src/assets/icons/socials/.
-   * e.g. "facebook" → src/assets/icons/socials/facebook.svg
+   * e.g. "weibo" → src/assets/icons/socials/weibo.svg
    */
   name: string;
-  /** Base share URL. The post URL will be appended as a query param. */
+  /** Base share URL, or an empty string for client-only actions like copy. */
   url: string;
   /**
    * Accessible label for the icon link (aria-label, title attribute).
