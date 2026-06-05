@@ -86,7 +86,7 @@ interface ShareLink {
   url: string;
   /**
    * Accessible label for the icon link (aria-label, title attribute).
-   * Auto-generated if omitted: "Share this post on Facebook", "Share this post via WhatsApp", etc.
+   * Auto-generated if omitted: "Share this post on Weibo", "Share this post via email", etc.
    * Override when the default wording doesn't fit.
    */
   linkTitle?: string;

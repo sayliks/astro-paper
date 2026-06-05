@@ -2,7 +2,9 @@ const THEME_KEY = "theme";
 const LIGHT = "light";
 const DARK = "dark";
 
-function isTheme(value: string | null): value is typeof LIGHT | typeof DARK {
+function isTheme(
+  value: string | null | undefined
+): value is typeof LIGHT | typeof DARK {
   return value === LIGHT || value === DARK;
 }
 
@@ -15,9 +17,11 @@ function getPreferredTheme(): string {
 }
 
 // Reuse the value already set by the inline FOUC-prevention script if available.
-let themeValue: string =
-  (window as unknown as { __theme?: { value: string } }).__theme?.value ??
-  getPreferredTheme();
+const initialTheme = (window as unknown as { __theme?: { value: string } })
+  .__theme?.value;
+let themeValue: string = isTheme(initialTheme)
+  ? initialTheme
+  : getPreferredTheme();
 
 function persist(): void {
   localStorage.setItem(THEME_KEY, themeValue);
