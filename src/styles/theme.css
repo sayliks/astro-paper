@@ -29,10 +29,10 @@
 [data-theme="dark"] {
   --background: #1b1f24;
   --foreground: #eaedf3;
-  --accent: #ff6b01;
+  --accent: #e07030;
   --accent-foreground: #ffffff;
   --muted: #343f60;
   --muted-foreground: #afb9ca;
-  --border: #ab4b08;
+  --border: #303842;
   --giscus-surface: var(--background);
 }
