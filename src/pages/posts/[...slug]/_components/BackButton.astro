@@ -23,19 +23,3 @@ const t = useTranslations(locale);
     </div>
   )
 }
-
-<script>
-  function updateGoBackUrl() {
-    const backButton: HTMLAnchorElement | null =
-      document.querySelector("#back-button");
-
-    const backUrl = sessionStorage.getItem("backUrl");
-
-    if (backUrl && backButton) {
-      backButton.href = backUrl;
-    }
-  }
-
-  document.addEventListener("astro:page-load", updateGoBackUrl);
-  updateGoBackUrl();
-</script>

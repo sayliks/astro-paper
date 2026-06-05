@@ -99,8 +99,6 @@ const rssHref = getAssetPath("rss.xml");
       )
     }
 
-    <SpeedInsights />
-
     <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
       the browser paints. Runs synchronously, no defer/async.
@@ -135,8 +133,10 @@ const rssHref = getAssetPath("rss.xml");
     class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"
   >
     <slot />
+    <SpeedInsights />
     <script>
       import "@/scripts/theme";
+      import "@/scripts/navigation-state";
     </script>
   </body>
 </html>

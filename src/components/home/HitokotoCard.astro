@@ -1,15 +1,15 @@
 <section
   data-hitokoto-card
-  class="border-border bg-background text-foreground group hover:border-accent/45 rounded-lg border py-5 transition-colors"
+  class="border-border bg-background text-foreground group hover:border-accent/45 min-h-48 rounded-lg border py-5 transition-colors sm:min-h-44"
   aria-label="每日一言"
 >
   <blockquote class="px-4 sm:px-5">
     <p
       data-hitokoto-text
-      class="text-foreground text-base leading-8 whitespace-pre-line sm:text-lg"
+      class="text-foreground min-h-24 text-base leading-8 whitespace-pre-line sm:min-h-20 sm:text-lg"
       aria-live="polite"
     >
-      正在获取一言...
+      “慢慢来，认真走，今天也会有一点新的光。”
     </p>
   </blockquote>
 
@@ -23,7 +23,7 @@
       rel="noreferrer"
       class="hover:text-accent underline decoration-dashed underline-offset-4 transition-colors"
     >
-      -- 佚名 / 一言
+      -- sayliks / sayliks corner
     </a>
   </div>
 
@@ -146,7 +146,7 @@
         if (card.dataset.hitokotoReady === "true") return;
         card.dataset.hitokotoReady = "true";
 
-        fetchQuote(card);
+        fetchQuote(card, { showLoading: false });
 
         const refreshId = window.setInterval(() => {
           if (document.hidden) return;

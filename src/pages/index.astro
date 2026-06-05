@@ -35,12 +35,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
   </Fragment>
 
   <Header />
-  <main
-    id="main-content"
-    data-layout="index"
-    data-home-path={homePath}
-    class="app-layout"
-  >
+  <main id="main-content" data-back-url={homePath} class="app-layout">
     <section id="hero" class="border-border border-b pt-8 pb-6">
       <HitokotoCard />
       <br />
@@ -111,14 +106,3 @@ const homePath = getRelativeLocaleUrl(locale, "");
   </main>
   <Footer />
 </Layout>
-
-<script>
-  document.addEventListener("astro:page-load", () => {
-    const indexLayout = (document.querySelector("#main-content") as HTMLElement)
-      ?.dataset;
-    const baseRoot = import.meta.env.BASE_URL.replace(/\/?$/, "/");
-    if (indexLayout?.layout) {
-      sessionStorage.setItem("backUrl", indexLayout.homePath ?? baseRoot);
-    }
-  });
-</script>
