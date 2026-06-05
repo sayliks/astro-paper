@@ -1,7 +1,7 @@
 import type { FontData } from "astro:assets";
 
 export function getFontPathByWeight(
-  fonts: FontData[],
+  fonts: FontData[] | undefined,
   weight: number,
   options?: {
     style?: "normal" | "italic";
@@ -12,6 +12,8 @@ export function getFontPathByWeight(
   const formats = options?.format
     ? [options.format]
     : ["woff", "truetype", "ttf", "opentype", "otf"];
+
+  if (!fonts) return undefined;
 
   for (const font of fonts) {
     if (font.weight === String(weight) && font.style === style) {

@@ -2,19 +2,17 @@ import type { APIRoute } from "astro";
 import satori from "satori";
 import sharp from "sharp";
 import { fontData, experimental_getFontFileURL } from "astro:assets";
-import { getFontPathByWeight } from "@/utils/getFontPathByWeight";
+import {
+  getRequiredOgFontPath,
+  OG_FONT_FAMILY,
+  OG_FONT_VARIABLE,
+} from "@/utils/ogFont";
 import config from "@/config";
-
-const OG_FONT_VARIABLE = "--font-google-sans-code-og";
 
 export const GET: APIRoute = async context => {
   const fonts = fontData[OG_FONT_VARIABLE];
-  const regularFontPath = getFontPathByWeight(fonts, 400);
-  const boldFontPath = getFontPathByWeight(fonts, 700);
-
-  if (regularFontPath === undefined || boldFontPath === undefined) {
-    throw new Error("Cannot find the font path.");
-  }
+  const regularFontPath = getRequiredOgFontPath(fonts, 400);
+  const boldFontPath = getRequiredOgFontPath(fonts, 700);
 
   const [regularData, boldData] = await Promise.all([
     fetch(experimental_getFontFileURL(regularFontPath, context.url)).then(res =>
@@ -37,7 +35,7 @@ export const GET: APIRoute = async context => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontFamily: "Google Sans Code",
+          fontFamily: OG_FONT_FAMILY,
         },
         children: [
           {
@@ -148,13 +146,13 @@ export const GET: APIRoute = async context => {
       embedFont: true,
       fonts: [
         {
-          name: "Google Sans Code",
+          name: OG_FONT_FAMILY,
           data: regularData,
           weight: 400,
           style: "normal",
         },
         {
-          name: "Google Sans Code",
+          name: OG_FONT_FAMILY,
           data: boldData,
           weight: 700,
           style: "normal",

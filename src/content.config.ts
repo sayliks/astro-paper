@@ -5,6 +5,14 @@ import config from "@/config";
 
 export const BLOG_PATH = "src/content/posts";
 
+const blankStringToUndefined = (value: unknown) =>
+  typeof value === "string" && value.trim() === "" ? undefined : value;
+
+const optionalTrimmedString = z.preprocess(
+  blankStringToUndefined,
+  z.string().trim().optional()
+);
+
 const posts = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: `./${BLOG_PATH}` }),
   schema: ({ image }) =>
@@ -16,11 +24,14 @@ const posts = defineCollection({
       featured: z.boolean().optional(),
       draft: z.boolean().optional(),
       tags: z.array(z.string()).default(["others"]),
-      ogImage: image().or(z.string()).optional(),
+      ogImage: z.preprocess(
+        blankStringToUndefined,
+        image().or(z.string().trim().min(1)).optional()
+      ),
       description: z.string(),
-      canonicalURL: z.string().optional(),
+      canonicalURL: optionalTrimmedString,
       hideEditPost: z.boolean().optional(),
-      timezone: z.string().optional(),
+      timezone: optionalTrimmedString,
     }),
 });
 
@@ -29,8 +40,8 @@ const pages = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
-    ogImage: z.string().optional(),
-    canonicalURL: z.string().optional(),
+    ogImage: optionalTrimmedString,
+    canonicalURL: optionalTrimmedString,
   }),
 });
 

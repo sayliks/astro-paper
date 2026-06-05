@@ -100,26 +100,41 @@
     typeof globalThis & {
       __astroPaperHitokotoReady?: boolean;
     };
+  const hitokotoRequests = new WeakMap<HTMLElement, AbortController>();
 
   async function fetchQuote(
     card: HTMLElement,
     { showLoading = true }: { showLoading?: boolean } = {}
   ): Promise<void> {
+    if (hitokotoRequests.has(card)) return;
+
+    const controller = new AbortController();
     const text = card.querySelector<HTMLElement>("[data-hitokoto-text]");
     const error = card.querySelector<HTMLElement>("[data-hitokoto-error]");
+
+    hitokotoRequests.set(card, controller);
 
     if (showLoading && text) text.textContent = "正在获取一言...";
     if (error) error.textContent = "";
 
     try {
-      const response = await fetch(HITOKOTO_API, { cache: "no-store" });
+      const response = await fetch(HITOKOTO_API, {
+        cache: "no-store",
+        signal: controller.signal,
+      });
       if (!response.ok) throw new Error("Hitokoto request failed");
       const data = (await response.json()) as HitokotoResponse;
       applyQuote(card, data);
     } catch {
+      if (controller.signal.aborted) return;
+
       applyQuote(card, FALLBACK_QUOTE);
       if (error) {
         error.textContent = "一言获取失败，已显示备用句子。";
+      }
+    } finally {
+      if (hitokotoRequests.get(card) === controller) {
+        hitokotoRequests.delete(card);
       }
     }
   }
@@ -140,7 +155,11 @@
 
         document.addEventListener(
           "astro:before-swap",
-          () => window.clearInterval(refreshId),
+          () => {
+            window.clearInterval(refreshId);
+            hitokotoRequests.get(card)?.abort();
+            hitokotoRequests.delete(card);
+          },
           { once: true }
         );
       });

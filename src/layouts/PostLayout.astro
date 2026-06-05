@@ -35,6 +35,8 @@ const structuredData = {
 
 <Layout {title} {description} {ogImage} {canonicalURL}>
   <Fragment slot="head">
+    <link rel="preconnect" href="https://giscus.app" crossorigin />
+
     <!-- Override og:type for article pages -->
     <meta property="og:type" content="article" />
 

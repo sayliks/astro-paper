@@ -17,6 +17,7 @@ import {
 } from "@shikijs/transformers";
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import { rehypeImageOptimize } from "./src/utils/transformers/rehypeImageOptimize";
+import { OG_FONT_FAMILY, OG_FONT_VARIABLE } from "./src/utils/ogFont";
 import config from "./astro-paper.config";
 
 export default defineConfig({
@@ -63,7 +64,7 @@ export default defineConfig({
   },
   fonts: [
     {
-      name: "Google Sans Code",
+      name: OG_FONT_FAMILY,
       cssVariable: "--font-google-sans-code",
       provider: fontProviders.google(),
       fallbacks: ["monospace"],
@@ -72,8 +73,8 @@ export default defineConfig({
       formats: ["woff2"],
     },
     {
-      name: "Google Sans Code",
-      cssVariable: "--font-google-sans-code-og",
+      name: OG_FONT_FAMILY,
+      cssVariable: OG_FONT_VARIABLE,
       provider: fontProviders.google(),
       fallbacks: ["monospace"],
       weights: [400, 700],

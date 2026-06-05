@@ -20,10 +20,13 @@ const { site } = config;
 const {
   title = site.title,
   description = site.description,
-  ogImage = resolveDefaultOgImagePath(config),
-  canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
+  ogImage: initOgImage,
+  canonicalURL: initCanonicalURL,
 } = Astro.props;
 
+const ogImage = initOgImage?.trim() || resolveDefaultOgImagePath(config);
+const canonicalURL =
+  initCanonicalURL?.trim() || new URL(Astro.url.pathname, Astro.site).href;
 const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
 const rssHref = getRelativeLocaleUrl(
   Astro.currentLocale ?? config.site.lang,
@@ -40,7 +43,6 @@ const rssHref = getRelativeLocaleUrl(
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="preconnect" href="https://giscus.app" crossorigin />
     <link rel="icon" type="image/svg+xml" href={getAssetPath("favicon.svg")} />
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
