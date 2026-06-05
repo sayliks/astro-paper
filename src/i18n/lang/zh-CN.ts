@@ -3,7 +3,7 @@ import type { UIStrings } from "../types";
 export default {
   nav: {
     home: "首页",
-    posts: "文章",
+    posts: "内容",
     tags: "标签",
     about: "关于",
     archives: "归档",
@@ -29,9 +29,9 @@ export default {
   },
   home: {
     socialLinks: "社交链接",
-    featured: "精选文章",
-    recentPosts: "最近文章",
-    allPosts: "全部文章",
+    featured: "精选",
+    recentPosts: "最近",
+    allPosts: "全部",
   },
   footer: {
     copyright: "版权所有",
@@ -39,7 +39,7 @@ export default {
   },
   pages: {
     tagTitle: "标签",
-    tagDesc: "包含该标签的所有文章",
+    tagDesc: "包含该标签的所有内容",
 
     tagsTitle: "标签",
     tagsDesc: "文章中使用过的所有标签。",
@@ -51,14 +51,14 @@ export default {
     archivesDesc: "按时间整理的所有文章。",
 
     searchTitle: "搜索",
-    searchDesc: "搜索站内文章……",
+    searchDesc: "搜索站内",
   },
   a11y: {
     skipToContent: "跳到正文",
     openMenu: "打开菜单",
     closeMenu: "关闭菜单",
     toggleTheme: "切换主题",
-    searchPlaceholder: "搜索文章……",
+    searchPlaceholder: "搜索内容……",
     noResults: "没有找到结果",
     goToPreviousPage: "前往上一页",
     goToNextPage: "前往下一页",
