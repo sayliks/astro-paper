@@ -58,9 +58,15 @@ const t = useTranslations(Astro.currentLocale);
 
     let lastVisible = null;
     function handleScroll() {
-      const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTotal = Math.max(
+        rootElement.scrollHeight - rootElement.clientHeight,
+        1
+      );
       const scrollTop = rootElement.scrollTop;
-      const scrollPercent = Math.floor((scrollTop / scrollTotal) * 100);
+      const scrollPercent = Math.min(
+        100,
+        Math.max(0, Math.floor((scrollTop / scrollTotal) * 100))
+      );
 
       progressIndicator.style.setProperty(
         "background-image",

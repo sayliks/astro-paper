@@ -8,12 +8,34 @@ function isTheme(
   return value === LIGHT || value === DARK;
 }
 
+function getStoredTheme(): string | null {
+  try {
+    return localStorage.getItem(THEME_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function setStoredTheme(value: string): void {
+  try {
+    localStorage.setItem(THEME_KEY, value);
+  } catch {
+    // The reflected DOM state still updates when storage is unavailable.
+  }
+}
+
+function getPrefersDark(): boolean {
+  try {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  } catch {
+    return false;
+  }
+}
+
 function getPreferredTheme(): string {
-  const stored = localStorage.getItem(THEME_KEY);
+  const stored = getStoredTheme();
   if (isTheme(stored)) return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? DARK
-    : LIGHT;
+  return getPrefersDark() ? DARK : LIGHT;
 }
 
 // Reuse the value already set by the inline FOUC-prevention script if available.
@@ -24,7 +46,7 @@ let themeValue: string = isTheme(initialTheme)
   : getPreferredTheme();
 
 function persist(): void {
-  localStorage.setItem(THEME_KEY, themeValue);
+  setStoredTheme(themeValue);
   (window as unknown as { __theme?: { value: string } }).__theme = {
     value: themeValue,
   };
@@ -79,11 +101,15 @@ document.addEventListener("astro:before-swap", event => {
 });
 
 // Sync with OS-level dark/light preference changes.
-window
-  .matchMedia("(prefers-color-scheme: dark)")
-  .addEventListener("change", ({ matches }) => {
-    if (isTheme(localStorage.getItem(THEME_KEY))) return;
+try {
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", ({ matches }) => {
+      if (isTheme(getStoredTheme())) return;
 
-    themeValue = matches ? DARK : LIGHT;
-    reflect();
-  });
+      themeValue = matches ? DARK : LIGHT;
+      reflect();
+    });
+} catch {
+  // No media-query change listener in this environment.
+}

@@ -107,11 +107,21 @@ const rssHref = getAssetPath("rss.xml");
     -->
     <script is:inline>
       (function () {
-        const stored = localStorage.getItem("theme");
         const isTheme = value => value === "light" || value === "dark";
-        const prefersDark = window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches;
+        let stored;
+        try {
+          stored = localStorage.getItem("theme");
+        } catch {
+          stored = null;
+        }
+        let prefersDark = false;
+        try {
+          prefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)"
+          ).matches;
+        } catch {
+          prefersDark = false;
+        }
         const theme = isTheme(stored) ? stored : prefersDark ? "dark" : "light";
         document.firstElementChild?.setAttribute("data-theme", theme);
         // Expose value so theme.ts can skip re-detection.

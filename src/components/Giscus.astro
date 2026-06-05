@@ -18,14 +18,23 @@
             return activeTheme;
           }
 
-          const storedTheme = localStorage.getItem("theme");
+          let storedTheme;
+          try {
+            storedTheme = localStorage.getItem("theme");
+          } catch {
+            storedTheme = null;
+          }
           if (storedTheme === "dark" || storedTheme === "light") {
             return storedTheme;
           }
 
-          return window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light";
+          try {
+            return window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+          } catch {
+            return "light";
+          }
         };
         const getGiscusTheme = () =>
           getSiteTheme() === "dark" ? "noborder_dark" : "noborder_light";
