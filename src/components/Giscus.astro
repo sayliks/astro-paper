@@ -10,6 +10,8 @@
         if (!container) return;
 
         const GISCUS_ORIGIN = "https://giscus.app";
+        const loadTarget = container.closest("section") ?? container;
+
         const getSiteTheme = () => {
           const activeTheme = document.documentElement.dataset.theme;
           if (activeTheme === "dark" || activeTheme === "light") {
@@ -37,44 +39,68 @@
           );
         };
 
-        container
-          .querySelectorAll("script[data-giscus-script], iframe.giscus-frame")
-          .forEach(element => element.remove());
-        container.__giscusThemeObserver?.disconnect();
+        const injectGiscus = () => {
+          container
+            .querySelectorAll("script[data-giscus-script], iframe.giscus-frame")
+            .forEach(element => element.remove());
+          container.__giscusThemeObserver?.disconnect();
 
-        const script = document.createElement("script");
-        script.src = `${GISCUS_ORIGIN}/client.js`;
-        script.async = true;
-        script.crossOrigin = "anonymous";
-        script.dataset.giscusScript = "";
-        script.setAttribute("data-repo", "sayliks/blog-comments");
-        script.setAttribute("data-repo-id", "R_kgDOSwxE-A");
-        script.setAttribute("data-category", "General");
-        script.setAttribute("data-category-id", "DIC_kwDOSwxE-M4C-ett");
-        script.setAttribute("data-mapping", "pathname");
-        script.setAttribute("data-strict", "1");
-        script.setAttribute("data-reactions-enabled", "1");
-        script.setAttribute("data-emit-metadata", "0");
-        script.setAttribute("data-input-position", "bottom");
-        script.setAttribute("data-theme", getGiscusTheme());
-        script.setAttribute("data-lang", "zh-CN");
-        script.setAttribute("data-loading", "lazy");
-        script.addEventListener("load", updateGiscusTheme);
+          const script = document.createElement("script");
+          script.src = `${GISCUS_ORIGIN}/client.js`;
+          script.async = true;
+          script.crossOrigin = "anonymous";
+          script.dataset.giscusScript = "";
+          script.setAttribute("data-repo", "sayliks/blog-comments");
+          script.setAttribute("data-repo-id", "R_kgDOSwxE-A");
+          script.setAttribute("data-category", "General");
+          script.setAttribute("data-category-id", "DIC_kwDOSwxE-M4C-ett");
+          script.setAttribute("data-mapping", "pathname");
+          script.setAttribute("data-strict", "1");
+          script.setAttribute("data-reactions-enabled", "1");
+          script.setAttribute("data-emit-metadata", "0");
+          script.setAttribute("data-input-position", "bottom");
+          script.setAttribute("data-theme", getGiscusTheme());
+          script.setAttribute("data-lang", "zh-CN");
+          script.setAttribute("data-loading", "lazy");
+          script.addEventListener("load", updateGiscusTheme);
 
-        container.append(script);
+          container.append(script);
 
-        const observer = new MutationObserver(updateGiscusTheme);
-        observer.observe(document.documentElement, {
-          attributes: true,
-          attributeFilter: ["data-theme"],
-        });
-        container.__giscusThemeObserver = observer;
+          const observer = new MutationObserver(updateGiscusTheme);
+          observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["data-theme"],
+          });
+          container.__giscusThemeObserver = observer;
 
-        document.addEventListener(
-          "astro:before-swap",
-          () => observer.disconnect(),
-          { once: true }
-        );
+          document.addEventListener(
+            "astro:before-swap",
+            () => observer.disconnect(),
+            { once: true }
+          );
+        };
+
+        if ("IntersectionObserver" in window) {
+          const observer = new IntersectionObserver(
+            entries => {
+              if (entries[0]?.isIntersecting) {
+                injectGiscus();
+                observer.disconnect();
+              }
+            },
+            { rootMargin: "0px 0px 400px 0px" }
+          );
+
+          observer.observe(loadTarget);
+          document.addEventListener(
+            "astro:before-swap",
+            () => observer.disconnect(),
+            { once: true }
+          );
+          return;
+        }
+
+        injectGiscus();
       })();
     </script>
   </div>

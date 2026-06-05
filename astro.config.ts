@@ -16,6 +16,7 @@ import {
   transformerNotationWordHighlight,
 } from "@shikijs/transformers";
 import { transformerFileName } from "./src/utils/transformers/fileName";
+import { rehypeImageOptimize } from "./src/utils/transformers/rehypeImageOptimize";
 import config from "./astro-paper.config";
 
 export default defineConfig({
@@ -43,6 +44,7 @@ export default defineConfig({
         remarkToc,
         [remarkCollapse, { test: "Table of contents" }],
       ],
+      rehypePlugins: [rehypeImageOptimize],
     }),
     shikiConfig: {
       themes: { light: "min-light", dark: "night-owl" },
@@ -65,9 +67,9 @@ export default defineConfig({
       cssVariable: "--font-google-sans-code",
       provider: fontProviders.google(),
       fallbacks: ["monospace"],
-      weights: [300, 400, 500, 600, 700],
+      weights: [400, 500, 700],
       styles: ["normal", "italic"],
-      formats: ["woff", "ttf"],
+      formats: ["ttf"],
     },
   ],
   env: {

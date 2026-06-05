@@ -35,3 +35,56 @@
 :target {
   scroll-margin-block: 1rem;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --astro-transition-duration: 150ms;
+  }
+}
+
+.progress-container,
+.progress-bar {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .progress-container {
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    display: block;
+    width: 100%;
+    height: 4px;
+    background: var(--color-background);
+  }
+
+  .progress-bar {
+    display: block;
+    width: 100%;
+    height: 4px;
+    background: var(--color-accent);
+    transform-origin: left;
+    animation: reading-progress auto linear;
+    animation-timeline: scroll();
+  }
+}
+
+@keyframes reading-progress {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}

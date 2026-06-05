@@ -7,14 +7,27 @@ type Props = {
   noMarginTop?: boolean;
 } & HTMLAttributes<"footer">;
 
-const { noMarginTop = false, class: className, ...attrs } = Astro.props;
+const {
+  noMarginTop = false,
+  class: className,
+  style,
+  ...attrs
+} = Astro.props;
 
 const currentYear = new Date().getFullYear();
 const { site } = config;
+
+const footerStyle = [
+  "content-visibility: auto; contain-intrinsic-size: auto 200px",
+  style,
+]
+  .filter(Boolean)
+  .join("; ");
 ---
 
 <footer
   class:list={["app-layout", { "mt-auto": !noMarginTop }, className]}
+  style={footerStyle}
   {...attrs}
 >
   <div

@@ -26,6 +26,14 @@ const homePath = getRelativeLocaleUrl(locale, "");
 ---
 
 <Layout>
+  <Fragment slot="head">
+    <link
+      rel="prefetch"
+      href={getRelativeLocaleUrl(locale, "posts")}
+      as="document"
+    />
+  </Fragment>
+
   <Header />
   <main
     id="main-content"
