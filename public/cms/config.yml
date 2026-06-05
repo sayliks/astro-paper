@@ -7,9 +7,12 @@ backend:
 
 publish_mode: editorial_workflow
 
+app_title: "sayliks 内容管理"
 site_url: "https://www.matsumae.top"
 display_url: "https://www.matsumae.top"
-logo_url: /favicon.svg
+logo:
+  src: /favicon.svg
+  show_in_header: true
 
 media_folder: public/assets/uploads
 public_folder: /assets/uploads
