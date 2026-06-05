@@ -38,7 +38,9 @@ const getShareHref = (name: string, baseUrl: string) => {
     case "telegram":
       return `${baseUrl}?url=${encodedUrl}&text=${encodedTitle}`;
     case "mail": {
-      const body = encodeURIComponent(`${postTitle}\n\n${description}\n\n${pageUrl}`);
+      const body = encodeURIComponent(
+        `${postTitle}\n\n${description}\n\n${pageUrl}`
+      );
       return `${baseUrl}?subject=${encodedTitle}&body=${body}`;
     }
     default:
@@ -110,14 +112,13 @@ const items = await Promise.all(
       </div>
 
       <span
-        class="mt-1 min-h-5 text-xs text-accent opacity-0 transition-opacity"
+        class="text-accent mt-1 min-h-5 text-xs opacity-0 transition-opacity"
         aria-live="polite"
         data-share-feedback
-      >
-      </span>
+      />
 
       <div
-        class="absolute bottom-full left-1/2 z-20 mb-3 hidden w-64 -translate-x-1/2 rounded-md border border-border bg-background p-3 text-left text-sm text-foreground shadow-lg md:left-0 md:translate-x-0"
+        class="border-border bg-background text-foreground absolute bottom-full left-1/2 z-20 mb-3 hidden w-64 -translate-x-1/2 rounded-md border p-3 text-left text-sm shadow-lg md:left-0 md:translate-x-0"
         role="status"
         data-wechat-popover
       >
@@ -125,7 +126,7 @@ const items = await Promise.all(
           <strong class="text-sm">微信分享</strong>
           <button
             type="button"
-            class="rounded px-1 text-muted-foreground hover:text-accent"
+            class="text-muted-foreground hover:text-accent rounded px-1"
             aria-label="关闭微信分享提示"
             data-wechat-close
           >
@@ -133,7 +134,7 @@ const items = await Promise.all(
           </button>
         </div>
         <p>已复制链接，可粘贴到微信分享。</p>
-        <p class="mt-1 text-xs text-muted-foreground">
+        <p class="text-muted-foreground mt-1 text-xs">
           使用微信扫码分享：当前版本先使用复制链接作为轻量回退。
         </p>
       </div>

@@ -10,12 +10,7 @@ type Props = {
   noMarginTop?: boolean;
 } & HTMLAttributes<"footer">;
 
-const {
-  noMarginTop = false,
-  class: className,
-  style,
-  ...attrs
-} = Astro.props;
+const { noMarginTop = false, class: className, style, ...attrs } = Astro.props;
 
 const currentYear = new Date().getFullYear();
 const { site } = config;
@@ -39,8 +34,14 @@ const footerStyle = [
   >
     <div class="flex flex-wrap items-center gap-1">
       <Socials />
-      <LinkButton href={rssHref} class="p-1.5 hover:rotate-6 sm:p-1" title="订阅 RSS">
-        <IconRss class="inline-block size-5 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent" />
+      <LinkButton
+        href={rssHref}
+        class="p-1.5 hover:rotate-6 sm:p-1"
+        title="订阅 RSS"
+      >
+        <IconRss
+          class="inline-block size-5 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent"
+        />
         <span class="sr-only">订阅 RSS</span>
       </LinkButton>
     </div>
