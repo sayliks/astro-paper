@@ -1,6 +1,6 @@
 ---
 title: "你好，我是 sayliks 👋"
-description: "你好，我是 sayliks。"
+description: "关于 sayliks 的个人介绍。"
 ---
 
 目前是一名软件工程专业的大二学生。
