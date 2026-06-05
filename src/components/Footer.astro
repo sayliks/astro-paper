@@ -1,7 +1,10 @@
 ---
 import type { HTMLAttributes } from "astro/types";
+import IconRss from "@/assets/icons/IconRss.svg";
 import Socials from "./Socials.astro";
+import LinkButton from "./LinkButton.astro";
 import config from "@/config";
+import { getAssetPath } from "@/utils/withBase";
 
 type Props = {
   noMarginTop?: boolean;
@@ -16,6 +19,7 @@ const {
 
 const currentYear = new Date().getFullYear();
 const { site } = config;
+const rssHref = getAssetPath("rss.xml");
 
 const footerStyle = [
   "content-visibility: auto; contain-intrinsic-size: auto 200px",
@@ -33,7 +37,13 @@ const footerStyle = [
   <div
     class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"
   >
-    <Socials />
+    <div class="flex flex-wrap items-center gap-1">
+      <LinkButton href={rssHref} class="p-2 hover:rotate-6 sm:p-1" title="订阅 RSS">
+        <IconRss class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" />
+        <span class="sr-only">订阅 RSS</span>
+      </LinkButton>
+      <Socials />
+    </div>
     <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row">
       <span>&#169; {currentYear} {site.author}</span>
     </div>
