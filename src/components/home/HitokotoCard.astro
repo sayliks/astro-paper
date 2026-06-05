@@ -27,17 +27,14 @@
   <div
     class="text-muted-foreground mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 px-4 text-sm sm:px-5"
   >
-    <p data-hitokoto-author></p>
-    <p data-hitokoto-source></p>
     <a
       data-hitokoto-link
       href="https://hitokoto.cn/"
       target="_blank"
       rel="noreferrer"
       class="hover:text-accent underline decoration-dashed underline-offset-4 transition-colors"
-      hidden
     >
-      详情
+      -- 佚名 / 一言
     </a>
   </div>
 
@@ -88,20 +85,19 @@
 
   function applyQuote(card: HTMLElement, data: HitokotoResponse): void {
     const text = card.querySelector<HTMLElement>("[data-hitokoto-text]");
-    const author = card.querySelector<HTMLElement>("[data-hitokoto-author]");
-    const source = card.querySelector<HTMLElement>("[data-hitokoto-source]");
     const link = card.querySelector<HTMLAnchorElement>("[data-hitokoto-link]");
 
     if (text) text.textContent = `“${data.hitokoto}”`;
-    if (author) author.textContent = `作者：${formatAuthor(data)}`;
-    if (source) source.textContent = `出处：${formatSource(data)}`;
 
     if (link) {
+      const meta = `-- ${formatAuthor(data)} / ${formatSource(data)}`;
+      link.textContent = meta;
+      link.setAttribute("aria-label", `查看一言出处：${meta}`);
+
       if (data.uuid) {
         link.href = `https://hitokoto.cn/?uuid=${encodeURIComponent(data.uuid)}`;
-        link.hidden = false;
       } else {
-        link.hidden = true;
+        link.href = "https://hitokoto.cn/";
       }
     }
   }
