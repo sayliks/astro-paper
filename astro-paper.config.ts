@@ -40,6 +40,11 @@ export default defineAstroPaperConfig({
       linkTitle: "X 上的 sayliks",
     },
     {
+      name: "discord",
+      url: "https://discord.gg/5khVRKUv",
+      linkTitle: "Discord 上的 saylikx",
+    },
+    {
       name: "mail",
       url: "mailto:sayliks@outlook.com",
       linkTitle: "给 sayliks 发邮件",
