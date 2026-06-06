@@ -1,5 +1,6 @@
 # Ignore everything
 /*
+.codex/**
 
 # Except these files & folders
 !/src
