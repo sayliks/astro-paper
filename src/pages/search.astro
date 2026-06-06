@@ -115,6 +115,24 @@ const tags = getUniqueTags(posts);
         showSubResults: true,
         translations: {
           language: "zh-CN",
+          placeholder: "搜索站内",
+          clear_search: "清除",
+          load_more: "加载更多结果",
+          search_label: "站内搜索",
+          searching: "正在搜索 [SEARCH_TERM]...",
+          zero_results: "没有找到与 [SEARCH_TERM] 相关的结果",
+          one_result: "找到 [COUNT] 条与 [SEARCH_TERM] 相关的结果",
+          many_results: "找到 [COUNT] 条与 [SEARCH_TERM] 相关的结果",
+          total_zero_results: "无结果",
+          total_one_result: "[COUNT] 条结果",
+          total_many_results: "[COUNT] 条结果",
+          alt_search:
+            "没有找到与 [SEARCH_TERM] 相关的结果，正在显示 [DIFFERENT_TERM] 的结果",
+          search_suggestion:
+            "没有找到与 [SEARCH_TERM] 相关的结果，可以试试以下搜索：",
+          searching_label: "搜索中",
+          results_label: "搜索结果",
+          zero_results_label: "无结果",
         },
         processTerm: function (term: string) {
           params.set("q", term); // Update the `q` parameter in the URL
