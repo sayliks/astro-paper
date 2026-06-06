@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import Layout from "@/layouts/Layout.astro";
@@ -9,6 +9,13 @@ import Socials from "@/components/Socials.astro";
 import Card from "@/components/Card.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import HitokotoCard from "@/components/home/HitokotoCard.astro";
+import MomentMeta from "@/components/moments/MomentMeta.astro";
+import {
+  getMomentDescription,
+  getMomentMetaTitle,
+  getMomentUrl,
+  getSortedMoments,
+} from "@/utils/getSortedMoments";
 import { getSortedPosts } from "@/utils/getSortedPosts";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
@@ -22,7 +29,38 @@ const posts = await getCollection("posts");
 const sortedPosts = getSortedPosts(posts);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const moments = getSortedMoments(await getCollection("moments"));
 const homePath = getRelativeLocaleUrl(locale, "");
+
+type RecentFeedItem =
+  | {
+      type: "post";
+      sortTime: number;
+      post: CollectionEntry<"posts">;
+    }
+  | {
+      type: "moment";
+      sortTime: number;
+      moment: CollectionEntry<"moments">;
+    };
+
+const getSortTime = (date: Date | string | null | undefined) =>
+  date ? new Date(date).getTime() : 0;
+
+const recentFeedItems: RecentFeedItem[] = [
+  ...recentPosts.map(post => ({
+    type: "post" as const,
+    sortTime: getSortTime(post.data.modDatetime ?? post.data.pubDatetime),
+    post,
+  })),
+  ...moments.map(moment => ({
+    type: "moment" as const,
+    sortTime: getSortTime(moment.data.modDatetime ?? moment.data.pubDatetime),
+    moment,
+  })),
+]
+  .sort((a, b) => b.sortTime - a.sortTime)
+  .slice(0, postsConfig.perIndex);
 ---
 
 <Layout clientRouter={false} preloadFont={false}>
@@ -59,7 +97,7 @@ const homePath = getRelativeLocaleUrl(locale, "");
           id="featured"
           class:list={[
             "pt-12 pb-6",
-            { "border-border border-b": recentPosts.length > 0 },
+            { "border-border border-b": recentFeedItems.length > 0 },
           ]}
         >
           <h2 class="text-2xl font-semibold tracking-wide">
@@ -75,23 +113,48 @@ const homePath = getRelativeLocaleUrl(locale, "");
     }
 
     {
-      recentPosts.length > 0 && (
+      recentFeedItems.length > 0 && (
         <section id="recent-posts" class="pt-12 pb-6">
           <h2 class="text-2xl font-semibold tracking-wide">
             {t.home.recentPosts}
           </h2>
           <ul>
-            {recentPosts.slice(0, postsConfig.perIndex).map(data => (
-              <Card variant="h3" {...data} />
-            ))}
+            {recentFeedItems.map(item =>
+              item.type === "post" ? (
+                <Card variant="h3" {...item.post} />
+              ) : (
+                <li class="my-6">
+                  <a
+                    href={getMomentUrl(item.moment, locale)}
+                    class:list={[
+                      "text-accent inline-block text-lg font-medium",
+                      "decoration-dashed underline-offset-4 hover:underline",
+                      "focus-visible:no-underline focus-visible:underline-offset-0",
+                    ]}
+                  >
+                    <h3>{getMomentMetaTitle(item.moment)}</h3>
+                  </a>
+                  <MomentMeta moment={item.moment} class="mt-1" />
+                  <p>{getMomentDescription(item.moment, 96)}</p>
+                </li>
+              )
+            )}
           </ul>
         </section>
       )
     }
 
-    <div class="my-8 text-center">
+    <div
+      class="my-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-center"
+    >
       <LinkButton href={getRelativeLocaleUrl(locale, "posts")}>
         {t.home.allPosts}
+        {t.pages.postsTitle}
+        <IconArrowRight class="inline-block rtl:-rotate-180" />
+      </LinkButton>
+      <LinkButton href={getRelativeLocaleUrl(locale, "moments")}>
+        {t.home.allPosts}
+        {t.pages.momentsTitle}
         <IconArrowRight class="inline-block rtl:-rotate-180" />
       </LinkButton>
     </div>

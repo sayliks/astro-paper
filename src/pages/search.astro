@@ -1,11 +1,14 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
+import { getCollection } from "astro:content";
 import "@pagefind/default-ui/css/ui.css";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Main from "@/components/Main.astro";
 import Footer from "@/components/Footer.astro";
+import Tag from "@/components/Tag.astro";
+import { getUniqueTags } from "@/utils/getUniqueTags";
 import { getAssetPath } from "@/utils/withBase";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
@@ -25,6 +28,8 @@ const backUrl = config.features.showBackButton
 const pagefindBundlePath = getAssetPath("pagefind/");
 
 const t = useTranslations(locale);
+const posts = await getCollection("posts", ({ data }) => !data.draft);
+const tags = getUniqueTags(posts);
 ---
 
 <Layout title={`${t.pages.searchTitle} | ${config.site.title}`}>
@@ -40,6 +45,20 @@ const t = useTranslations(locale);
       data-bundle-path={pagefindBundlePath}
     >
     </div>
+
+    {
+      tags.length > 0 && (
+        <section class="border-border mt-10 border-t border-dashed pt-6">
+          <h2 class="text-xl font-bold">{t.pages.tagsTitle}</h2>
+          <p class="text-muted-foreground mt-2">{t.pages.tagsDesc}</p>
+          <ul class="mt-5 flex flex-wrap gap-x-5 gap-y-4">
+            {tags.map(({ tag, tagName }) => (
+              <Tag {tag} {tagName} size="sm" />
+            ))}
+          </ul>
+        </section>
+      )
+    }
   </Main>
 
   <Footer />
