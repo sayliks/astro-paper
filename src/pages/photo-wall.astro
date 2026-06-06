@@ -1,0 +1,135 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import Main from "@/components/Main.astro";
+import Footer from "@/components/Footer.astro";
+import { photoWallItems } from "@/data/photoWall";
+import { useTranslations } from "@/i18n";
+import { getAssetPath } from "@/utils/withBase";
+import config from "@/config";
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+---
+
+<Layout
+  title={`${t.pages.photoWallTitle} | ${config.site.title}`}
+  description={t.pages.photoWallDesc}
+  clientRouter={false}
+  speedInsights={false}
+>
+  <Header />
+
+  <Breadcrumb />
+
+  <Main pageTitle={t.pages.photoWallTitle} pageDesc={t.pages.photoWallDesc}>
+    <ul class="photo-wall-grid" aria-label={t.pages.photoWallTitle}>
+      {
+        photoWallItems.map((item, index) => {
+          const isLandscape = item.width > item.height;
+          const isPortrait = item.height > item.width;
+          const loading = index < 2 ? undefined : "lazy";
+
+          return (
+            <li
+              class:list={[
+                "photo-card",
+                {
+                  "photo-card--landscape": isLandscape,
+                  "photo-card--portrait": isPortrait,
+                  "photo-card--square": !isLandscape && !isPortrait,
+                },
+              ]}
+              style={`--photo-width: ${item.width}; --photo-height: ${item.height};`}
+            >
+              <figure>
+                <div class="photo-frame">
+                  <img
+                    src={getAssetPath(item.src)}
+                    alt={item.alt}
+                    width={item.width}
+                    height={item.height}
+                    loading={loading}
+                    decoding="async"
+                  />
+                </div>
+                {item.caption && <figcaption>{item.caption}</figcaption>}
+              </figure>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </Main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .photo-wall-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-auto-flow: dense;
+    align-items: start;
+    gap: 1.25rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .photo-card {
+    grid-column: span 3;
+    min-width: 0;
+  }
+
+  .photo-card--portrait {
+    grid-column: span 2;
+  }
+
+  .photo-card--landscape {
+    grid-column: span 4;
+  }
+
+  .photo-card figure {
+    height: 100%;
+    margin: 0;
+  }
+
+  .photo-frame {
+    overflow: hidden;
+    background: var(--color-muted);
+    border: 1px solid var(--color-border);
+    border-radius: 0.45rem;
+    box-shadow: 0 0.75rem 2rem
+      color-mix(in srgb, var(--foreground), transparent 94%);
+    aspect-ratio: var(--photo-width) / var(--photo-height);
+  }
+
+  .photo-frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .photo-card figcaption {
+    padding-block: 0.65rem 0;
+    color: var(--color-muted-foreground);
+    font-weight: 700;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 720px) {
+    .photo-wall-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .photo-card,
+    .photo-card--portrait,
+    .photo-card--landscape {
+      grid-column: span 2;
+    }
+  }
+</style>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750">
+  <defs>
+    <linearGradient id="sunset" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f2b77c"/>
+      <stop offset=".46" stop-color="#e6d3b2"/>
+      <stop offset="1" stop-color="#6e8ea0"/>
+    </linearGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.1"/>
+      </feComponentTransfer>
+      <feBlend mode="soft-light" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="750" fill="url(#sunset)"/>
+  <circle cx="244" cy="190" r="102" fill="#fff0b8" opacity=".78"/>
+  <path d="M0 352c119-56 226-66 320-30 99 38 151 92 268 74 83-13 135-50 226-52 75-2 142 19 201 64 58 43 117 58 185 45v297H0Z" fill="#d7b58b" opacity=".38"/>
+  <path d="M0 470c133-30 279-23 438 22 198 56 400 52 606-10 58-18 111-29 156-34v302H0Z" fill="#586e74" opacity=".42"/>
+  <path d="M0 561h1200v189H0z" fill="#35393c"/>
+  <path d="M70 561h1030v40H70z" fill="#202327"/>
+  <g stroke="#1f2428" stroke-linecap="round" stroke-width="12">
+    <path d="M142 601v149M270 601v149M398 601v149M526 601v149M654 601v149M782 601v149M910 601v149M1038 601v149"/>
+  </g>
+  <path d="M711 430c17 51 64 74 141 70 75-4 133 17 175 62H619c18-49 49-84 92-132Z" fill="#f9e0a7" opacity=".45"/>
+  <rect width="1200" height="750" filter="url(#grain)" opacity=".75"/>
+</svg>

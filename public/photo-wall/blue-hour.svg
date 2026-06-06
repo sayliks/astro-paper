@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#17233d"/>
+      <stop offset=".52" stop-color="#496b91"/>
+      <stop offset="1" stop-color="#d5a874"/>
+    </linearGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.09"/>
+      </feComponentTransfer>
+      <feBlend mode="soft-light" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="750" fill="url(#bg)"/>
+  <circle cx="908" cy="159" r="75" fill="#ffe7af" opacity=".85"/>
+  <path d="M0 520c164-71 287-93 438-63 151 29 224 86 374 66 95-13 144-44 238-29 65 10 113 35 150 59v197H0Z" fill="#18263e" opacity=".8"/>
+  <rect x="70" y="283" width="144" height="467" fill="#1c2435"/>
+  <rect x="260" y="221" width="190" height="529" fill="#22304a"/>
+  <rect x="506" y="326" width="126" height="424" fill="#182133"/>
+  <rect x="706" y="256" width="236" height="494" fill="#253550"/>
+  <rect x="980" y="350" width="132" height="400" fill="#1d283e"/>
+  <g fill="#f4d9a3" opacity=".9">
+    <rect x="97" y="328" width="31" height="36"/>
+    <rect x="152" y="413" width="31" height="36"/>
+    <rect x="312" y="269" width="34" height="39"/>
+    <rect x="381" y="361" width="34" height="39"/>
+    <rect x="749" y="305" width="38" height="42"/>
+    <rect x="822" y="454" width="38" height="42"/>
+    <rect x="1020" y="407" width="30" height="35"/>
+  </g>
+  <path d="M0 657h1200v93H0z" fill="#101827" opacity=".84"/>
+  <rect width="1200" height="750" filter="url(#grain)" opacity=".75"/>
+</svg>

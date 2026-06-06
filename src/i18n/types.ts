@@ -3,6 +3,7 @@ export interface UIStrings {
     home: string;
     posts: string;
     tags: string;
+    photoWall: string;
     about: string;
     archives: string;
     search: string;
@@ -41,6 +42,9 @@ export interface UIStrings {
 
     tagsTitle: string;
     tagsDesc: string;
+
+    photoWallTitle: string;
+    photoWallDesc: string;
 
     postsTitle: string;
     postsDesc: string;

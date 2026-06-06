@@ -5,6 +5,7 @@ export default {
     home: "首页",
     posts: "内容",
     tags: "标签",
+    photoWall: "照片墙",
     about: "关于",
     archives: "归档",
     search: "搜索",
@@ -43,6 +44,9 @@ export default {
 
     tagsTitle: "标签",
     tagsDesc: "文章中使用过的所有标签。",
+
+    photoWallTitle: "照片墙",
+    photoWallDesc: "一些被留下来的画面。",
 
     postsTitle: "文章",
     postsDesc: "我发布过的所有文章。",
