@@ -68,17 +68,6 @@ const recentFeedItems: RecentFeedItem[] = [
   <main id="main-content" data-back-url={homePath} class="app-layout">
     <section id="hero" class="border-border border-b pt-8 pb-6">
       <HitokotoCard />
-      <br />
-      <p>欢迎！希望你能在这里找到一些有趣的内容，或者只是偶尔停下来看看。</p>
-      <p class="mt-2">
-        你可以从文章开始，也可以去我的
-        <LinkButton
-          class="hover:text-accent underline decoration-dashed underline-offset-4"
-          href={config.site.profile}
-        >
-          GitHub
-        </LinkButton> 看看最近在做什么。
-      </p>
       {
         socials.length > 0 && (
           <div class="mt-4 flex max-sm:flex-col sm:items-center">
