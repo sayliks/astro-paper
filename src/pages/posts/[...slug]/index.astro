@@ -127,30 +127,21 @@ const ogImage = ogImageUrl
   >
     <h1
       style={{ viewTransitionName: toTransitionName(title) }}
-      class="text-accent inline-block text-2xl font-bold sm:text-3xl"
+      class="post-title inline-block text-2xl leading-snug font-bold sm:text-3xl sm:leading-tight"
     >
       {title}
     </h1>
 
-    <div class="my-2 flex items-center gap-2">
+    <div class="mt-2 mb-3 flex flex-wrap items-center gap-x-4 gap-y-1">
       <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
-      <span
-        aria-hidden="true"
-        class:list={[
-          "text-muted-foreground max-sm:hidden",
-          { hidden: !config.features.editPost?.enabled || hideEditPost },
-        ]}
-      >
-        |
-      </span>
       <EditPost {hideEditPost} {post} class="max-sm:hidden" />
     </div>
 
     <article
       id="article"
       class:list={[
-        "mt-8 w-full",
-        "app-prose max-w-app",
+        "mt-9 w-full",
+        "app-prose post-article mx-auto max-w-[43.25rem]",
         "prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)",
       ]}
     >
@@ -192,3 +183,9 @@ const ogImage = ogImageUrl
     );
   }
 </script>
+
+<style>
+  .post-title {
+    color: var(--post-title);
+  }
+</style>

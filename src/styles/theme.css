@@ -27,6 +27,8 @@
   --foreground: #282728;
   --accent: #006cac;
   --accent-foreground: #ffffff;
+  --article-body: #202124;
+  --post-title: #255f78;
   --muted: #e6e6e6;
   --muted-foreground: #6b7280;
   --border: #ece9e9;
@@ -40,6 +42,8 @@
   --foreground: #eaedf3;
   --accent: #e07030;
   --accent-foreground: #ffffff;
+  --article-body: #eef1f6;
+  --post-title: #a9c9d8;
   --muted: #343f60;
   --muted-foreground: #afb9ca;
   --border: #303842;
