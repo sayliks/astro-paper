@@ -1,0 +1,24 @@
+{
+  "name": "sayliks's corner",
+  "short_name": "sayliks",
+  "description": "一个用来记录学习、项目、阅读、音乐和日常想法的个人空间。",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "minimal-ui",
+  "background_color": "#fefbfb",
+  "theme_color": "#e07030",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    }
+  ]
+}
