@@ -12,10 +12,11 @@ export async function GET() {
     title: config.site.title,
     description: config.site.description,
     site: config.site.url,
-    items: sortedPosts.map(({ data, id, filePath }) => ({
+    items: sortedPosts.map(({ data, id, filePath, rendered }) => ({
       link: getPostUrl(id, filePath, config.site.lang),
       title: data.title,
       description: data.description,
+      content: rendered?.html,
       pubDate: new Date(data.modDatetime ?? data.pubDatetime),
     })),
   });

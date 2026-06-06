@@ -25,7 +25,7 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 const homePath = getRelativeLocaleUrl(locale, "");
 ---
 
-<Layout>
+<Layout clientRouter={false}>
   <Header />
   <main id="main-content" data-back-url={homePath} class="app-layout">
     <section id="hero" class="border-border border-b pt-8 pb-6">

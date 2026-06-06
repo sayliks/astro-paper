@@ -13,6 +13,9 @@ type Props = {
   ogImage?: string;
   canonicalURL?: string;
   ogType?: "website" | "article";
+  clientRouter?: boolean;
+  preloadFont?: boolean;
+  speedInsights?: boolean;
 };
 
 const { site } = config;
@@ -23,6 +26,9 @@ const {
   ogImage: initOgImage,
   canonicalURL: initCanonicalURL,
   ogType = "website",
+  clientRouter = true,
+  preloadFont = true,
+  speedInsights = config.features.speedInsights,
 } = Astro.props;
 
 const ogImage = initOgImage?.trim() || resolveDefaultOgImagePath(config);
@@ -30,6 +36,24 @@ const canonicalURL =
   initCanonicalURL?.trim() || new URL(Astro.url.pathname, Astro.site).href;
 const socialImageURL = new URL(ogImage, Astro.site ?? Astro.url);
 const rssHref = getAssetPath("rss.xml");
+const speedInsightsBeforeSendScript = `
+window.speedInsightsBeforeSend = function (event) {
+  try {
+    const pathname = new URL(event.url).pathname;
+    if (
+      pathname === "/404/" ||
+      pathname === "/404" ||
+      pathname.startsWith("/admin") ||
+      pathname.startsWith("/cms")
+    ) {
+      return null;
+    }
+  } catch {
+    return event;
+  }
+  return event;
+};
+`;
 ---
 
 <!doctype html>
@@ -46,13 +70,17 @@ const rssHref = getAssetPath("rss.xml");
     <meta name="generator" content={Astro.generator} />
 
     <!-- Font -->
-    <Font
-      cssVariable="--font-google-sans-code"
-      preload={[
-        { subset: "latin", weight: 400, style: "normal" },
-        { subset: "latin", weight: 700, style: "normal" },
-      ]}
-    />
+    {
+      preloadFont && (
+        <Font
+          cssVariable="--font-google-sans-code"
+          preload={[
+            { subset: "latin", weight: 400, style: "normal" },
+            { subset: "latin", weight: 700, style: "normal" },
+          ]}
+        />
+      )
+    }
 
     <!-- Primary meta -->
     <title>{title}</title>
@@ -127,13 +155,20 @@ const rssHref = getAssetPath("rss.xml");
       })();
     </script>
 
-    <ClientRouter />
+    {clientRouter && <ClientRouter />}
   </head>
   <body
     class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"
   >
     <slot />
-    {config.features.speedInsights && <SpeedInsights />}
+    {
+      speedInsights && (
+        <>
+          <script is:inline set:html={speedInsightsBeforeSendScript} />
+          <SpeedInsights />
+        </>
+      )
+    }
     <script>
       import "@/scripts/theme";
       import "@/scripts/header-menu";

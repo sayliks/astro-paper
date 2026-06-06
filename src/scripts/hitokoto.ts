@@ -132,11 +132,20 @@ async function fetchQuote(
   const controller = new AbortController();
   const text = card.querySelector<HTMLElement>("[data-hitokoto-text]");
   const error = card.querySelector<HTMLElement>("[data-hitokoto-error]");
+  const refreshButton = card.querySelector<HTMLButtonElement>(
+    "[data-hitokoto-refresh]"
+  );
+  const idleLabel = refreshButton?.dataset.idleLabel || "换一句";
 
   hitokotoRequests.set(card, controller);
 
   if (showLoading && text) text.textContent = "正在获取一言...";
   if (error) error.textContent = "";
+  if (refreshButton) {
+    refreshButton.dataset.idleLabel = idleLabel;
+    refreshButton.disabled = true;
+    refreshButton.textContent = "获取中";
+  }
 
   try {
     const response = await fetch(HITOKOTO_API, {
@@ -162,35 +171,11 @@ async function fetchQuote(
     if (hitokotoRequests.get(card) === controller) {
       hitokotoRequests.delete(card);
     }
+    if (refreshButton) {
+      refreshButton.disabled = false;
+      refreshButton.textContent = refreshButton.dataset.idleLabel || idleLabel;
+    }
   }
-}
-
-function runWhenPageIsIdle(callback: () => void): () => void {
-  const requestIdle = window.requestIdleCallback?.bind(window);
-  const cancelIdle = window.cancelIdleCallback?.bind(window);
-
-  if (requestIdle) {
-    const idleId = requestIdle(callback, { timeout: 2000 });
-    return () => cancelIdle?.(idleId);
-  }
-
-  let timeoutId: number | undefined;
-  const run = () => {
-    timeoutId = window.setTimeout(callback, 0);
-  };
-
-  if (document.readyState === "complete") {
-    run();
-    return () => {
-      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
-    };
-  }
-
-  window.addEventListener("load", run, { once: true });
-  return () => {
-    window.removeEventListener("load", run);
-    if (timeoutId !== undefined) window.clearTimeout(timeoutId);
-  };
 }
 
 function setupHitokotoCards(): void {
@@ -201,24 +186,33 @@ function setupHitokotoCards(): void {
       card.dataset.hitokotoReady = "true";
 
       const cachedQuote = readCachedQuote();
-      const cancelInitialFetch = cachedQuote
-        ? () => undefined
-        : runWhenPageIsIdle(() => fetchQuote(card, { showLoading: false }));
-
       if (cachedQuote) {
         applyQuote(card, cachedQuote);
       }
 
-      const refreshId = window.setInterval(() => {
-        if (document.hidden) return;
-        fetchQuote(card, { showLoading: false });
-      }, HITOKOTO_REFRESH_MS);
+      const refreshButton = card.querySelector<HTMLButtonElement>(
+        "[data-hitokoto-refresh]"
+      );
+      const error = card.querySelector<HTMLElement>("[data-hitokoto-error]");
+      const refreshQuote = () => {
+        const freshCachedQuote = readCachedQuote();
+        if (freshCachedQuote) {
+          applyQuote(card, freshCachedQuote);
+          if (error) {
+            error.textContent = "一言每 5 分钟最多刷新一次，已显示最近缓存。";
+          }
+          return;
+        }
+
+        void fetchQuote(card);
+      };
+
+      refreshButton?.addEventListener("click", refreshQuote);
 
       document.addEventListener(
         "astro:before-swap",
         () => {
-          cancelInitialFetch();
-          window.clearInterval(refreshId);
+          refreshButton?.removeEventListener("click", refreshQuote);
           hitokotoRequests.get(card)?.abort();
           hitokotoRequests.delete(card);
         },
