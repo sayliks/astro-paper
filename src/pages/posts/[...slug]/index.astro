@@ -72,7 +72,12 @@ const {
   hideEditPost,
 } = post.data;
 
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const renderedHtml = post.rendered?.html ?? "";
+const hasLinkableHeadings = headings.some(
+  ({ depth }) => depth >= 2 && depth <= 6
+);
+const hasCodeBlocks = renderedHtml.includes("<pre");
 
 let ogImageUrl: string | undefined;
 
@@ -175,13 +180,9 @@ const ogImage = ogImageUrl
   <Footer />
 </PostLayout>
 
-<script>
-  import "@/scripts/heading-links";
-</script>
+{hasLinkableHeadings && <script>import "@/scripts/heading-links";</script>}
 
-<script>
-  import "@/scripts/code-copy";
-</script>
+{hasCodeBlocks && <script>import "@/scripts/code-copy";</script>}
 
 <script is:inline>
   if (!window.__astroPaperPostScrollResetReady) {

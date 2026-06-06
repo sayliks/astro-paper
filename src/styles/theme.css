@@ -8,7 +8,16 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --color-giscus-surface: var(--giscus-surface);
-  --font-app: var(--font-google-sans-code);
+  --font-app: var(
+    --font-google-sans-code,
+    ui-monospace,
+    SFMono-Regular,
+    "SF Mono",
+    Consolas,
+    "Liberation Mono",
+    Menlo,
+    monospace
+  );
 }
 
 /* Light theme values */
