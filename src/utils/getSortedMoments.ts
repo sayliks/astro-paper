@@ -7,9 +7,9 @@ import {
   getMomentDescriptionFromMarkdown,
   getMomentIdSlug,
   getMomentTitle,
+  getPublishedMomentEntries,
   isPublishedMoment,
   isValidMomentImage,
-  sortMomentEntries,
 } from "./momentModel";
 
 export type MomentEntry = CollectionEntry<"moments">;
@@ -26,11 +26,11 @@ export function getMomentMetaTitle(moment: MomentEntry) {
 }
 
 export function momentFilter(moment: MomentEntry) {
-  return isPublishedMoment(moment);
+  return isPublishedMoment(moment, { isDev: import.meta.env.DEV });
 }
 
 export function getSortedMoments(moments: MomentEntry[]) {
-  return sortMomentEntries(moments.filter(momentFilter));
+  return getPublishedMomentEntries(moments, { isDev: import.meta.env.DEV });
 }
 
 export function getMomentSlug(moment: MomentEntry) {

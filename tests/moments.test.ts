@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   FALLBACK_MOMENT_DESCRIPTION,
+  getPublishedMomentEntries,
   getMomentDescriptionFromMarkdown,
   getMomentIdSlug,
   getMomentTitle,
@@ -10,6 +11,9 @@ import {
   sortMomentEntries,
   type MomentSortInput,
 } from "../src/utils/momentModel.ts";
+
+const NOW = new Date("2026-06-06T22:00:00+08:00");
+const PUBLICATION_OPTIONS = { now: NOW, isDev: false };
 
 function createMoment(
   overrides: Partial<MomentSortInput["data"]> = {},
@@ -31,7 +35,47 @@ test("filters draft moments out of the published set", () => {
   const published = createMoment();
   const draft = createMoment({ draft: true }, "2026-06-06-2200-draft");
 
-  assert.deepEqual([published, draft].filter(isPublishedMoment), [published]);
+  assert.deepEqual(
+    [published, draft].filter(moment =>
+      isPublishedMoment(moment, PUBLICATION_OPTIONS)
+    ),
+    [published]
+  );
+});
+
+test("filters future moments out of the published set", () => {
+  const published = createMoment();
+  const future = createMoment(
+    { pubDatetime: new Date("2026-06-06T22:30:00+08:00") },
+    "2026-06-06-2230-future"
+  );
+
+  assert.deepEqual(
+    [future, published].filter(moment =>
+      isPublishedMoment(moment, PUBLICATION_OPTIONS)
+    ),
+    [published]
+  );
+});
+
+test("includes moments once publication time has passed", () => {
+  const published = createMoment({
+    pubDatetime: new Date("2026-06-06T21:59:59+08:00"),
+  });
+
+  assert.equal(isPublishedMoment(published, PUBLICATION_OPTIONS), true);
+});
+
+test("uses pubDatetime as the production publication boundary for moments", () => {
+  const boundary = createMoment({
+    pubDatetime: new Date("2026-06-06T22:00:00+08:00"),
+  });
+  const afterBoundary = createMoment({
+    pubDatetime: new Date("2026-06-06T21:59:59+08:00"),
+  });
+
+  assert.equal(isPublishedMoment(boundary, PUBLICATION_OPTIONS), false);
+  assert.equal(isPublishedMoment(afterBoundary, PUBLICATION_OPTIONS), true);
 });
 
 test("sorts pinned moments first, then by descending publish date", () => {
@@ -129,12 +173,35 @@ test("feed selection excludes drafts before sorting", () => {
     "2026-06-08-2130-draft-pinned"
   );
   const published = createMoment(
-    { pubDatetime: new Date("2026-06-07T21:30:00+08:00") },
-    "2026-06-07-2130-published"
+    { pubDatetime: new Date("2026-06-06T21:45:00+08:00") },
+    "2026-06-06-2145-published"
   );
 
   assert.deepEqual(
-    sortMomentEntries([draftPinned, published].filter(isPublishedMoment)),
+    getPublishedMomentEntries([draftPinned, published], PUBLICATION_OPTIONS),
     [published]
+  );
+});
+
+test("shared published moment source excludes future entries before sorting", () => {
+  const pinnedPublished = createMoment(
+    { pinned: true, pubDatetime: new Date("2026-06-06T21:30:00+08:00") },
+    "2026-06-06-2130-pinned"
+  );
+  const futurePinned = createMoment(
+    { pinned: true, pubDatetime: new Date("2026-06-06T22:30:00+08:00") },
+    "2026-06-06-2230-future-pinned"
+  );
+  const published = createMoment(
+    { pubDatetime: new Date("2026-06-06T21:45:00+08:00") },
+    "2026-06-06-2145-published"
+  );
+
+  assert.deepEqual(
+    getPublishedMomentEntries(
+      [published, futurePinned, pinnedPublished],
+      PUBLICATION_OPTIONS
+    ),
+    [pinnedPublished, published]
   );
 });

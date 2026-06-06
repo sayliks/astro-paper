@@ -1,3 +1,8 @@
+import {
+  isContentPublished,
+  type PublicationFilterOptions,
+} from "./publicationFilter.ts";
+
 export const FALLBACK_MOMENT_DESCRIPTION = "一条日常记录。";
 
 export type MomentSortInput = {
@@ -13,8 +18,11 @@ export type MomentSortInput = {
 const toSeconds = (value: Date | string) =>
   Math.floor(new Date(value).getTime() / 1000);
 
-export function isPublishedMoment(moment: { data: { draft?: boolean } }) {
-  return !moment.data.draft;
+export function isPublishedMoment(
+  moment: MomentSortInput,
+  options?: PublicationFilterOptions
+) {
+  return isContentPublished(moment, options);
 }
 
 export function sortMomentEntries<T extends MomentSortInput>(
@@ -27,6 +35,15 @@ export function sortMomentEntries<T extends MomentSortInput>(
 
     return toSeconds(b.data.pubDatetime) - toSeconds(a.data.pubDatetime);
   });
+}
+
+export function getPublishedMomentEntries<T extends MomentSortInput>(
+  moments: T[],
+  options?: PublicationFilterOptions
+): T[] {
+  return sortMomentEntries(
+    moments.filter(moment => isPublishedMoment(moment, options))
+  );
 }
 
 export function getMomentIdSlug(id: string) {

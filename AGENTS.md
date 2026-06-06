@@ -15,7 +15,7 @@ pnpm format         # prettier --write .   (format:check for CI)
 pnpm sync           # regenerate astro:content / astro:* TS types after schema changes
 ```
 
-There is no test suite. "Type checking" means `astro check` (run via `pnpm build`, or directly with `pnpm astro check`). Run `pnpm sync` after editing `content.config.ts` so the generated types match.
+Tests live in `tests/` and run with `pnpm test`. CI runs tests before `pnpm build`. "Type checking" means `astro check` (run via `pnpm build`, or directly with `pnpm astro check`). Run `pnpm sync` after editing `content.config.ts` so the generated types match.
 
 ## Configuration system (three layers — edit only the first)
 

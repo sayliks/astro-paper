@@ -59,11 +59,15 @@ Sveltia CMS does not reliably write intrinsic dimensions into frontmatter, so
 The feed renders full Moment bodies directly. Detail pages exist for permalinks,
 sharing, comments, and search indexing.
 
-## Drafts And Sorting
+## Publication, Drafts, And Sorting
 
-Draft Moments are excluded from generated feed pages, detail pages, RSS, sitemap,
-and search. Pinned Moments appear first; pinned and normal groups are each sorted
-by `pubDatetime` descending.
+In production, `pubDatetime` controls when a Moment becomes publicly generated.
+Future Moments are treated as scheduled content and are excluded until their
+publication time passes.
+
+Draft and future Moments are excluded from generated feed pages, detail pages,
+RSS, sitemap, and search. Pinned Moments appear first; pinned and normal groups
+are each sorted by `pubDatetime` descending.
 
 ## Comments, Search, And RSS
 

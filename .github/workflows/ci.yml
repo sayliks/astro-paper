@@ -36,11 +36,17 @@ jobs:
       - name: "📦 Install dependencies"
         run: pnpm install --frozen-lockfile
 
+      - name: "🔎 Check Astro types"
+        run: pnpm astro check
+
       - name: "🔎 Lint code"
-        run: pnpm run lint
+        run: pnpm lint
 
       - name: "📝 Checking code format"
         run: pnpm run format:check
+
+      - name: "🧪 Run tests"
+        run: pnpm test
 
       - name: "🚀 Build the project"
         run: pnpm run build

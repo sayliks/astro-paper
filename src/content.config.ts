@@ -14,13 +14,20 @@ const optionalTrimmedString = z.preprocess(
   z.string().trim().optional()
 );
 
+const requiredDate = z.coerce.date();
+
+const optionalDate = z.preprocess(
+  blankStringToUndefined,
+  z.coerce.date().optional().nullable()
+);
+
 const posts = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: `./${BLOG_PATH}` }),
   schema: ({ image }) =>
     z.object({
       author: z.string().default(config.site.author),
-      pubDatetime: z.date(),
-      modDatetime: z.date().optional().nullable(),
+      pubDatetime: requiredDate,
+      modDatetime: optionalDate,
       title: z.string(),
       featured: z.boolean().optional(),
       draft: z.boolean().optional(),
@@ -40,8 +47,8 @@ const moments = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: `./${MOMENTS_PATH}` }),
   schema: z.object({
     slug: z.string().trim().min(1),
-    pubDatetime: z.date(),
-    modDatetime: z.date().optional().nullable(),
+    pubDatetime: requiredDate,
+    modDatetime: optionalDate,
     draft: z.boolean().default(false),
     pinned: z.boolean().default(false),
     mood: optionalTrimmedString,

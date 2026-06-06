@@ -3,7 +3,7 @@ import type { UIStrings } from "../types";
 export default {
   nav: {
     home: "首页",
-    posts: "内容",
+    posts: "文章",
     tags: "标签",
     moments: "日常",
     photoWall: "照片墙",
@@ -56,7 +56,7 @@ export default {
   },
   pages: {
     tagTitle: "标签",
-    tagDesc: "包含该标签的所有内容",
+    tagDesc: "包含该标签的所有文章",
 
     tagsTitle: "标签",
     tagsDesc: "文章中使用过的所有标签。",
@@ -81,7 +81,7 @@ export default {
     openMenu: "打开菜单",
     closeMenu: "关闭菜单",
     toggleTheme: "切换主题",
-    searchPlaceholder: "搜索内容……",
+    searchPlaceholder: "搜索文章……",
     noResults: "没有找到结果",
     goToPreviousPage: "前往上一页",
     goToNextPage: "前往下一页",

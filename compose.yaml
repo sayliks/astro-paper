@@ -2,16 +2,16 @@ services:
   app:
     image: ghcr.io/pnpm/pnpm:11.3.0
     ports:
-      - 4321:4321
+      - 5173:5173
     working_dir: /app
     command: >
       bash -c "
       pnpm runtime set node 24 -g
       && pnpm install --frozen-lockfile
       && pnpm prune
-      && pnpm run dev --host 0.0.0.0"
+      && pnpm run dev -- --host 0.0.0.0 --port 5173"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4321"]
+      test: ["CMD", "curl", "-f", "http://localhost:5173"]
       interval: 10s
       timeout: 5s
       retries: 10

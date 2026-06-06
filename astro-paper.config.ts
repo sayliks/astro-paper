@@ -64,6 +64,6 @@ export default defineAstroPaperConfig({
       linkTitle: "分享到 Telegram",
     },
     { name: "mail", url: "mailto:", linkTitle: "通过邮件分享这篇文章" },
-    { name: "copy", url: "", linkTitle: "复制内容链接" },
+    { name: "copy", url: "", linkTitle: "复制文章链接" },
   ],
 });

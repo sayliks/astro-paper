@@ -8,7 +8,7 @@ backend:
   base_url: https://www.matsumae.top/api/cms-auth
   auth_methods: [oauth, token]
 
-app_title: "sayliks 内容管理"
+app_title: "sayliks 文章管理"
 site_url: "https://www.matsumae.top"
 display_url: "https://www.matsumae.top"
 logo:
@@ -36,8 +36,6 @@ collections:
     summary: "{{title}} - {{pubDatetime}}"
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     preview_path: "posts/{{slug}}/"
-    editor:
-      preview: false
     fields:
       - label: 标题
         name: title

@@ -6,7 +6,7 @@ Add a photo wall feature to AstroPaper and expose it from the main header naviga
 
 ## User-Facing Behavior
 
-- Header navigation order becomes: 内容, 标签, 照片墙, 关于, then the existing icon actions.
+- Header navigation order becomes: 文章, 标签, 照片墙, 关于, then the existing icon actions.
 - The new item is a normal text navigation link so it matches the current posts/tags/about behavior on desktop and mobile.
 - The photo wall route is `/photo-wall/`.
 - The page title is localized through the existing i18n system.

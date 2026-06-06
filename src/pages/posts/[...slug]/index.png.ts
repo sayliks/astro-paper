@@ -9,6 +9,8 @@ import {
   OG_FONT_VARIABLE,
 } from "@/utils/ogFont";
 import { getPostSlug } from "@/utils/getPostPaths";
+import { postFilter } from "@/utils/postFilter";
+import { shouldGenerateDynamicOgImagePost } from "@/utils/dynamicOgImageFilter";
 import config from "@/config";
 
 export async function getStaticPaths() {
@@ -16,8 +18,8 @@ export async function getStaticPaths() {
     return [];
   }
 
-  const posts = await getCollection("posts").then(p =>
-    p.filter(({ data }) => !data.draft && !data.ogImage)
+  const posts = await getCollection("posts").then(posts =>
+    posts.filter(post => shouldGenerateDynamicOgImagePost(post, postFilter))
   );
 
   return posts.map(post => ({
