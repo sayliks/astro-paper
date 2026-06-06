@@ -36,6 +36,8 @@ collections:
     summary: "{{title}} - {{pubDatetime}}"
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     preview_path: "posts/{{slug}}/"
+    editor:
+      preview: false
     fields:
       - label: 标题
         name: title
@@ -206,7 +208,6 @@ collections:
             label_singular: 照片
             summary: "{{order}} · {{title}}"
             thumbnail: src
-            allow_reorder: true
             fields:
               - label: 图片来源
                 name: src
@@ -242,7 +243,7 @@ collections:
                 widget: number
                 value_type: int
                 required: true
-                hint: 数字越小越靠前；也可以在列表中拖动或用箭头调整顺序。
+                hint: 数字越小越靠前。
               - label: 已发布
                 name: published
                 widget: boolean

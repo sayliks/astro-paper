@@ -25,6 +25,17 @@ function readString(value: unknown, field: string, index: number): string {
   throw new Error(`Photo wall item ${index + 1} has an invalid ${field}.`);
 }
 
+function readPhotoSrc(value: unknown, index: number): string {
+  const src = readString(value, "src", index);
+  const hasProtocol = /^[a-z][\w+.-]*:/i.test(src);
+
+  if (hasProtocol && !/^https?:/i.test(src)) {
+    throw new Error(`Photo wall item ${index + 1} has an unsupported src.`);
+  }
+
+  return src;
+}
+
 function readPositiveInteger(
   value: unknown,
   field: string,
@@ -59,7 +70,7 @@ function readBoolean(value: unknown, field: string, index: number): boolean {
 }
 
 export function isExternalPhotoSrc(src: string): boolean {
-  return /^(?:https?:)?\/\//i.test(src) || src.startsWith("data:");
+  return /^(?:https?:)?\/\//i.test(src);
 }
 
 export function resolvePhotoWallSrc(
@@ -83,7 +94,7 @@ export function getPublishedPhotoWallItems(
       }
 
       return {
-        src: readString(item.src, "src", index),
+        src: readPhotoSrc(item.src, index),
         title: readString(item.title, "title", index),
         alt: readString(item.alt, "alt", index),
         width: readPositiveInteger(item.width, "width", index),

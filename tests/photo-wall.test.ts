@@ -46,6 +46,7 @@ test("resolves local photo wall sources with the asset path helper", () => {
 
 test("keeps external photo wall URLs unchanged", () => {
   assert.equal(isExternalPhotoSrc("https://example.com/a.jpg"), true);
+  assert.equal(isExternalPhotoSrc("//cdn.example.com/a.jpg"), true);
   assert.equal(
     resolvePhotoWallSrc("https://example.com/a.jpg", path => `/base/${path}`),
     "https://example.com/a.jpg"
@@ -66,6 +67,20 @@ test("rejects invalid photo wall dimensions and empty text fields", () => {
   assert.throws(() =>
     getPublishedPhotoWallItems({
       photos: [{ ...validPhoto, title: "" }],
+    })
+  );
+});
+
+test("rejects unsupported photo wall source protocols", () => {
+  assert.equal(isExternalPhotoSrc("data:image/svg+xml;base64,AAAA"), false);
+  assert.throws(() =>
+    getPublishedPhotoWallItems({
+      photos: [{ ...validPhoto, src: "data:image/svg+xml;base64,AAAA" }],
+    })
+  );
+  assert.throws(() =>
+    getPublishedPhotoWallItems({
+      photos: [{ ...validPhoto, src: "ftp://example.com/a.jpg" }],
     })
   );
 });

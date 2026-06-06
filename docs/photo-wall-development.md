@@ -41,9 +41,9 @@ type PhotoWallItem = {
 ```
 
 `src` may be either a local repository image, such as
-`photo-wall/window-light.svg`, or an external `https://` image URL. Local
-images are passed through the project base-path helper at build time; external
-URLs are left unchanged.
+`photo-wall/window-light.svg`, or an external `http(s)` image URL. Local images
+are passed through the project base-path helper at build time; external URLs are
+left unchanged. The `order` field controls the final display order.
 
 The six initial placeholder images remain under `public/photo-wall/` and have
 been migrated into `src/data/photoWall.json`.
