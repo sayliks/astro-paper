@@ -2,12 +2,12 @@
 
 This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
 
-AstroPaper is a minimal, SEO-friendly Astro blog theme. Package manager is **pnpm**; Node `>=22.12.0`.
+AstroPaper is a minimal, SEO-friendly Astro blog theme. Package manager is **pnpm**; Node `>=24.0.0 <25`.
 
 ## Commands
 
 ```bash
-pnpm dev            # dev server at localhost:4321 (shows drafts + scheduled posts)
+pnpm dev            # dev server at localhost:5173 (shows drafts + scheduled posts)
 pnpm build          # astro check (typecheck) + astro build + pagefind index in dist/pagefind/
 pnpm preview        # preview the production build
 pnpm lint           # eslint .

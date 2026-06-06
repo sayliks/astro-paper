@@ -17,9 +17,21 @@ export function rehypeImageOptimize() {
     function walk(node: HastNode): void {
       if (node.type === "element" && node.tagName === "img") {
         node.properties ??= {};
-        node.properties.loading = isFirstImage ? "eager" : "lazy";
-        node.properties.decoding = "async";
+        const hasDimensions = Boolean(
+          node.properties.width && node.properties.height
+        );
+        const canPrioritize = isFirstImage && hasDimensions;
+
+        node.properties.loading = canPrioritize ? "eager" : "lazy";
+        node.properties.decoding ??= "async";
         node.properties.sizes ??= "(max-width: 768px) 100vw, 768px";
+
+        if (canPrioritize) {
+          node.properties.fetchpriority ??= "high";
+        } else {
+          delete node.properties.fetchpriority;
+        }
+
         isFirstImage = false;
       }
 

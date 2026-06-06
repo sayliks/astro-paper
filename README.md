@@ -31,7 +31,7 @@ The About page is:
 src/content/pages/about.md
 ```
 
-Root-level Markdown posts can be created through Decap CMS at:
+Root-level Markdown posts can be created through Sveltia CMS at:
 
 ```txt
 /cms/
@@ -60,7 +60,7 @@ ALLOWED_DOMAINS=www.matsumae.top,matsumae.top
 
 ## Local Development
 
-This project uses `pnpm` and expects Node `>=22.12.0 <24`.
+This project uses `pnpm` and expects Node `>=24.0.0 <25`.
 
 ```bash
 pnpm install
@@ -91,7 +91,7 @@ http://localhost:5173/
 - [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Pagefind](https://pagefind.app/) for static search
-- [Decap CMS](https://decapcms.org/) for web-based post creation
+- [Sveltia CMS](https://sveltiacms.app/) for web-based post creation
 - [Giscus](https://giscus.app/) for comments
 - [Satori](https://github.com/vercel/satori) and [Sharp](https://sharp.pixelplumbing.com/) for dynamic Open Graph images
 

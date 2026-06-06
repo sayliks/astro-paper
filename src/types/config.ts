@@ -59,6 +59,8 @@ interface FeaturesConfig {
    * Set to false to disable search entirely.
    */
   search?: "pagefind" | false;
+  /** Enable Vercel Speed Insights. Defaults to true. */
+  speedInsights?: boolean;
 }
 
 interface SocialLink {
