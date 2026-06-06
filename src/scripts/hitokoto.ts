@@ -59,6 +59,22 @@ function formatQuoteText(value: string): string {
   return value.trim().replace(/([。！？!?])\s*(?=\S)/g, "$1\n\n");
 }
 
+function isHitokotoResponse(value: unknown): value is HitokotoResponse {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "hitokoto" in value &&
+    "uuid" in value &&
+    "from" in value &&
+    typeof value.hitokoto === "string" &&
+    typeof value.uuid === "string" &&
+    typeof value.from === "string" &&
+    ("from_who" in value
+      ? value.from_who === null || typeof value.from_who === "string"
+      : true)
+  );
+}
+
 function applyQuote(card: HTMLElement, data: HitokotoResponse): void {
   const text = card.querySelector<HTMLElement>("[data-hitokoto-text]");
   const link = card.querySelector<HTMLAnchorElement>("[data-hitokoto-link]");
@@ -83,7 +99,11 @@ function readCachedQuote(): HitokotoResponse | null {
     const raw = sessionStorage.getItem(HITOKOTO_CACHE_KEY);
     if (!raw) return null;
 
-    const cache = JSON.parse(raw) as HitokotoCache;
+    const cache = JSON.parse(raw) as Partial<HitokotoCache>;
+    if (typeof cache.savedAt !== "number" || !isHitokotoResponse(cache.data)) {
+      return null;
+    }
+
     if (Date.now() - cache.savedAt > HITOKOTO_CACHE_MAX_AGE_MS) return null;
 
     return cache.data;
@@ -124,7 +144,11 @@ async function fetchQuote(
       signal: controller.signal,
     });
     if (!response.ok) throw new Error("Hitokoto request failed");
-    const data = (await response.json()) as HitokotoResponse;
+    const data: unknown = await response.json();
+    if (!isHitokotoResponse(data)) {
+      throw new Error("Unexpected Hitokoto response");
+    }
+
     writeCachedQuote(data);
     applyQuote(card, data);
   } catch {

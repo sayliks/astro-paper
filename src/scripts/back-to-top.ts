@@ -79,6 +79,8 @@ function setupBackToTop(): void {
     { passive: true, signal: controller.signal }
   );
 
+  handleScroll();
+
   document.addEventListener("astro:before-swap", () => controller.abort(), {
     once: true,
   });
