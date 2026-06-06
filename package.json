@@ -13,7 +13,8 @@
     "astro": "astro",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "node --experimental-strip-types --test tests/hitokoto-cache.test.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^6.0.1",

@@ -1,48 +1,29 @@
+import {
+  getFetchFailureQuote,
+  isHitokotoResponse,
+  readCachedQuote,
+  writeCachedQuote,
+  type HitokotoResponse,
+} from "./hitokoto-cache";
+
 declare global {
   interface Window {
     __astroPaperHitokotoReady?: boolean;
   }
 }
 
-type HitokotoResponse = {
-  id: number;
-  uuid: string;
-  hitokoto: string;
-  type: string;
-  from: string;
-  from_who: string | null;
-  creator: string;
-  creator_uid: number;
-  reviewer: number;
-  commit_from: string;
-  created_at: string;
-  length: number;
-};
-
-type HitokotoCache = {
-  savedOn: string;
-  data: HitokotoResponse;
-};
-
 const HITOKOTO_API =
   "https://v1.hitokoto.cn/?c=d&c=e&c=k&max_length=42&encode=json";
-const HITOKOTO_CACHE_KEY = "hitokoto:latest";
-const FALLBACK_QUOTE: HitokotoResponse = {
-  id: 0,
-  uuid: "",
-  hitokoto: "慢慢来，认真走，今天也会有一点新的光。",
-  type: "e",
-  from: "sayliks corner",
-  from_who: null,
-  creator: "sayliks",
-  creator_uid: 0,
-  reviewer: 0,
-  commit_from: "fallback",
-  created_at: "",
-  length: 20,
-};
 
 const hitokotoRequests = new WeakMap<HTMLElement, AbortController>();
+
+function getQuoteStorage(): Storage | null {
+  try {
+    return window.localStorage;
+  } catch {
+    return null;
+  }
+}
 
 function formatSource(data: HitokotoResponse): string {
   if (data.from) return data.from;
@@ -55,29 +36,6 @@ function formatAuthor(data: HitokotoResponse): string {
 
 function formatQuoteText(value: string): string {
   return value.trim().replace(/([。！？!?])\s*(?=\S)/g, "$1\n\n");
-}
-
-function getLocalDateKey(date = new Date()): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
-function isHitokotoResponse(value: unknown): value is HitokotoResponse {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "hitokoto" in value &&
-    "uuid" in value &&
-    "from" in value &&
-    typeof value.hitokoto === "string" &&
-    typeof value.uuid === "string" &&
-    typeof value.from === "string" &&
-    ("from_who" in value
-      ? value.from_who === null || typeof value.from_who === "string"
-      : true)
-  );
 }
 
 function applyQuote(card: HTMLElement, data: HitokotoResponse): void {
@@ -96,39 +54,6 @@ function applyQuote(card: HTMLElement, data: HitokotoResponse): void {
     } else {
       link.href = "https://hitokoto.cn/";
     }
-  }
-}
-
-function readCachedQuote(): HitokotoResponse | null {
-  try {
-    const raw = localStorage.getItem(HITOKOTO_CACHE_KEY);
-    if (!raw) return null;
-
-    const cache = JSON.parse(raw) as Partial<HitokotoCache>;
-    if (
-      cache.savedOn !== getLocalDateKey() ||
-      !isHitokotoResponse(cache.data)
-    ) {
-      return null;
-    }
-
-    return cache.data;
-  } catch {
-    return null;
-  }
-}
-
-function writeCachedQuote(data: HitokotoResponse): void {
-  try {
-    localStorage.setItem(
-      HITOKOTO_CACHE_KEY,
-      JSON.stringify({
-        savedOn: getLocalDateKey(),
-        data,
-      } satisfies HitokotoCache)
-    );
-  } catch {
-    // The fallback quote remains visible when browser storage is unavailable.
   }
 }
 
@@ -158,12 +83,12 @@ async function fetchQuote(
       throw new Error("Unexpected Hitokoto response");
     }
 
-    writeCachedQuote(data);
+    writeCachedQuote(getQuoteStorage(), data);
     applyQuote(card, data);
   } catch {
     if (controller.signal.aborted) return;
 
-    applyQuote(card, FALLBACK_QUOTE);
+    applyQuote(card, getFetchFailureQuote(getQuoteStorage()));
     if (error) {
       error.textContent = "一言获取失败，已显示备用句子。";
     }
@@ -181,7 +106,7 @@ function setupHitokotoCards(): void {
       if (card.dataset.hitokotoReady === "true") return;
       card.dataset.hitokotoReady = "true";
 
-      const cachedQuote = readCachedQuote();
+      const cachedQuote = readCachedQuote(getQuoteStorage());
       if (cachedQuote) {
         applyQuote(card, cachedQuote);
       } else {
