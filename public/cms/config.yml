@@ -95,3 +95,99 @@ collections:
       - label: 正文
         name: body
         widget: markdown
+
+  - name: moments
+    label: 日常
+    label_singular: 日常
+    folder: src/content/moments
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    identifier_field: slug
+    summary: "{{pubDatetime}} · {{body}}"
+    slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}-{{slug}}"
+    preview_path: "moments/{{slug}}/"
+    media_folder: public/moments
+    public_folder: /moments
+    fields:
+      - label: 正文
+        name: body
+        widget: markdown
+        required: true
+        hint: 可以写得很短，适合记录轻量的日常想法。
+
+      - label: 简短标识
+        name: slug
+        widget: string
+        required: true
+        hint: 用于生成稳定链接，建议使用简短英文或拼音，例如 evening-walk。
+
+      - label: 图片
+        name: images
+        widget: list
+        required: false
+        hint: 可选。图片会保存到 public/moments，并通过 /moments 访问。
+        fields:
+          - label: 图片
+            name: src
+            widget: image
+            required: true
+          - label: 替代文本
+            name: alt
+            widget: string
+            required: true
+            hint: 描述图片中能看到的主要内容。
+          - label: 宽度
+            name: width
+            widget: number
+            value_type: int
+            required: true
+            min: 1
+            hint: 图片原始宽度，单位为像素。
+          - label: 高度
+            name: height
+            widget: number
+            value_type: int
+            required: true
+            min: 1
+            hint: 图片原始高度，单位为像素。
+
+      - label: 发布时间
+        name: pubDatetime
+        widget: datetime
+        required: true
+        format: "YYYY-MM-DDTHH:mm:ssZ"
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm"
+        default: "{{now}}"
+
+      - label: 心情
+        name: mood
+        widget: string
+        required: false
+
+      - label: 地点
+        name: location
+        widget: string
+        required: false
+        hint: 可选，必须手动填写，不会自动获取位置。
+
+      - label: 置顶
+        name: pinned
+        widget: boolean
+        default: false
+
+      - label: 草稿
+        name: draft
+        widget: boolean
+        default: false
+        hint: 草稿不会出现在生产环境页面中。
+
+      - label: 修改时间
+        name: modDatetime
+        widget: datetime
+        required: false
+        format: "YYYY-MM-DDTHH:mm:ssZ"
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm"

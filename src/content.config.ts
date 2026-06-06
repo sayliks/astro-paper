@@ -4,6 +4,7 @@ import { glob } from "astro/loaders";
 import config from "@/config";
 
 export const BLOG_PATH = "src/content/posts";
+export const MOMENTS_PATH = "src/content/moments";
 
 const blankStringToUndefined = (value: unknown) =>
   typeof value === "string" && value.trim() === "" ? undefined : value;
@@ -35,6 +36,29 @@ const posts = defineCollection({
     }),
 });
 
+const moments = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: `./${MOMENTS_PATH}` }),
+  schema: z.object({
+    slug: z.string().trim().min(1),
+    pubDatetime: z.date(),
+    modDatetime: z.date().optional().nullable(),
+    draft: z.boolean().default(false),
+    pinned: z.boolean().default(false),
+    mood: optionalTrimmedString,
+    location: optionalTrimmedString,
+    images: z
+      .array(
+        z.object({
+          src: z.string().trim().min(1),
+          alt: z.string().trim().min(1),
+          width: z.coerce.number().int().positive(),
+          height: z.coerce.number().int().positive(),
+        })
+      )
+      .default([]),
+  }),
+});
+
 const pages = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/pages" }),
   schema: z.object({
@@ -45,4 +69,4 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { posts, pages };
+export const collections = { posts, moments, pages };

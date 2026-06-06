@@ -1,0 +1,26 @@
+---
+import type { MomentEntry } from "@/utils/getSortedMoments";
+import MomentContent from "./MomentContent.astro";
+import MomentImages from "./MomentImages.astro";
+import MomentMeta from "./MomentMeta.astro";
+
+type Props = {
+  moment: MomentEntry;
+  href: string;
+  eagerImages?: boolean;
+};
+
+const { moment, href, eagerImages = false } = Astro.props;
+---
+
+<article class="border-border border-b py-7 first:pt-0 last:border-b-0">
+  <header>
+    <MomentMeta moment={moment} commentsHref={href} />
+  </header>
+  <MomentContent moment={moment} class="mt-3" />
+  <MomentImages
+    images={moment.data.images}
+    class="mt-4"
+    loading={eagerImages ? "eager" : "lazy"}
+  />
+</article>

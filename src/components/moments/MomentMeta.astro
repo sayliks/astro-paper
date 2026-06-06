@@ -1,0 +1,73 @@
+---
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import "dayjs/locale/zh-cn";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+import type { MomentEntry } from "@/utils/getSortedMoments";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+type Props = {
+  moment: MomentEntry;
+  commentsHref?: string;
+  class?: string;
+};
+
+const { moment, commentsHref, class: className } = Astro.props;
+const t = useTranslations(Astro.currentLocale);
+
+const pubDatetime = dayjs(moment.data.pubDatetime)
+  .tz(config.site.timezone)
+  .locale("zh-cn");
+const modDatetime = moment.data.modDatetime
+  ? dayjs(moment.data.modDatetime).tz(config.site.timezone).locale("zh-cn")
+  : null;
+const isModified = modDatetime && modDatetime.valueOf() > pubDatetime.valueOf();
+const formattedPubDatetime = pubDatetime.format("YYYY年M月D日 HH:mm");
+const formattedModDatetime = modDatetime?.format("YYYY年M月D日 HH:mm");
+const modDatetimeIso = modDatetime?.toISOString();
+---
+
+<ul
+  class:list={[
+    "text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-sm",
+    className,
+  ]}
+>
+  {
+    moment.data.pinned && (
+      <li class="text-accent font-medium">{t.moments.pinned}</li>
+    )
+  }
+  {
+    moment.data.draft && (
+      <li class="text-accent font-medium">{t.moments.draft}</li>
+    )
+  }
+  <li>
+    <time datetime={pubDatetime.toISOString()}>{formattedPubDatetime}</time>
+  </li>
+  {
+    isModified && formattedModDatetime && modDatetimeIso && (
+      <li>
+        {t.moments.updatedAt}
+        {": "}
+        <time datetime={modDatetimeIso}>{formattedModDatetime}</time>
+      </li>
+    )
+  }
+  {moment.data.mood && <li>{moment.data.mood}</li>}
+  {moment.data.location && <li>{moment.data.location}</li>}
+  {
+    commentsHref && (
+      <li>
+        <a class="hover:text-accent focus-outline" href={commentsHref}>
+          {t.moments.comments}
+        </a>
+      </li>
+    )
+  }
+</ul>

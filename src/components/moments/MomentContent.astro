@@ -1,0 +1,35 @@
+---
+import { render } from "astro:content";
+import type { MomentEntry } from "@/utils/getSortedMoments";
+
+type Props = {
+  moment: MomentEntry;
+  class?: string;
+};
+
+const { moment, class: className } = Astro.props;
+const { Content } = await render(moment);
+---
+
+<div class:list={["app-prose moment-content", className]}>
+  <Content />
+</div>
+
+<style>
+  .moment-content {
+    max-width: none;
+    line-height: 1.78;
+  }
+
+  .moment-content :global(p:last-child),
+  .moment-content :global(ul:last-child),
+  .moment-content :global(ol:last-child),
+  .moment-content :global(blockquote:last-child),
+  .moment-content :global(pre:last-child) {
+    margin-bottom: 0;
+  }
+
+  .moment-content :global(a) {
+    color: var(--color-accent);
+  }
+</style>

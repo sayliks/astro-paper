@@ -5,6 +5,7 @@ export default {
     home: "首页",
     posts: "内容",
     tags: "标签",
+    moments: "日常",
     photoWall: "照片墙",
     about: "关于",
     archives: "归档",
@@ -22,6 +23,18 @@ export default {
     editPage: "编辑页面",
     previousPost: "上一篇",
     nextPost: "下一篇",
+  },
+  moments: {
+    title: "日常",
+    description: "一些轻一点、近一点的记录。",
+    empty: "还没有发布日常。",
+    pinned: "置顶",
+    draft: "草稿",
+    comments: "评论",
+    backToMoments: "返回日常",
+    updatedAt: "更新于",
+    rssTitle: "sayliks 日常 RSS",
+    rssDescription: "sayliks 的日常记录。",
   },
   pagination: {
     prev: "上一页",
@@ -47,6 +60,9 @@ export default {
 
     photoWallTitle: "照片墙",
     photoWallDesc: "一些被留下来的画面。",
+
+    momentsTitle: "日常",
+    momentsDesc: "一些轻一点、近一点的记录。",
 
     postsTitle: "文章",
     postsDesc: "我发布过的所有文章。",

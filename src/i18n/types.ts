@@ -3,6 +3,7 @@ export interface UIStrings {
     home: string;
     posts: string;
     tags: string;
+    moments: string;
     photoWall: string;
     about: string;
     archives: string;
@@ -20,6 +21,18 @@ export interface UIStrings {
     editPage: string;
     previousPost: string;
     nextPost: string;
+  };
+  moments: {
+    title: string;
+    description: string;
+    empty: string;
+    pinned: string;
+    draft: string;
+    comments: string;
+    backToMoments: string;
+    updatedAt: string;
+    rssTitle: string;
+    rssDescription: string;
   };
   pagination: {
     prev: string;
@@ -45,6 +58,9 @@ export interface UIStrings {
 
     photoWallTitle: string;
     photoWallDesc: string;
+
+    momentsTitle: string;
+    momentsDesc: string;
 
     postsTitle: string;
     postsDesc: string;

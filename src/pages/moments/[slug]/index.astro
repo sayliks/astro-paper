@@ -1,0 +1,105 @@
+---
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Giscus from "@/components/Giscus.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import MomentContent from "@/components/moments/MomentContent.astro";
+import MomentImages from "@/components/moments/MomentImages.astro";
+import MomentMeta from "@/components/moments/MomentMeta.astro";
+import Layout from "@/layouts/Layout.astro";
+import { useTranslations } from "@/i18n";
+import {
+  getMomentDescription,
+  getMomentMetaTitle,
+  getMomentSlug,
+  getMomentUrl,
+  getSortedMoments,
+} from "@/utils/getSortedMoments";
+import config from "@/config";
+
+export async function getStaticPaths() {
+  const moments = getSortedMoments(await getCollection("moments"));
+
+  return moments.map(moment => ({
+    params: { slug: getMomentSlug(moment) },
+    props: { moment },
+  }));
+}
+
+type Props = {
+  moment: CollectionEntry<"moments">;
+};
+
+const { moment } = Astro.props;
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+const { headings } = await render(moment);
+const renderedHtml = moment.rendered?.html ?? "";
+const hasLinkableHeadings = headings.some(
+  ({ depth }) => depth >= 2 && depth <= 6
+);
+const hasCodeBlocks = renderedHtml.includes("<pre");
+const title = getMomentMetaTitle(moment);
+const description = getMomentDescription(moment);
+const canonicalURL = new URL(getMomentUrl(moment, locale), Astro.site).href;
+const backHref = getRelativeLocaleUrl(locale, "moments");
+const ogImage = moment.data.images[0]?.src;
+---
+
+<Layout
+  title={`${title} | ${config.site.title}`}
+  description={description}
+  ogImage={ogImage}
+  canonicalURL={canonicalURL}
+  ogType="article"
+>
+  <Fragment slot="head">
+    <meta
+      property="article:published_time"
+      content={moment.data.pubDatetime.toISOString()}
+    />
+    {
+      moment.data.modDatetime && (
+        <meta
+          property="article:modified_time"
+          content={moment.data.modDatetime.toISOString()}
+        />
+      )
+    }
+  </Fragment>
+
+  <Header />
+
+  <main id="main-content" class="app-layout bg-giscus-surface pt-8">
+    <LinkButton
+      href={backHref}
+      class="text-muted-foreground hover:text-foreground -ms-1 mb-6 inline-flex items-center gap-1.5"
+    >
+      <IconChevronLeft class="inline-block size-5 rtl:rotate-180" />
+      <span>{t.moments.backToMoments}</span>
+    </LinkButton>
+
+    <article data-pagefind-body class="mx-auto max-w-[43.25rem]">
+      <header class="mb-4">
+        <h1 class="sr-only">{title}</h1>
+        <MomentMeta moment={moment} />
+      </header>
+
+      <MomentContent moment={moment} />
+      <MomentImages images={moment.data.images} class="mt-5" loading="lazy" />
+    </article>
+
+    <div style="content-visibility: auto; contain-intrinsic-size: auto 500px">
+      <Giscus />
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+{hasLinkableHeadings && <script>import "@/scripts/heading-links";</script>}
+
+{hasCodeBlocks && <script>import "@/scripts/code-copy";</script>}

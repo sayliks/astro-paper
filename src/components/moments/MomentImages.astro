@@ -1,0 +1,94 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { MomentEntry } from "@/utils/getSortedMoments";
+import { getAssetPath } from "@/utils/withBase";
+
+type Props = {
+  images?: MomentEntry["data"]["images"];
+  loading?: "eager" | "lazy";
+} & HTMLAttributes<"ul">;
+
+const {
+  images = [],
+  loading = "lazy",
+  class: className,
+  ...attrs
+} = Astro.props;
+
+const getImageSrc = (src: string) =>
+  /^https?:\/\//i.test(src) ? src : getAssetPath(src);
+---
+
+{
+  images.length > 0 && (
+    <ul
+      class:list={[
+        "moment-images",
+        `moment-images--count-${Math.min(images.length, 4)}`,
+        className,
+      ]}
+      aria-label="日常图片"
+      {...attrs}
+    >
+      {images.map(image => (
+        <li
+          class="moment-image"
+          style={`--moment-image-width: ${image.width}; --moment-image-height: ${image.height};`}
+        >
+          <img
+            src={getImageSrc(image.src)}
+            alt={image.alt}
+            width={image.width}
+            height={image.height}
+            loading={loading}
+            decoding="async"
+          />
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .moment-images {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    padding: 0;
+    margin-block: 1.1rem 0;
+    list-style: none;
+  }
+
+  .moment-images--count-1 {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: min(100%, 34rem);
+  }
+
+  .moment-images--count-3 .moment-image:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .moment-image {
+    min-width: 0;
+  }
+
+  .moment-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--color-muted);
+    border: 1px solid var(--color-border);
+    border-radius: 0.375rem;
+    aspect-ratio: var(--moment-image-width) / var(--moment-image-height);
+  }
+
+  @media (max-width: 520px) {
+    .moment-images {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .moment-images--count-3 .moment-image:first-child {
+      grid-column: auto;
+    }
+  }
+</style>
