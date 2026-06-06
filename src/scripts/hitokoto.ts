@@ -26,9 +26,8 @@ type HitokotoCache = {
 
 const HITOKOTO_API =
   "https://v1.hitokoto.cn/?c=d&c=e&c=k&max_length=42&encode=json";
-const HITOKOTO_REFRESH_MS = 5 * 60 * 1000;
 const HITOKOTO_CACHE_KEY = "hitokoto:latest";
-const HITOKOTO_CACHE_MAX_AGE_MS = HITOKOTO_REFRESH_MS;
+const HITOKOTO_CACHE_MAX_AGE_MS = 5 * 60 * 1000;
 const FALLBACK_QUOTE: HitokotoResponse = {
   id: 0,
   uuid: "",
@@ -193,17 +192,7 @@ function setupHitokotoCards(): void {
       const refreshButton = card.querySelector<HTMLButtonElement>(
         "[data-hitokoto-refresh]"
       );
-      const error = card.querySelector<HTMLElement>("[data-hitokoto-error]");
       const refreshQuote = () => {
-        const freshCachedQuote = readCachedQuote();
-        if (freshCachedQuote) {
-          applyQuote(card, freshCachedQuote);
-          if (error) {
-            error.textContent = "一言每 5 分钟最多刷新一次，已显示最近缓存。";
-          }
-          return;
-        }
-
         void fetchQuote(card);
       };
 
