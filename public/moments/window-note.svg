@@ -24,7 +24,7 @@
     stroke-width="18"
     stroke-linecap="round"
   />
-  <circle cx="702" cy="1040" r="30" fill="#e07030" />
+  <circle cx="702" cy="1040" r="30" fill="#006cac" />
   <path
     d="M178 170 760 1020"
     stroke="#fff"

@@ -33,6 +33,6 @@
     stroke-width="18"
     stroke-linecap="round"
   />
-  <circle cx="190" cy="600" r="22" fill="#e07030" />
+  <circle cx="190" cy="600" r="22" fill="#006cac" />
   <circle cx="232" cy="600" r="22" fill="#006cac" />
 </svg>
