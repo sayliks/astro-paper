@@ -1,0 +1,58 @@
+{
+  "photos": [
+    {
+      "src": "photo-wall/window-light.svg",
+      "title": "窗边上午",
+      "alt": "窗边的阳光落在书桌、纸页和一杯茶上",
+      "width": 900,
+      "height": 1125,
+      "order": 10,
+      "published": true
+    },
+    {
+      "src": "photo-wall/blue-hour.svg",
+      "title": "蓝调时刻",
+      "alt": "傍晚蓝色天空下的城市窗户和远处楼影",
+      "width": 1200,
+      "height": 750,
+      "order": 20,
+      "published": true
+    },
+    {
+      "src": "photo-wall/rain-walk.svg",
+      "title": "雨后散步",
+      "alt": "雨后路面反射着路灯和行人的影子",
+      "width": 900,
+      "height": 900,
+      "order": 30,
+      "published": true
+    },
+    {
+      "src": "photo-wall/library-corner.svg",
+      "title": "图书馆角落",
+      "alt": "书架、阅读灯和摊开的笔记本组成的安静角落",
+      "width": 900,
+      "height": 1125,
+      "order": 40,
+      "published": true
+    },
+    {
+      "src": "photo-wall/warm-rooftop.svg",
+      "title": "天台余温",
+      "alt": "暖色天光下的天台边缘和远方云层",
+      "width": 1200,
+      "height": 750,
+      "order": 50,
+      "published": true
+    },
+    {
+      "src": "photo-wall/green-shadow.svg",
+      "title": "绿影",
+      "alt": "树叶投下的绿色影子铺在浅色墙面上",
+      "width": 900,
+      "height": 900,
+      "order": 60,
+      "published": true
+    }
+  ]
+}

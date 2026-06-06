@@ -15,25 +15,38 @@ Add a photo wall feature to AstroPaper and expose it from the main header naviga
 
 ## Content Model
 
-Use a small typed data module instead of adding a new content collection for the first version. This keeps the feature lightweight and easy to maintain.
+Photo wall entries are managed through Sveltia CMS as a file collection.
 
-Planned file:
+Data file:
 
-- `src/data/photoWall.ts`
+- `src/data/photoWall.json`
 
-Proposed item shape:
+Image upload folder:
+
+- repository path: `public/photo-wall/`
+- public URL prefix: `/photo-wall/`
+
+Item shape:
 
 ```ts
-export type PhotoWallItem = {
+type PhotoWallItem = {
   src: string;
+  title: string;
   alt: string;
-  caption?: string;
   width: number;
   height: number;
+  order: number;
+  published: boolean;
 };
 ```
 
-Initial images will be local placeholders under `public/photo-wall/` because the repository does not currently include user photo assets. They can be replaced later without changing the route or navigation.
+`src` may be either a local repository image, such as
+`photo-wall/window-light.svg`, or an external `https://` image URL. Local
+images are passed through the project base-path helper at build time; external
+URLs are left unchanged.
+
+The six initial placeholder images remain under `public/photo-wall/` and have
+been migrated into `src/data/photoWall.json`.
 
 ## Production Asset Guidelines
 
@@ -43,7 +56,9 @@ Initial images will be local placeholders under `public/photo-wall/` because the
 - Target maximum file size: roughly `250 KB` per image after compression; smaller is better when visual quality holds.
 - File names should be lowercase kebab-case, descriptive, and stable, for example `rain-walk.webp`.
 - Compress and strip unnecessary metadata before adding files to the repository.
-- To replace placeholders, put the new files in `public/photo-wall/`, update `src`, `alt`, `caption`, `width`, and `height` in `src/data/photoWall.ts`, then run the validation commands below.
+- To replace placeholders, upload or place new files in `public/photo-wall/`,
+  update `src`, `title`, `alt`, `width`, `height`, `order`, and `published` in
+  Sveltia CMS, then run the validation commands below.
 
 ## Routing and Layout
 
@@ -117,7 +132,6 @@ After implementation:
 
 ## Future Extensions
 
-- Move photo entries into an Astro content collection if captions become long-form.
-- Add explicit `width` and `height` fields for optimized local images.
+- Move photo entries into an Astro content collection only if captions become long-form.
 - Add tag or year filtering once the photo count grows.
 - Replace placeholder assets with real personal photos.

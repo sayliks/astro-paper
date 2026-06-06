@@ -55,6 +55,7 @@ const ogImage = moment.data.images[0]?.src;
   ogImage={ogImage}
   canonicalURL={canonicalURL}
   ogType="article"
+  speedInsights={false}
 >
   <Fragment slot="head">
     <meta
@@ -96,7 +97,7 @@ const ogImage = moment.data.images[0]?.src;
       </header>
 
       <MomentContent moment={moment} />
-      <MomentImages images={moment.data.images} class="mt-5" />
+      <MomentImages images={moment.data.images} class="mt-5" loading="lazy" />
     </article>
 
     <div style="content-visibility: auto; contain-intrinsic-size: auto 500px">

@@ -36,8 +36,6 @@ collections:
     summary: "{{title}} - {{pubDatetime}}"
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     preview_path: "posts/{{slug}}/"
-    editor:
-      preview: false
     fields:
       - label: 标题
         name: title
@@ -191,3 +189,62 @@ collections:
         format: "YYYY-MM-DDTHH:mm:ssZ"
         date_format: "YYYY-MM-DD"
         time_format: "HH:mm"
+
+  - name: photo_wall
+    label: 照片墙
+    media_folder: public/photo-wall
+    public_folder: /photo-wall
+    files:
+      - name: photo_wall
+        label: 照片墙
+        file: src/data/photoWall.json
+        format: json
+        fields:
+          - label: 照片
+            name: photos
+            widget: list
+            label_singular: 照片
+            summary: "{{order}} · {{title}}"
+            thumbnail: src
+            allow_reorder: true
+            fields:
+              - label: 图片来源
+                name: src
+                widget: image
+                choose_url: true
+                required: true
+                hint: 可上传到 public/photo-wall，也可以粘贴 https:// 开头的外部图片 URL。
+              - label: 标题或描述
+                name: title
+                widget: string
+                required: true
+              - label: 替代文本
+                name: alt
+                widget: string
+                required: true
+                hint: 描述图片中能看到的主要内容。
+              - label: 宽度
+                name: width
+                widget: number
+                value_type: int
+                required: true
+                min: 1
+                hint: 图片原始宽度，单位为像素。
+              - label: 高度
+                name: height
+                widget: number
+                value_type: int
+                required: true
+                min: 1
+                hint: 图片原始高度，单位为像素。
+              - label: 排序
+                name: order
+                widget: number
+                value_type: int
+                required: true
+                hint: 数字越小越靠前；也可以在列表中拖动或用箭头调整顺序。
+              - label: 已发布
+                name: published
+                widget: boolean
+                default: true
+                required: true

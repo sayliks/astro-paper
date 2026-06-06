@@ -20,6 +20,7 @@ const momentsRssHref = new URL(getAssetPath("moments/rss.xml"), Astro.site);
 <Layout
   title={`${t.pages.momentsTitle} | ${config.site.title}`}
   description={t.pages.momentsDesc}
+  speedInsights={false}
 >
   <Fragment slot="head">
     <link
