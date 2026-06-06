@@ -37,12 +37,12 @@ const momentsRssHref = new URL(getAssetPath("moments/rss.xml"), Astro.site);
   <Main pageTitle={t.pages.momentsTitle} pageDesc={t.pages.momentsDesc}>
     {
       moments.length > 0 ? (
-        <section class="mt-2" aria-label={t.moments.title}>
+        <section class="mt-2" aria-label={t.moments.title} data-pagefind-ignore>
           {moments.map((moment, index) => (
             <MomentCard
               moment={moment}
               href={getMomentUrl(moment, locale)}
-              eagerImages={index === 0}
+              loadImagesNormally={index === 0}
             />
           ))}
         </section>

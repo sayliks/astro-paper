@@ -31,6 +31,9 @@ export interface UIStrings {
     comments: string;
     backToMoments: string;
     updatedAt: string;
+    metadataLabel: string;
+    moodLabel: string;
+    locationLabel: string;
     rssTitle: string;
     rssDescription: string;
   };

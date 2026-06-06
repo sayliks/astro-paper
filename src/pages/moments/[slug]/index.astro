@@ -83,13 +83,20 @@ const ogImage = moment.data.images[0]?.src;
     </LinkButton>
 
     <article data-pagefind-body class="mx-auto max-w-[43.25rem]">
-      <header class="mb-4">
-        <h1 class="sr-only">{title}</h1>
-        <MomentMeta moment={moment} />
+      <header class="mb-6">
+        <p class="text-accent mb-2 text-sm font-medium tracking-normal">
+          {t.moments.title}
+        </p>
+        <h1
+          class="text-2xl leading-snug font-semibold sm:text-3xl sm:leading-tight"
+        >
+          {title}
+        </h1>
+        <MomentMeta moment={moment} class="mt-3" />
       </header>
 
       <MomentContent moment={moment} />
-      <MomentImages images={moment.data.images} class="mt-5" loading="lazy" />
+      <MomentImages images={moment.data.images} class="mt-5" />
     </article>
 
     <div style="content-visibility: auto; contain-intrinsic-size: auto 500px">

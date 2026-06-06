@@ -7,13 +7,14 @@ import MomentMeta from "./MomentMeta.astro";
 type Props = {
   moment: MomentEntry;
   href: string;
-  eagerImages?: boolean;
+  loadImagesNormally?: boolean;
 };
 
-const { moment, href, eagerImages = false } = Astro.props;
+const { moment, href, loadImagesNormally = false } = Astro.props;
+const imageLoading = loadImagesNormally ? undefined : "lazy";
 ---
 
-<article class="border-border border-b py-7 first:pt-0 last:border-b-0">
+<article class="moment-card">
   <header>
     <MomentMeta moment={moment} commentsHref={href} />
   </header>
@@ -21,6 +22,23 @@ const { moment, href, eagerImages = false } = Astro.props;
   <MomentImages
     images={moment.data.images}
     class="mt-4"
-    loading={eagerImages ? "eager" : "lazy"}
+    loading={imageLoading}
   />
 </article>
+
+<style>
+  .moment-card {
+    min-width: 0;
+    padding-block: 1.35rem;
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .moment-card:first-child {
+    padding-block-start: 0;
+    border-block-start: 0;
+  }
+
+  .moment-card:last-child {
+    padding-block-end: 0;
+  }
+</style>

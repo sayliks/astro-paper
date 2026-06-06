@@ -33,9 +33,10 @@ const modDatetimeIso = modDatetime?.toISOString();
 
 <ul
   class:list={[
-    "text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-sm",
+    "moment-meta text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-sm",
     className,
   ]}
+  aria-label={t.moments.metadataLabel}
 >
   {
     moment.data.pinned && (
@@ -48,6 +49,7 @@ const modDatetimeIso = modDatetime?.toISOString();
     )
   }
   <li>
+    <span class="sr-only">{t.post.publishedAt}: </span>
     <time datetime={pubDatetime.toISOString()}>{formattedPubDatetime}</time>
   </li>
   {
@@ -59,8 +61,20 @@ const modDatetimeIso = modDatetime?.toISOString();
       </li>
     )
   }
-  {moment.data.mood && <li>{moment.data.mood}</li>}
-  {moment.data.location && <li>{moment.data.location}</li>}
+  {
+    moment.data.mood && (
+      <li aria-label={`${t.moments.moodLabel}: ${moment.data.mood}`}>
+        {moment.data.mood}
+      </li>
+    )
+  }
+  {
+    moment.data.location && (
+      <li aria-label={`${t.moments.locationLabel}: ${moment.data.location}`}>
+        {moment.data.location}
+      </li>
+    )
+  }
   {
     commentsHref && (
       <li>
@@ -71,3 +85,9 @@ const modDatetimeIso = modDatetime?.toISOString();
     )
   }
 </ul>
+
+<style>
+  .moment-meta {
+    min-width: 0;
+  }
+</style>
