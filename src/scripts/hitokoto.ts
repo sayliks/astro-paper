@@ -20,14 +20,13 @@ type HitokotoResponse = {
 };
 
 type HitokotoCache = {
-  savedAt: number;
+  savedOn: string;
   data: HitokotoResponse;
 };
 
 const HITOKOTO_API =
   "https://v1.hitokoto.cn/?c=d&c=e&c=k&max_length=42&encode=json";
 const HITOKOTO_CACHE_KEY = "hitokoto:latest";
-const HITOKOTO_CACHE_MAX_AGE_MS = 5 * 60 * 1000;
 const FALLBACK_QUOTE: HitokotoResponse = {
   id: 0,
   uuid: "",
@@ -56,6 +55,13 @@ function formatAuthor(data: HitokotoResponse): string {
 
 function formatQuoteText(value: string): string {
   return value.trim().replace(/([。！？!?])\s*(?=\S)/g, "$1\n\n");
+}
+
+function getLocalDateKey(date = new Date()): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 function isHitokotoResponse(value: unknown): value is HitokotoResponse {
@@ -95,15 +101,16 @@ function applyQuote(card: HTMLElement, data: HitokotoResponse): void {
 
 function readCachedQuote(): HitokotoResponse | null {
   try {
-    const raw = sessionStorage.getItem(HITOKOTO_CACHE_KEY);
+    const raw = localStorage.getItem(HITOKOTO_CACHE_KEY);
     if (!raw) return null;
 
     const cache = JSON.parse(raw) as Partial<HitokotoCache>;
-    if (typeof cache.savedAt !== "number" || !isHitokotoResponse(cache.data)) {
+    if (
+      cache.savedOn !== getLocalDateKey() ||
+      !isHitokotoResponse(cache.data)
+    ) {
       return null;
     }
-
-    if (Date.now() - cache.savedAt > HITOKOTO_CACHE_MAX_AGE_MS) return null;
 
     return cache.data;
   } catch {
@@ -113,12 +120,15 @@ function readCachedQuote(): HitokotoResponse | null {
 
 function writeCachedQuote(data: HitokotoResponse): void {
   try {
-    sessionStorage.setItem(
+    localStorage.setItem(
       HITOKOTO_CACHE_KEY,
-      JSON.stringify({ savedAt: Date.now(), data } satisfies HitokotoCache)
+      JSON.stringify({
+        savedOn: getLocalDateKey(),
+        data,
+      } satisfies HitokotoCache)
     );
   } catch {
-    // The fallback quote remains visible when session storage is unavailable.
+    // The fallback quote remains visible when browser storage is unavailable.
   }
 }
 
@@ -131,20 +141,11 @@ async function fetchQuote(
   const controller = new AbortController();
   const text = card.querySelector<HTMLElement>("[data-hitokoto-text]");
   const error = card.querySelector<HTMLElement>("[data-hitokoto-error]");
-  const refreshButton = card.querySelector<HTMLButtonElement>(
-    "[data-hitokoto-refresh]"
-  );
-  const idleLabel = refreshButton?.dataset.idleLabel || "换一句";
 
   hitokotoRequests.set(card, controller);
 
   if (showLoading && text) text.textContent = "正在获取一言...";
   if (error) error.textContent = "";
-  if (refreshButton) {
-    refreshButton.dataset.idleLabel = idleLabel;
-    refreshButton.disabled = true;
-    refreshButton.textContent = "获取中";
-  }
 
   try {
     const response = await fetch(HITOKOTO_API, {
@@ -170,10 +171,6 @@ async function fetchQuote(
     if (hitokotoRequests.get(card) === controller) {
       hitokotoRequests.delete(card);
     }
-    if (refreshButton) {
-      refreshButton.disabled = false;
-      refreshButton.textContent = refreshButton.dataset.idleLabel || idleLabel;
-    }
   }
 }
 
@@ -187,21 +184,13 @@ function setupHitokotoCards(): void {
       const cachedQuote = readCachedQuote();
       if (cachedQuote) {
         applyQuote(card, cachedQuote);
+      } else {
+        void fetchQuote(card, { showLoading: false });
       }
-
-      const refreshButton = card.querySelector<HTMLButtonElement>(
-        "[data-hitokoto-refresh]"
-      );
-      const refreshQuote = () => {
-        void fetchQuote(card);
-      };
-
-      refreshButton?.addEventListener("click", refreshQuote);
 
       document.addEventListener(
         "astro:before-swap",
         () => {
-          refreshButton?.removeEventListener("click", refreshQuote);
           hitokotoRequests.get(card)?.abort();
           hitokotoRequests.delete(card);
         },
