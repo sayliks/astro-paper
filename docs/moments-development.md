@@ -12,6 +12,7 @@ Moment files live in `src/content/moments/` and use the `moments` collection in
 
 ```yaml
 slug: evening-walk
+title: 傍晚散步 # optional
 pubDatetime: 2026-06-06T21:30:00+08:00
 modDatetime: 2026-06-06T22:00:00+08:00 # optional
 draft: false
@@ -25,9 +26,12 @@ images:
     height: 1200
 ```
 
-The Markdown body is the visible Moment text. A formal title, tags, description,
-featured flag, reading time, social metrics, automatic location, weather, and
-EXIF fields are intentionally not part of Phase 1.
+The Markdown body is the visible Moment text. `title` is optional: when set it
+becomes the main title shown on the home feed, detail page, and RSS; when blank
+or omitted the title falls back to the publish-time form `日常 · YYYY-MM-DD HH:mm`.
+The resolution lives in `resolveMomentTitle` (`src/utils/momentModel.ts`).
+Tags, description, featured flag, reading time, social metrics, automatic
+location, weather, and EXIF fields are intentionally not part of Phase 1.
 
 ## CMS
 

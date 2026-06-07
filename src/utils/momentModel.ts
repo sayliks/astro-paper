@@ -79,6 +79,14 @@ export function getMomentTitle(
   return `日常 · ${formatMomentDateTimeKey(date, timeZone)}`;
 }
 
+export function resolveMomentTitle(
+  data: { title?: string | null; pubDatetime: Date | string },
+  timeZone = "Asia/Hong_Kong"
+) {
+  const custom = typeof data.title === "string" ? data.title.trim() : "";
+  return custom || getMomentTitle(data.pubDatetime, timeZone);
+}
+
 export function markdownToPlainText(markdown: string) {
   return markdown
     .replace(/```[\s\S]*?```/g, " ")

@@ -47,6 +47,7 @@ const moments = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: `./${MOMENTS_PATH}` }),
   schema: z.object({
     slug: z.string().trim().min(1),
+    title: optionalTrimmedString,
     pubDatetime: requiredDate,
     modDatetime: optionalDate,
     draft: z.boolean().default(false),

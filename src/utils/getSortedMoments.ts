@@ -6,10 +6,10 @@ import {
   formatMomentDateTimeKey,
   getMomentDescriptionFromMarkdown,
   getMomentIdSlug,
-  getMomentTitle,
   getPublishedMomentEntries,
   isPublishedMoment,
   isValidMomentImage,
+  resolveMomentTitle,
 } from "./momentModel";
 
 export type MomentEntry = CollectionEntry<"moments">;
@@ -22,7 +22,7 @@ export function getMomentDateTimeKey(date: Date) {
 }
 
 export function getMomentMetaTitle(moment: MomentEntry) {
-  return getMomentTitle(moment.data.pubDatetime, config.site.timezone);
+  return resolveMomentTitle(moment.data, config.site.timezone);
 }
 
 export function momentFilter(moment: MomentEntry) {

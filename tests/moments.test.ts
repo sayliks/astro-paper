@@ -8,6 +8,7 @@ import {
   getMomentTitle,
   isPublishedMoment,
   isValidMomentImage,
+  resolveMomentTitle,
   sortMomentEntries,
   type MomentSortInput,
 } from "../src/utils/momentModel.ts";
@@ -116,6 +117,33 @@ test("generates metadata titles from the local publish time", () => {
   assert.equal(
     getMomentTitle(new Date("2026-06-06T21:30:00+08:00"), "Asia/Hong_Kong"),
     "日常 · 2026-06-06 21:30"
+  );
+});
+
+test("prefers a custom moment title over the date-derived one", () => {
+  assert.equal(
+    resolveMomentTitle(
+      {
+        title: "低俗小说好看",
+        pubDatetime: new Date("2026-06-06T21:30:00+08:00"),
+      },
+      "Asia/Hong_Kong"
+    ),
+    "低俗小说好看"
+  );
+});
+
+test("falls back to the date title when the custom title is blank or missing", () => {
+  const pubDatetime = new Date("2026-06-06T21:30:00+08:00");
+  const expected = "日常 · 2026-06-06 21:30";
+
+  assert.equal(
+    resolveMomentTitle({ title: "   ", pubDatetime }, "Asia/Hong_Kong"),
+    expected
+  );
+  assert.equal(
+    resolveMomentTitle({ pubDatetime }, "Asia/Hong_Kong"),
+    expected
   );
 });
 

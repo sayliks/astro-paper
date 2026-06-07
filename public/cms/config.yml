@@ -115,6 +115,12 @@ collections:
         required: true
         hint: 可以写得很短，适合记录轻量的日常想法。
 
+      - label: 标题
+        name: title
+        widget: string
+        required: false
+        hint: 可选。填写后作为主标题显示；留空则自动使用发布时间。
+
       - label: 简短标识
         name: slug
         widget: string
