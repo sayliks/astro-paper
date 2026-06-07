@@ -2,7 +2,27 @@ const SUPPORTED_PROVIDER = "github";
 const DEFAULT_ALLOWED_DOMAINS =
   "www.matsumae.top,matsumae.top,localhost,127.0.0.1";
 
+// JS line/paragraph separators are valid whitespace in source but terminate a
+// string literal when embedded raw, so they must be escaped alongside "<".
+const LINE_SEPARATOR = String.fromCharCode(0x2028);
+const PARAGRAPH_SEPARATOR = String.fromCharCode(0x2029);
+
 const escapeRegExp = str => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+// Serialize a value for safe embedding inside an inline <script>. JSON.stringify
+// alone does not escape "<", so a literal "</script>" in attacker-controlled
+// input would close the script element and enable XSS.
+const toScriptJSON = value =>
+  JSON.stringify(value)
+    .replaceAll("<", "\\u003c")
+    .replaceAll(LINE_SEPARATOR, "\\u2028")
+    .replaceAll(PARAGRAPH_SEPARATOR, "\\u2029");
+
+// Constrain a reflected provider to a safe charset. Anything outside [a-z-]
+// (including missing values) collapses to "unknown" so untrusted query input is
+// never echoed verbatim. Defense-in-depth on top of toScriptJSON.
+const normalizeProvider = value =>
+  typeof value === "string" && /^[a-z-]+$/.test(value) ? value : "unknown";
 
 const normalizeDomain = value => {
   const domain = value?.trim().toLowerCase();
@@ -41,7 +61,7 @@ const outputHTML = (
   return new Response(
     `<!doctype html><html><body><script>
 (() => {
-  const allowedDomainPatterns = ${JSON.stringify(allowedDomainPatterns)}.map(
+  const allowedDomainPatterns = ${toScriptJSON(allowedDomainPatterns)}.map(
     source => new RegExp(source, "i")
   );
   const isAllowedOrigin = origin => {
@@ -63,14 +83,14 @@ const outputHTML = (
   };
 
   window.addEventListener("message", ({ data, origin }) => {
-    if (data === ${JSON.stringify(readyMessage)} && isAllowedOrigin(origin)) {
+    if (data === ${toScriptJSON(readyMessage)} && isAllowedOrigin(origin)) {
       window.opener?.postMessage(
-        ${JSON.stringify(resultMessage)},
+        ${toScriptJSON(resultMessage)},
         origin
       );
     }
   });
-  window.opener?.postMessage(${JSON.stringify(readyMessage)}, "*");
+  window.opener?.postMessage(${toScriptJSON(readyMessage)}, "*");
 })();
 </script></body></html>`,
     {
@@ -97,13 +117,13 @@ export const handleAuth = async (request, env = process.env) => {
   }
 
   const url = new URL(request.url);
-  const provider = url.searchParams.get("provider");
+  const provider = normalizeProvider(url.searchParams.get("provider"));
   const domain = url.searchParams.get("site_id");
 
   if (provider !== SUPPORTED_PROVIDER) {
     return createError(
       request,
-      provider ?? "unknown",
+      provider,
       "Your Git backend is not supported by the authenticator.",
       "UNSUPPORTED_BACKEND",
       env
