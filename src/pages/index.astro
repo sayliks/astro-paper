@@ -31,6 +31,7 @@ const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 const moments = getSortedMoments(await getCollection("moments"));
 const homePath = getRelativeLocaleUrl(locale, "");
+const recentLimit = postsConfig.perIndex;
 
 type RecentFeedItem =
   | {
@@ -47,20 +48,29 @@ type RecentFeedItem =
 const getSortTime = (date: Date | string | null | undefined) =>
   date ? new Date(date).getTime() : 0;
 
+const recentPostCandidates = recentPosts.slice(0, recentLimit);
+const recentMomentCandidates = [...moments]
+  .sort(
+    (a, b) =>
+      getSortTime(b.data.modDatetime ?? b.data.pubDatetime) -
+      getSortTime(a.data.modDatetime ?? a.data.pubDatetime)
+  )
+  .slice(0, recentLimit);
+
 const recentFeedItems: RecentFeedItem[] = [
-  ...recentPosts.map(post => ({
+  ...recentPostCandidates.map(post => ({
     type: "post" as const,
     sortTime: getSortTime(post.data.modDatetime ?? post.data.pubDatetime),
     post,
   })),
-  ...moments.map(moment => ({
+  ...recentMomentCandidates.map(moment => ({
     type: "moment" as const,
     sortTime: getSortTime(moment.data.modDatetime ?? moment.data.pubDatetime),
     moment,
   })),
 ]
   .sort((a, b) => b.sortTime - a.sortTime)
-  .slice(0, postsConfig.perIndex);
+  .slice(0, recentLimit);
 ---
 
 <Layout clientRouter={false} preloadFont={false}>

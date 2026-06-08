@@ -35,6 +35,7 @@ const photoWallItems = getPublishedPhotoWallItems(photoWallData);
           const isLandscape = item.width > item.height;
           const isPortrait = item.height > item.width;
           const loading = index < 2 ? undefined : "lazy";
+          const priority = index === 0;
 
           return (
             <li
@@ -57,6 +58,8 @@ const photoWallItems = getPublishedPhotoWallItems(photoWallData);
                     height={item.height}
                     loading={loading}
                     decoding="async"
+                    fetchpriority={priority ? "high" : undefined}
+                    referrerpolicy="no-referrer"
                   />
                 </div>
                 <figcaption>{item.title}</figcaption>

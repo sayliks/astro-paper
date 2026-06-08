@@ -5,10 +5,17 @@ import { getAssetPath } from "@/utils/withBase";
 
 type Props = {
   images?: MomentEntry["data"]["images"];
-  loading?: "lazy";
+  loading?: "eager" | "lazy";
+  priorityFirstImage?: boolean;
 } & HTMLAttributes<"ul">;
 
-const { images = [], loading, class: className, ...attrs } = Astro.props;
+const {
+  images = [],
+  loading,
+  priorityFirstImage = false,
+  class: className,
+  ...attrs
+} = Astro.props;
 
 const getImageSrc = (src: string) =>
   /^(?:https?:)?\/\//i.test(src) || src.startsWith("data:")
@@ -27,21 +34,26 @@ const getImageSrc = (src: string) =>
       aria-label="动态图片"
       {...attrs}
     >
-      {images.map(image => (
-        <li
-          class="moment-image"
-          style={`--moment-image-width: ${image.width}; --moment-image-height: ${image.height};`}
-        >
-          <img
-            src={getImageSrc(image.src)}
-            alt={image.alt}
-            width={image.width}
-            height={image.height}
-            loading={loading}
-            decoding="async"
-          />
-        </li>
-      ))}
+      {images.map((image, index) => {
+        const priority = priorityFirstImage && index === 0;
+
+        return (
+          <li
+            class="moment-image"
+            style={`--moment-image-width: ${image.width}; --moment-image-height: ${image.height};`}
+          >
+            <img
+              src={getImageSrc(image.src)}
+              alt={image.alt}
+              width={image.width}
+              height={image.height}
+              loading={priority ? undefined : loading}
+              fetchpriority={priority ? "high" : undefined}
+              decoding="async"
+            />
+          </li>
+        );
+      })}
     </ul>
   )
 }

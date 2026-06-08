@@ -18,5 +18,13 @@ export default [
     },
   },
   { rules: { "no-console": "error" } },
-  { ignores: ["dist/**", ".astro/**", ".codex/**", "public/pagefind/**"] },
+  {
+    ignores: [
+      "dist/**",
+      ".astro/**",
+      ".codex/**",
+      "public/pagefind/**",
+      "public/cms/sveltia-cms.js",
+    ],
+  },
 ];

@@ -15,3 +15,6 @@
 
 # Ignore MDX files
 *.mdx
+
+# Ignore vendored CMS runtime bundle
+public/cms/sveltia-cms.js

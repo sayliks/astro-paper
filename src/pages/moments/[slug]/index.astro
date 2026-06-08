@@ -97,7 +97,12 @@ const ogImage = moment.data.images[0]?.src;
       </header>
 
       <MomentContent moment={moment} />
-      <MomentImages images={moment.data.images} class="mt-5" loading="lazy" />
+      <MomentImages
+        images={moment.data.images}
+        class="mt-5"
+        loading="lazy"
+        priorityFirstImage
+      />
     </article>
 
     <div style="content-visibility: auto; contain-intrinsic-size: auto 500px">
