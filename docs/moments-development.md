@@ -1,6 +1,6 @@
 # Moments Development Notes
 
-`日常 / Moments` is a lightweight publishing lane for informal updates. It is
+`动态 / Moments` is a lightweight publishing lane for status updates. It is
 separate from formal articles and remains fully static: Markdown files are
 committed to Git, Astro builds the feed/detail pages, and Vercel publishes the
 generated output.
@@ -28,14 +28,14 @@ images:
 
 The Markdown body is the visible Moment text. `title` is optional: when set it
 becomes the main title shown on the home feed, detail page, and RSS; when blank
-or omitted the title falls back to the publish-time form `日常 · YYYY-MM-DD HH:mm`.
+or omitted the title falls back to the publish-time form `动态 · YYYY-MM-DD HH:mm`.
 The resolution lives in `resolveMomentTitle` (`src/utils/momentModel.ts`).
 Tags, description, featured flag, reading time, social metrics, automatic
 location, weather, and EXIF fields are intentionally not part of Phase 1.
 
 ## CMS
 
-Sveltia CMS is configured in `public/cms/config.yml`. The `日常` collection uses
+Sveltia CMS is configured in `public/cms/config.yml`. The `动态` collection uses
 the existing GitHub backend and writes files to `src/content/moments/`.
 
 CMS-created filenames follow:

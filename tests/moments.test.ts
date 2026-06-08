@@ -116,7 +116,7 @@ test("generates a stable permalink slug from the committed filename id", () => {
 test("generates metadata titles from the local publish time", () => {
   assert.equal(
     getMomentTitle(new Date("2026-06-06T21:30:00+08:00"), "Asia/Hong_Kong"),
-    "日常 · 2026-06-06 21:30"
+    "动态 · 2026-06-06 21:30"
   );
 });
 
@@ -135,7 +135,7 @@ test("prefers a custom moment title over the date-derived one", () => {
 
 test("falls back to the date title when the custom title is blank or missing", () => {
   const pubDatetime = new Date("2026-06-06T21:30:00+08:00");
-  const expected = "日常 · 2026-06-06 21:30";
+  const expected = "动态 · 2026-06-06 21:30";
 
   assert.equal(
     resolveMomentTitle({ title: "   ", pubDatetime }, "Asia/Hong_Kong"),

@@ -8,7 +8,7 @@ backend:
   base_url: https://www.matsumae.top/api/cms-auth
   auth_methods: [oauth, token]
 
-app_title: "sayliks 文章管理"
+app_title: "sayliks 内容管理"
 site_url: "https://www.matsumae.top"
 display_url: "https://www.matsumae.top"
 logo:
@@ -95,8 +95,8 @@ collections:
         widget: markdown
 
   - name: moments
-    label: 日常
-    label_singular: 日常
+    label: 动态
+    label_singular: 动态
     folder: src/content/moments
     create: true
     delete: true
@@ -113,13 +113,13 @@ collections:
         name: body
         widget: markdown
         required: true
-        hint: 可以写得很短，适合记录轻量的日常想法。
+        hint: 可以写得很短，适合记录轻量的状态更新。
 
       - label: 标题
         name: title
         widget: string
         required: false
-        hint: 可选。填写后作为主标题显示；留空则自动使用发布时间。
+        hint: 可选。填写后作为动态标题显示；留空则自动使用发布时间。
 
       - label: 简短标识
         name: slug
@@ -131,7 +131,7 @@ collections:
         name: images
         widget: list
         required: false
-        hint: 可选。图片会保存到 public/moments，并通过 /moments 访问。
+        hint: 可选。动态图片会保存到 public/moments，并通过 /moments 访问。
         fields:
           - label: 图片
             name: src

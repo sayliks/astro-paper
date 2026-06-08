@@ -12,8 +12,8 @@ export async function GET() {
   const moments = getSortedMoments(await getCollection("moments"));
 
   return rss({
-    title: "日常 | sayliks corner",
-    description: "sayliks 的日常记录。",
+    title: "动态 | sayliks corner",
+    description: "sayliks 的状态更新。",
     site: config.site.url,
     items: moments.map(moment => ({
       link: getMomentUrl(moment, config.site.lang),

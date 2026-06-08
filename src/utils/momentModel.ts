@@ -3,7 +3,7 @@ import {
   type PublicationFilterOptions,
 } from "./publicationFilter.ts";
 
-export const FALLBACK_MOMENT_DESCRIPTION = "一条日常记录。";
+export const FALLBACK_MOMENT_DESCRIPTION = "一条状态更新。";
 
 export type MomentSortInput = {
   id: string;
@@ -76,7 +76,7 @@ export function getMomentTitle(
   date: Date | string,
   timeZone = "Asia/Hong_Kong"
 ) {
-  return `日常 · ${formatMomentDateTimeKey(date, timeZone)}`;
+  return `动态 · ${formatMomentDateTimeKey(date, timeZone)}`;
 }
 
 export function resolveMomentTitle(
