@@ -1,6 +1,16 @@
 const SUPPORTED_PROVIDER = "github";
 const DEFAULT_ALLOWED_DOMAINS =
   "www.matsumae.top,matsumae.top,localhost,127.0.0.1";
+const AUTH_COPY = {
+  authCodeRequestFailed: "未收到授权码，请稍后重试。",
+  csrfDetected: "检测到潜在的 CSRF 风险，授权流程已中止。",
+  githubMissingToken: "GitHub 未返回访问令牌。",
+  malformedResponse: "服务器返回的数据格式不正确，请稍后重试。",
+  misconfiguredClient: "OAuth 应用的 Client ID 或 Secret 尚未配置。",
+  tokenRequestFailed: "请求访问令牌失败，请稍后重试。",
+  unsupportedBackend: "当前 Git 后端不受授权服务支持。",
+  unsupportedDomain: "当前域名不允许使用此授权服务。",
+};
 
 // JS line/paragraph separators are valid whitespace in source but terminate a
 // string literal when embedded raw, so they must be escaped alongside "<".
@@ -59,7 +69,7 @@ const outputHTML = (
   );
 
   return new Response(
-    `<!doctype html><html><body><script>
+    `<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><title>CMS 授权</title></head><body><script>
 (() => {
   const allowedDomainPatterns = ${toScriptJSON(allowedDomainPatterns)}.map(
     source => new RegExp(source, "i")
@@ -124,7 +134,7 @@ export const handleAuth = async (request, env = process.env) => {
     return createError(
       request,
       provider,
-      "Your Git backend is not supported by the authenticator.",
+      AUTH_COPY.unsupportedBackend,
       "UNSUPPORTED_BACKEND",
       env
     );
@@ -136,7 +146,7 @@ export const handleAuth = async (request, env = process.env) => {
     return createError(
       request,
       provider,
-      "Your domain is not allowed to use the authenticator.",
+      AUTH_COPY.unsupportedDomain,
       "UNSUPPORTED_DOMAIN",
       env
     );
@@ -146,7 +156,7 @@ export const handleAuth = async (request, env = process.env) => {
     return createError(
       request,
       provider,
-      "OAuth app client ID or secret is not configured.",
+      AUTH_COPY.misconfiguredClient,
       "MISCONFIGURED_CLIENT",
       env
     );
@@ -190,7 +200,7 @@ export const handleCallback = async (request, env = process.env) => {
     return createError(
       request,
       provider ?? "unknown",
-      "Your Git backend is not supported by the authenticator.",
+      AUTH_COPY.unsupportedBackend,
       "UNSUPPORTED_BACKEND",
       env
     );
@@ -200,7 +210,7 @@ export const handleCallback = async (request, env = process.env) => {
     return createError(
       request,
       provider,
-      "Failed to receive an authorization code. Please try again later.",
+      AUTH_COPY.authCodeRequestFailed,
       "AUTH_CODE_REQUEST_FAILED",
       env
     );
@@ -210,7 +220,7 @@ export const handleCallback = async (request, env = process.env) => {
     return createError(
       request,
       provider,
-      "Potential CSRF attack detected. Authentication flow aborted.",
+      AUTH_COPY.csrfDetected,
       "CSRF_DETECTED",
       env
     );
@@ -220,7 +230,7 @@ export const handleCallback = async (request, env = process.env) => {
     return createError(
       request,
       provider,
-      "OAuth app client ID or secret is not configured.",
+      AUTH_COPY.misconfiguredClient,
       "MISCONFIGURED_CLIENT",
       env
     );
@@ -248,7 +258,7 @@ export const handleCallback = async (request, env = process.env) => {
     return createError(
       request,
       provider,
-      "Failed to request an access token. Please try again later.",
+      AUTH_COPY.tokenRequestFailed,
       "TOKEN_REQUEST_FAILED",
       env
     );
@@ -262,7 +272,7 @@ export const handleCallback = async (request, env = process.env) => {
     return createError(
       request,
       provider,
-      "Server responded with malformed data. Please try again later.",
+      AUTH_COPY.malformedResponse,
       "MALFORMED_RESPONSE",
       env
     );
@@ -274,7 +284,7 @@ export const handleCallback = async (request, env = process.env) => {
       provider,
       payload.error_description ||
         payload.error ||
-        "GitHub did not return an access token.",
+        AUTH_COPY.githubMissingToken,
       payload.error ? "TOKEN_REQUEST_FAILED" : "MALFORMED_RESPONSE",
       env
     );
