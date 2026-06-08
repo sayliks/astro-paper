@@ -1,6 +1,5 @@
 import assert from "node:assert/strict";
 import { afterEach, test } from "node:test";
-// @ts-expect-error — plain JS module without type declarations.
 import { handleAuth, handleCallback } from "../src/server/cmsAuth.js";
 
 const VALID_ENV = {
