@@ -36,6 +36,21 @@
   scroll-margin-block: 1rem;
 }
 
+[data-theme-icon] {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.75) rotate(45deg);
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease;
+}
+
+html[data-theme-mode="system"] [data-theme-icon="system"],
+html[data-theme-mode="light"] [data-theme-icon="light"],
+html[data-theme-mode="dark"] [data-theme-icon="dark"] {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1) rotate(0);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

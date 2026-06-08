@@ -81,7 +81,6 @@ export default {
     openMenu: "打开菜单",
     closeMenu: "关闭菜单",
     toggleTheme: "切换主题",
-    themeMenu: "选择主题",
     themeCurrent: "当前主题",
     themeSystem: "跟随系统",
     themeLight: "浅色",

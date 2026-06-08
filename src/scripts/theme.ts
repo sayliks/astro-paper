@@ -76,29 +76,10 @@ function persist(): void {
   reflect();
 }
 
-function getThemeOptions(): HTMLButtonElement[] {
-  return Array.from(
-    document.querySelectorAll<HTMLButtonElement>("[data-theme-option]")
-  );
-}
-
-function getThemeLabel(): string {
-  const activeOption = getThemeOptions().find(
-    option => option.dataset.themeOption === themeMode
-  );
-  return activeOption?.dataset.label ?? themeMode;
-}
-
-function setThemeMenuOpen(open: boolean): void {
-  const themeButton = document.querySelector<HTMLButtonElement>("#theme-btn");
-  const themeMenu = document.querySelector<HTMLElement>("#theme-menu");
-
-  themeButton?.setAttribute("aria-expanded", String(open));
-  themeMenu?.classList.toggle("hidden", !open);
-}
-
-function closeThemeMenu(): void {
-  setThemeMenuOpen(false);
+function getNextThemeMode(): ThemeMode {
+  if (themeMode === SYSTEM) return LIGHT;
+  if (themeMode === LIGHT) return DARK;
+  return SYSTEM;
 }
 
 function reflect(): void {
@@ -107,20 +88,15 @@ function reflect(): void {
   root?.setAttribute("data-theme-mode", themeMode);
 
   const themeButton = document.querySelector<HTMLButtonElement>("#theme-btn");
-  const currentLabel = themeButton?.dataset.labelCurrent ?? "Theme";
-  const themeLabel = getThemeLabel();
-  themeButton?.setAttribute("aria-label", `${currentLabel}: ${themeLabel}`);
-  themeButton?.setAttribute("title", `${currentLabel}: ${themeLabel}`);
-
-  getThemeOptions().forEach(option => {
-    const active = option.dataset.themeOption === themeMode;
-    option.setAttribute("aria-checked", String(active));
-    option.classList.toggle("bg-muted", active);
-    option.classList.toggle("text-accent", active);
-    option
-      .querySelector("[data-theme-check]")
-      ?.classList.toggle("opacity-0", !active);
-  });
+  const toggleLabel = themeButton?.dataset.labelToggle ?? "Toggle theme";
+  const currentLabel = themeButton?.dataset.labelCurrent ?? "Current theme";
+  const themeLabel =
+    themeButton?.dataset[
+      `label${themeMode.charAt(0).toUpperCase()}${themeMode.slice(1)}`
+    ] ?? themeMode;
+  const label = `${toggleLabel} (${currentLabel}: ${themeLabel})`;
+  themeButton?.setAttribute("aria-label", label);
+  themeButton?.setAttribute("title", label);
 
   // Fill <meta name="theme-color"> with the computed background colour so
   // Android's browser chrome matches the page background.
@@ -133,55 +109,14 @@ function reflect(): void {
 function setup(): void {
   reflect();
   const themeButton = document.querySelector<HTMLButtonElement>("#theme-btn");
-  const themeMenu = document.querySelector<HTMLElement>("#theme-menu");
 
-  if (!themeButton || !themeMenu) return;
+  if (!themeButton) return;
 
-  themeButton.onclick = event => {
-    event.stopPropagation();
-    const willOpen = themeButton.getAttribute("aria-expanded") !== "true";
-    setThemeMenuOpen(willOpen);
-
-    if (willOpen) {
-      const activeOption =
-        getThemeOptions().find(
-          option => option.dataset.themeOption === themeMode
-        ) ?? getThemeOptions()[0];
-      activeOption?.focus();
-    }
+  themeButton.onclick = () => {
+    themeMode = getNextThemeMode();
+    themeValue = resolveTheme(themeMode);
+    persist();
   };
-
-  themeMenu.onclick = event => {
-    event.stopPropagation();
-  };
-
-  getThemeOptions().forEach(option => {
-    option.onclick = () => {
-      const optionTheme = option.dataset.themeOption;
-
-      if (!isThemeMode(optionTheme)) return;
-
-      themeMode = optionTheme;
-      themeValue = resolveTheme(themeMode);
-      persist();
-      closeThemeMenu();
-      themeButton.focus();
-    };
-  });
-}
-
-function focusThemeOption(offset: number): void {
-  const themeOptions = getThemeOptions();
-  const activeElement = document.activeElement;
-  const currentIndex = themeOptions.findIndex(
-    option => option === activeElement
-  );
-  const nextIndex =
-    currentIndex === -1
-      ? 0
-      : (currentIndex + offset + themeOptions.length) % themeOptions.length;
-
-  themeOptions[nextIndex]?.focus();
 }
 
 function setupThemeListeners(): void {
@@ -189,47 +124,6 @@ function setupThemeListeners(): void {
 
   window.__astroPaperThemeReady = true;
   document.addEventListener("astro:after-swap", setup);
-  document.addEventListener("keydown", event => {
-    const themeButton = document.querySelector<HTMLButtonElement>("#theme-btn");
-    const themeMenu = document.querySelector<HTMLElement>("#theme-menu");
-    const menuIsOpen = !!themeMenu && !themeMenu.classList.contains("hidden");
-
-    if (event.key === "Escape") {
-      if (menuIsOpen) {
-        closeThemeMenu();
-        themeButton?.focus();
-      }
-      return;
-    }
-
-    if (!menuIsOpen) return;
-
-    if (event.key === "ArrowDown") {
-      event.preventDefault();
-      focusThemeOption(1);
-    } else if (event.key === "ArrowUp") {
-      event.preventDefault();
-      focusThemeOption(-1);
-    } else if (event.key === "Home") {
-      event.preventDefault();
-      getThemeOptions()[0]?.focus();
-    } else if (event.key === "End") {
-      event.preventDefault();
-      getThemeOptions().at(-1)?.focus();
-    }
-  });
-  document.addEventListener("click", event => {
-    const target = event.target;
-    const themePicker = document.querySelector("#theme-picker");
-
-    if (
-      target instanceof Node &&
-      themePicker &&
-      !themePicker.contains(target)
-    ) {
-      closeThemeMenu();
-    }
-  });
 
   // Carry the theme-color value across View Transitions to prevent the
   // Android navigation bar from flashing during page transitions.
