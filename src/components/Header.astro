@@ -6,6 +6,7 @@ import IconArchive from "@/assets/icons/IconArchive.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
+import IconDeviceDesktop from "@/assets/icons/IconDeviceDesktop.svg";
 import IconX from "@/assets/icons/IconX.svg";
 import LinkButton from "./LinkButton.astro";
 import { stripBase, stripLocale } from "@/utils/withBase";
@@ -153,17 +154,80 @@ const isActive = (path: string) => {
         }
         {
           features.lightAndDarkMode && (
-            <li class="col-span-1 flex items-center justify-center">
+            <li
+              id="theme-picker"
+              class="relative col-span-1 flex items-center justify-center"
+            >
               <button
                 id="theme-btn"
                 class="focus-outline hover:[&>svg]:stroke-accent relative size-12 p-4 sm:size-8"
-                title={t.a11y.toggleTheme}
-                aria-label={t.a11y.toggleTheme}
+                title={t.a11y.themeMenu}
+                aria-label={t.a11y.themeMenu}
+                aria-haspopup="menu"
+                aria-expanded="false"
+                aria-controls="theme-menu"
                 aria-live="polite"
+                data-label-menu={t.a11y.themeMenu}
+                data-label-current={t.a11y.themeCurrent}
               >
                 <IconMoon class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
                 <IconSunHigh class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
               </button>
+              <div
+                id="theme-menu"
+                class="border-border bg-background absolute top-full z-20 mt-2 hidden w-40 rounded-md border p-1 text-sm shadow-sm max-sm:left-1/2 max-sm:-translate-x-1/2 sm:end-0"
+                role="menu"
+                aria-label={t.a11y.themeMenu}
+              >
+                <button
+                  type="button"
+                  class="hover:bg-muted focus:bg-muted flex w-full items-center gap-2 rounded px-3 py-2 text-start"
+                  role="menuitemradio"
+                  aria-checked="false"
+                  data-theme-option="system"
+                  data-label={t.a11y.themeSystem}
+                >
+                  <IconDeviceDesktop class="size-4 shrink-0" />
+                  <span>{t.a11y.themeSystem}</span>
+                  <span
+                    data-theme-check
+                    aria-hidden="true"
+                    class="bg-accent ms-auto size-1.5 rounded-full opacity-0"
+                  />
+                </button>
+                <button
+                  type="button"
+                  class="hover:bg-muted focus:bg-muted flex w-full items-center gap-2 rounded px-3 py-2 text-start"
+                  role="menuitemradio"
+                  aria-checked="false"
+                  data-theme-option="light"
+                  data-label={t.a11y.themeLight}
+                >
+                  <IconSunHigh class="size-4 shrink-0" />
+                  <span>{t.a11y.themeLight}</span>
+                  <span
+                    data-theme-check
+                    aria-hidden="true"
+                    class="bg-accent ms-auto size-1.5 rounded-full opacity-0"
+                  />
+                </button>
+                <button
+                  type="button"
+                  class="hover:bg-muted focus:bg-muted flex w-full items-center gap-2 rounded px-3 py-2 text-start"
+                  role="menuitemradio"
+                  aria-checked="false"
+                  data-theme-option="dark"
+                  data-label={t.a11y.themeDark}
+                >
+                  <IconMoon class="size-4 shrink-0" />
+                  <span>{t.a11y.themeDark}</span>
+                  <span
+                    data-theme-check
+                    aria-hidden="true"
+                    class="bg-accent ms-auto size-1.5 rounded-full opacity-0"
+                  />
+                </button>
+              </div>
             </li>
           )
         }
