@@ -23,6 +23,10 @@ preserved during future optimization work.
 | Hitokoto cache misses | `src/scripts/hitokoto.ts` | Third-party quote fetches are scheduled with `requestIdleCallback` when available, with a 2-second idle timeout and a short timeout fallback. |
 | Touch interaction cleanup | `src/scripts/header-menu.ts`, `src/scripts/theme.ts`, `src/styles/global.css` | Header menu and theme toggle handle direct touch/pointer activation without relying only on delayed click events. |
 | Shared content queries | `src/utils/contentQueries.ts`, `src/pages/**` | Published posts, moments, and tags are loaded through shared helpers that memoize during static builds while staying fresh in dev. |
+| Content and markdown image regression tests | `src/content.config.ts`, `tests/moments.test.ts`, `tests/rehype-image-optimize.test.ts` | Moment entries use filename-derived collection IDs, and tests protect moment publication/sorting helpers plus Markdown image loading attributes. |
+| Homepage feed utility | `src/utils/recentFeed.ts`, `src/pages/index.astro`, `tests/recent-feed.test.ts` | The mixed recent feed is assembled by a pure helper that preserves candidate limiting and ordering behavior. |
+| Search module extraction | `src/pages/search.astro`, `src/scripts/search.ts`, `src/pagefind-default-ui.d.ts`, `tests/search.test.ts` | Pagefind initialization and query/back-link helpers now live in a typed route-local script module. |
+| OG renderer reuse | `src/utils/ogImageFrame.ts`, `src/utils/ogImageRenderer.ts`, `src/pages/og.png.ts`, `src/pages/posts/[...slug]/index.png.ts`, `tests/og-image-frame.test.ts` | Generic and post OG endpoints share Satori frame and PNG response helpers while keeping cached OG font loading. |
 | Vendored CMS bundle hygiene | `eslint.config.js`, `.prettierignore`, `public/cms/sveltia-cms.js` | The large self-hosted CMS runtime is excluded from lint/format paths. |
 
 ## Priority Map
@@ -31,11 +35,9 @@ preserved during future optimization work.
 | --- | --- | --- | --- |
 | P1 | Responsive image delivery | `src/pages/photo-wall.astro`, `src/components/moments/MomentImages.astro`, `src/data/photoWall.json` | Lower image bytes, better LCP, less dependence on remote originals |
 | P1 | CMS/admin runtime asset policy | `public/cms/sveltia-cms.js`, `public/cms/index.html`, `public/cms/config.yml` | Clearer upgrade/cache story for the 1.9 MB vendored admin bundle |
-| P2 | OG renderer reuse | `src/pages/og.png.ts`, `src/pages/posts/[...slug]/index.png.ts`, `src/utils/ogFont.ts` | Less duplicated Satori markup after font caching |
+| P1 | CMS OAuth scope audit | `src/server/cmsAuth.js`, `public/cms/config.yml` | Clearer or narrower repository permissions for admin login |
 | P2 | Client script gating | `src/layouts/Layout.astro`, `src/scripts/*.ts`, `src/components/Header.astro` | Less JavaScript on routes that do not need every behavior |
 | P2 | Third-party runtime controls | `src/scripts/hitokoto.ts`, `src/components/Giscus.astro`, `src/layouts/Layout.astro` | More predictable first-load behavior and privacy controls |
-| P2 | Search script structure | `src/pages/search.astro` | Smaller page component and easier View Transition lifecycle maintenance |
-| P2 | Content and image validation | `tests/`, `src/utils/transformers/rehypeImageOptimize.ts`, `public/cms/config.yml` | Fewer regressions around image loading and slug/content integrity |
 | P3 | Font and asset budgets | `astro.config.ts`, `src/layouts/Layout.astro`, `package.json` | Better visibility into incremental static asset growth |
 
 ## Findings
@@ -83,22 +85,22 @@ Recommended work:
 This reduces repeated static-build work and makes publication rules easier to
 audit.
 
-### 3. Share OG rendering code after font memoization
+### 3. Keep shared OG rendering helpers as the endpoint boundary
 
-`src/utils/ogFont.ts` now centralizes and memoizes OG font buffer loading, and
-failed font fetches evict their cache entries so later OG requests can retry.
-The two OG image routes still contain near-identical Satori frame markup and
-Sharp conversion flow.
+`src/utils/ogFont.ts` centralizes and memoizes OG font buffer loading, and failed
+font fetches evict their cache entries so later OG requests can retry. The
+generic and post OG endpoints now also share frame helpers in
+`src/utils/ogImageFrame.ts` and Satori-to-PNG response rendering in
+`src/utils/ogImageRenderer.ts`.
 
 Recommended work:
 
-- Extract common OG frame styles/layout to a small renderer helper so the two
-  routes only supply title, subtitle, and footer content.
-- Share the Satori-to-PNG conversion helper if more OG image types are added.
+- Keep future OG endpoint variants limited to supplying title, subtitle, body,
+  and footer content to the shared helpers.
 - Keep `config.features.dynamicOgImage` as the fast-build escape hatch.
+- Add new frame tests only when a new OG layout variant is introduced.
 
-This is now a maintainability optimization rather than the first build-time
-hotspot.
+This item is now a preservation note rather than an active extraction task.
 
 ### 4. Define the CMS bundle update and caching policy
 
@@ -163,75 +165,75 @@ Recommended work:
 These changes make the static site more predictable under slow networks and
 privacy-sensitive deployments.
 
-### 7. Extract the search page script into a typed module
+### 7. Keep search route behavior isolated in its module
 
-`src/pages/search.astro` contains the Pagefind UI bootstrap, development notice,
-URL query synchronization, session-storage back URL handling, and View
-Transition reinitialization in one inline script. It works, but it is one of the
-largest page files and has several lifecycle responsibilities.
+`src/pages/search.astro` now passes Pagefind bundle path, development notice
+copy, translations, and back URL through DOM `data-*` attributes. The lifecycle
+logic lives in `src/scripts/search.ts`, with local types for
+`@pagefind/default-ui` and tests for the pure query/back-link helpers.
 
 Recommended work:
 
-- Move the script body to `src/scripts/search.ts`.
-- Keep route data in DOM `data-*` attributes as it does now.
-- Add local types or a small declaration for `@pagefind/default-ui` instead of
-  keeping the `@ts-expect-error` inside the page.
-- Add tests for pure helpers if query/back-url behavior is extracted.
+- Keep Search-specific View Transition listeners inside `src/scripts/search.ts`.
+- Add tests before changing URL query synchronization or session-storage back
+  URL behavior.
+- Keep Pagefind UI loading route-local and idle-scheduled.
 
-This is mainly maintainability, but it also gives Vite a clearer module boundary
-for caching and chunking.
+This item is now a maintenance boundary rather than an extraction task.
 
-### 8. Add regression tests for markdown image optimization
+### 8. Keep markdown image optimization tests aligned with the transformer
 
 `src/utils/transformers/rehypeImageOptimize.ts` adds `loading`, `decoding`,
-`sizes`, and first-image `fetchpriority` attributes to markdown images. That is
-valuable performance behavior, but there is no direct test protecting it.
+`sizes`, and first-image `fetchpriority` attributes to markdown images. Direct
+tests now cover first-image priority, later lazy images, existing attributes,
+missing dimensions, and nested image nodes.
 
 Recommended work:
 
-- Add a focused test that feeds a small HAST tree into `rehypeImageOptimize()`.
-- Cover first image with dimensions, later images, images without dimensions,
-  and existing explicit attributes.
 - Keep the transformer attribute-only until responsive image generation is
   introduced deliberately.
+- Add new tests alongside any future `srcset` or local image pipeline behavior.
+- Continue requiring explicit dimensions for priority images.
 
-This is a small test investment that protects a high-impact rendering path.
+This protects the current rendering path without claiming responsive variants
+are implemented.
 
-### 9. Strengthen content integrity checks for slugs and remote media
+### 9. Extend media validation after the filename-derived moment route fix
 
-Current tests cover moment sorting/filtering and photo wall shape validation,
+Moment entries now use filename-derived collection IDs, so duplicate frontmatter
+`slug` values no longer overwrite entries in Astro's content layer. Current
+tests cover moment sorting/filtering helpers and photo wall validation,
 including the external-host allowlist, insecure external URLs, and malformed
-external URL shapes. The next checks should catch content states that only fail
-later in routing or production performance.
+external URL shapes.
 
 Recommended work:
 
-- Add a test or script that asserts moment slugs are unique after route slug
-  derivation.
 - Warn on external image URLs without known dimensions or on oversized local
   uploads.
 - Consider checking CMS-generated image metadata before build.
+- Keep Moment detail routes filename-derived unless a deliberate URL migration
+  plan is introduced.
 
-This is partly performance and partly reliability: bad media or duplicate slugs
-can waste debugging time and create route surprises.
+This is now mostly a media validation opportunity rather than a route collision
+fix.
 
-### 10. Refine homepage feed assembly into a pure utility
+### 10. Keep homepage feed assembly as a pure utility
 
-`src/pages/index.astro` builds a mixed recent feed from posts and moments. It
-already limits candidates before the final merge, which is good. The remaining
-work is to make ordering rules explicit and reusable.
+`src/utils/recentFeed.ts` now builds the mixed recent feed from posts and
+moments. It keeps the current behavior: featured posts are excluded, post and
+moment candidates are limited before the final merge, and the resulting feed is
+sorted by updated/published time.
 
 Recommended work:
 
-- Extract feed assembly to a pure utility, for example
-  `getRecentFeedItems({ posts, moments, limit })`.
-- Name the moment ordering choice: pinned-first timeline order versus
-  modified-time activity order.
-- Cache or precompute moment descriptions if the same excerpts are used in
-  multiple surfaces.
+- Keep homepage display rules in `getRecentFeedItems()` rather than rebuilding
+  them in the Astro template.
+- Add tests before changing candidate limits, featured filtering, or moment
+  ordering semantics.
+- Cache or precompute moment descriptions only if the same excerpts become
+  shared by multiple surfaces.
 
-This is not urgent today, but it keeps the homepage from becoming a data
-orchestration hotspot.
+This item is now a preservation note for the homepage utility.
 
 ### 11. Audit font loading by page type
 
@@ -265,14 +267,16 @@ Recommended work:
 - `Giscus.astro` lazy-loads comments with `IntersectionObserver`.
 - Post and moment detail pages import heading-link and code-copy scripts only
   when rendered content needs them.
-- Search imports Pagefind UI on idle and only on the search page.
+- Search imports Pagefind UI on idle through `src/scripts/search.ts` and only
+  on the search page.
 - Photo wall and moment images include explicit dimensions and first-visible
   priority handling.
 - Photo wall external URLs are constrained by `photoWall.allowedExternalHosts`.
 - Photo wall external URLs reject insecure `http://` and malformed `https:`
   shapes before rendering.
 - OG font buffers are memoized through `getOgSatoriFonts()` and failed fetches
-  evict their cache entries.
+  evict their cache entries; OG frame/render helpers are shared by both current
+  OG endpoints.
 - Hitokoto cache-miss fetches are deferred to idle time with a timeout.
 - Routes use `contentQueries.ts` for published posts, moments, and tags instead
   of repeating direct `getCollection()` calls.
@@ -286,11 +290,11 @@ Recommended work:
 Use the roadmap document for final ordering and branch scope. The remaining
 high-signal candidates from this audit are:
 
-1. Add regression tests for `rehypeImageOptimize()` and moment slug uniqueness.
+1. Audit CMS runtime/version provenance and GitHub OAuth scope.
 2. Add responsive image variant support for photo wall and moment uploads.
-3. Extract shared OG image frame/rendering helpers.
-4. Gate optional global scripts and third-party work behind page needs or config
+3. Gate optional global scripts and third-party work behind page needs or config
    flags.
+4. Add simple asset and bundle budget reporting once thresholds are known.
 
 ## Suggested Verification
 
