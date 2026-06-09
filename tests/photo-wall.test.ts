@@ -53,6 +53,50 @@ test("keeps external photo wall URLs unchanged", () => {
   );
 });
 
+test("allows only configured external photo wall hosts", () => {
+  const photos = getPublishedPhotoWallItems(
+    {
+      photos: [
+        {
+          ...validPhoto,
+          src: "https://images.example.com/a.webp",
+          title: "Allowed",
+        },
+        {
+          ...validPhoto,
+          src: "//images.example.com/b.webp",
+          title: "Protocol relative",
+          order: 30,
+        },
+      ],
+    },
+    { allowedExternalHosts: ["images.example.com"] }
+  );
+
+  assert.deepEqual(
+    photos.map(photo => photo.title),
+    ["Allowed", "Protocol relative"]
+  );
+});
+
+test("rejects unapproved external photo wall hosts", () => {
+  assert.throws(
+    () =>
+      getPublishedPhotoWallItems(
+        {
+          photos: [
+            {
+              ...validPhoto,
+              src: "https://tracker.example.com/a.webp",
+            },
+          ],
+        },
+        { allowedExternalHosts: ["images.example.com"] }
+      ),
+    /unapproved external src host/
+  );
+});
+
 test("rejects invalid photo wall dimensions and empty text fields", () => {
   assert.throws(() =>
     getPublishedPhotoWallItems({

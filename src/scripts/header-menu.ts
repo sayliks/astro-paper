@@ -4,6 +4,10 @@ declare global {
   }
 }
 
+const DIRECT_TAP_CLICK_GRACE_MS = 650;
+
+let closeCurrentMenu: (() => void) | undefined;
+
 function setupHeaderMenu(): void {
   const menuBtn = document.querySelector<HTMLButtonElement>("#menu-btn");
   const menuItems = document.querySelector<HTMLElement>("#menu-items");
@@ -12,25 +16,69 @@ function setupHeaderMenu(): void {
 
   if (!menuBtn || !menuItems || !menuIcon || !closeIcon) return;
 
-  const openLabel = menuBtn.dataset.labelOpen ?? "Open menu";
-  const closeLabel = menuBtn.dataset.labelClose ?? "Close menu";
+  const button = menuBtn;
+  const items = menuItems;
+  const iconMenu = menuIcon;
+  const iconClose = closeIcon;
+  const openLabel = button.dataset.labelOpen ?? "Open menu";
+  const closeLabel = button.dataset.labelClose ?? "Close menu";
 
   function setMenuOpen(open: boolean): void {
-    menuBtn?.setAttribute("aria-expanded", String(open));
-    menuBtn?.setAttribute("aria-label", open ? closeLabel : openLabel);
+    button.setAttribute("aria-expanded", String(open));
+    button.setAttribute("aria-label", open ? closeLabel : openLabel);
 
-    menuItems?.classList.toggle("hidden", !open);
-    menuItems?.classList.toggle("grid", open);
-    menuIcon?.classList.toggle("hidden", open);
-    closeIcon?.classList.toggle("hidden", !open);
+    items.classList.toggle("hidden", !open);
+    items.classList.toggle("grid", open);
+    iconMenu.classList.toggle("hidden", open);
+    iconClose.classList.toggle("hidden", !open);
   }
 
-  menuBtn.onclick = () => {
-    setMenuOpen(menuBtn.getAttribute("aria-expanded") !== "true");
-  };
+  function toggleMenuOpen(): void {
+    setMenuOpen(button.getAttribute("aria-expanded") !== "true");
+  }
 
-  menuItems.querySelectorAll("a").forEach(link => {
-    link.onclick = () => setMenuOpen(false);
+  closeCurrentMenu = () => setMenuOpen(false);
+
+  if (button.dataset.menuReady !== "true") {
+    button.dataset.menuReady = "true";
+
+    let lastDirectTapAt = 0;
+
+    button.addEventListener("pointerup", event => {
+      if (event.pointerType === "mouse") return;
+
+      lastDirectTapAt = window.performance.now();
+      event.preventDefault();
+      toggleMenuOpen();
+    });
+
+    button.addEventListener("click", () => {
+      if (
+        lastDirectTapAt &&
+        window.performance.now() - lastDirectTapAt < DIRECT_TAP_CLICK_GRACE_MS
+      ) {
+        return;
+      }
+
+      toggleMenuOpen();
+    });
+  }
+
+  items.querySelectorAll<HTMLAnchorElement>("a").forEach(link => {
+    if (link.dataset.menuReady === "true") return;
+
+    link.dataset.menuReady = "true";
+
+    link.addEventListener(
+      "pointerup",
+      event => {
+        if (event.pointerType !== "mouse") {
+          setMenuOpen(false);
+        }
+      },
+      { passive: true }
+    );
+    link.addEventListener("click", () => setMenuOpen(false));
   });
 }
 
@@ -38,7 +86,7 @@ function closeHeaderMenu(): void {
   const menuBtn = document.querySelector<HTMLButtonElement>("#menu-btn");
 
   if (menuBtn?.getAttribute("aria-expanded") === "true") {
-    menuBtn.click();
+    closeCurrentMenu?.();
   }
 }
 
@@ -52,13 +100,27 @@ function setupHeaderMenuListeners(): void {
       closeHeaderMenu();
     }
   });
-  document.addEventListener("click", event => {
-    const target = event.target;
+  const closeWhenOutside = (eventTarget: EventTarget | null) => {
     const navMenu = document.querySelector("#nav-menu");
 
-    if (target instanceof Node && navMenu && !navMenu.contains(target)) {
+    if (
+      eventTarget instanceof Node &&
+      navMenu &&
+      !navMenu.contains(eventTarget)
+    ) {
       closeHeaderMenu();
     }
+  };
+
+  document.addEventListener(
+    "pointerup",
+    event => {
+      closeWhenOutside(event.target);
+    },
+    { passive: true }
+  );
+  document.addEventListener("click", event => {
+    closeWhenOutside(event.target);
   });
 }
 

@@ -2,6 +2,7 @@ const THEME_KEY = "theme";
 const LIGHT = "light";
 const DARK = "dark";
 const SYSTEM = "system";
+const DIRECT_TAP_CLICK_GRACE_MS = 650;
 
 type ResolvedTheme = typeof LIGHT | typeof DARK;
 type ThemeMode = ResolvedTheme | typeof SYSTEM;
@@ -66,20 +67,51 @@ let themeValue: ResolvedTheme =
   isResolvedTheme(initialTheme) && resolveTheme(themeMode) === initialTheme
     ? initialTheme
     : resolveTheme(themeMode);
+let storeThemeTimer: number | undefined;
+let themeColorFrame: number | undefined;
 
 function persist(): void {
-  setStoredThemeMode(themeMode);
   window.__theme = {
     mode: themeMode,
     value: themeValue,
   };
   reflect();
+  scheduleStoredThemeMode(themeMode);
+}
+
+function scheduleStoredThemeMode(value: ThemeMode): void {
+  window.clearTimeout(storeThemeTimer);
+  storeThemeTimer = window.setTimeout(() => {
+    setStoredThemeMode(value);
+    storeThemeTimer = undefined;
+  }, 0);
 }
 
 function getNextThemeMode(): ThemeMode {
   if (themeMode === SYSTEM) return LIGHT;
   if (themeMode === LIGHT) return DARK;
   return SYSTEM;
+}
+
+function switchThemeMode(): void {
+  themeMode = getNextThemeMode();
+  themeValue = resolveTheme(themeMode);
+  persist();
+}
+
+function scheduleThemeColorUpdate(): void {
+  if (themeColorFrame) {
+    window.cancelAnimationFrame(themeColorFrame);
+  }
+
+  themeColorFrame = window.requestAnimationFrame(() => {
+    themeColorFrame = undefined;
+
+    const bg = window.getComputedStyle(document.body).backgroundColor;
+    document
+      .querySelector("meta[name='theme-color']")
+      ?.setAttribute("content", bg);
+  });
 }
 
 function reflect(): void {
@@ -100,10 +132,7 @@ function reflect(): void {
 
   // Fill <meta name="theme-color"> with the computed background colour so
   // Android's browser chrome matches the page background.
-  const bg = window.getComputedStyle(document.body).backgroundColor;
-  document
-    .querySelector("meta[name='theme-color']")
-    ?.setAttribute("content", bg);
+  scheduleThemeColorUpdate();
 }
 
 function setup(): void {
@@ -111,12 +140,30 @@ function setup(): void {
   const themeButton = document.querySelector<HTMLButtonElement>("#theme-btn");
 
   if (!themeButton) return;
+  if (themeButton.dataset.themeReady === "true") return;
 
-  themeButton.onclick = () => {
-    themeMode = getNextThemeMode();
-    themeValue = resolveTheme(themeMode);
-    persist();
-  };
+  themeButton.dataset.themeReady = "true";
+
+  let lastDirectTapAt = 0;
+
+  themeButton.addEventListener("pointerup", event => {
+    if (event.pointerType === "mouse") return;
+
+    lastDirectTapAt = window.performance.now();
+    event.preventDefault();
+    switchThemeMode();
+  });
+
+  themeButton.addEventListener("click", () => {
+    if (
+      lastDirectTapAt &&
+      window.performance.now() - lastDirectTapAt < DIRECT_TAP_CLICK_GRACE_MS
+    ) {
+      return;
+    }
+
+    switchThemeMode();
+  });
 }
 
 function setupThemeListeners(): void {

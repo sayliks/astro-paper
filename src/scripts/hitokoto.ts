@@ -16,6 +16,11 @@ const HITOKOTO_API =
   "https://v1.hitokoto.cn/?c=d&c=e&c=k&max_length=42&encode=json";
 
 const hitokotoRequests = new WeakMap<HTMLElement, AbortController>();
+type QuoteFetchHandle =
+  | { type: "idle"; id: number }
+  | { type: "timeout"; id: ReturnType<typeof setTimeout> };
+
+const scheduledQuoteFetches = new WeakMap<HTMLElement, QuoteFetchHandle>();
 
 function getQuoteStorage(): Storage | null {
   try {
@@ -99,6 +104,39 @@ async function fetchQuote(
   }
 }
 
+function scheduleQuoteFetch(card: HTMLElement): void {
+  if (scheduledQuoteFetches.has(card)) return;
+
+  if ("requestIdleCallback" in window) {
+    const callbackId = window.requestIdleCallback(() => {
+      scheduledQuoteFetches.delete(card);
+      void fetchQuote(card, { showLoading: false });
+    });
+    scheduledQuoteFetches.set(card, { type: "idle", id: callbackId });
+    return;
+  }
+
+  const timeoutId = globalThis.setTimeout(() => {
+    scheduledQuoteFetches.delete(card);
+    void fetchQuote(card, { showLoading: false });
+  }, 1);
+  scheduledQuoteFetches.set(card, { type: "timeout", id: timeoutId });
+}
+
+function cancelScheduledQuoteFetch(card: HTMLElement): void {
+  const handle = scheduledQuoteFetches.get(card);
+
+  if (!handle) return;
+
+  if (handle.type === "idle") {
+    window.cancelIdleCallback(handle.id);
+  } else {
+    globalThis.clearTimeout(handle.id);
+  }
+
+  scheduledQuoteFetches.delete(card);
+}
+
 function setupHitokotoCards(): void {
   document
     .querySelectorAll<HTMLElement>("[data-hitokoto-card]")
@@ -110,12 +148,13 @@ function setupHitokotoCards(): void {
       if (cachedQuote) {
         applyQuote(card, cachedQuote);
       } else {
-        void fetchQuote(card, { showLoading: false });
+        scheduleQuoteFetch(card);
       }
 
       document.addEventListener(
         "astro:before-swap",
         () => {
+          cancelScheduledQuoteFetch(card);
           hitokotoRequests.get(card)?.abort();
           hitokotoRequests.delete(card);
         },

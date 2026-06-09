@@ -1,10 +1,10 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
-import { fontData, experimental_getFontFileURL } from "astro:assets";
 import satori from "satori";
 import sharp from "sharp";
+import { experimental_getFontFileURL, fontData } from "astro:assets";
 import {
-  getRequiredOgFontPath,
+  getOgSatoriFonts,
   OG_FONT_FAMILY,
   OG_FONT_VARIABLE,
 } from "@/utils/ogFont";
@@ -33,18 +33,11 @@ export const GET: APIRoute = async ({ props, url }) => {
     return new Response(null, { status: 404, statusText: "Not found" });
   }
 
-  const fonts = fontData[OG_FONT_VARIABLE];
-  const regularFontPath = getRequiredOgFontPath(fonts, 400);
-  const boldFontPath = getRequiredOgFontPath(fonts, 700);
-
-  const [regularData, boldData] = await Promise.all([
-    fetch(experimental_getFontFileURL(regularFontPath, url)).then(res =>
-      res.arrayBuffer()
-    ),
-    fetch(experimental_getFontFileURL(boldFontPath, url)).then(res =>
-      res.arrayBuffer()
-    ),
-  ]);
+  const fonts = await getOgSatoriFonts(
+    fontData[OG_FONT_VARIABLE],
+    url,
+    experimental_getFontFileURL
+  );
 
   const svg = await satori(
     {
@@ -175,20 +168,7 @@ export const GET: APIRoute = async ({ props, url }) => {
       width: 1200,
       height: 630,
       embedFont: true,
-      fonts: [
-        {
-          name: OG_FONT_FAMILY,
-          data: regularData,
-          weight: 400,
-          style: "normal",
-        },
-        {
-          name: OG_FONT_FAMILY,
-          data: boldData,
-          weight: 700,
-          style: "normal",
-        },
-      ],
+      fonts,
     }
   );
 

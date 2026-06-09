@@ -220,7 +220,7 @@ collections:
                 widget: image
                 choose_url: true
                 required: true
-                hint: 可上传到 public/photo-wall，也可以粘贴 https:// 开头的外部图片 URL。
+                hint: 可上传到 public/photo-wall，也可以粘贴已允许图片域名的 https:// 外部图片 URL。
               - label: 标题或描述
                 name: title
                 widget: string

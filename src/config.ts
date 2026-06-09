@@ -26,6 +26,9 @@ const config: ResolvedAstroPaperConfig = {
     scheduledPostMargin:
       userConfig.posts?.scheduledPostMargin ?? 15 * 60 * 1000,
   },
+  photoWall: {
+    allowedExternalHosts: userConfig.photoWall?.allowedExternalHosts ?? [],
+  },
   features: {
     lightAndDarkMode: userConfig.features?.lightAndDarkMode ?? true,
     dynamicOgImage: userConfig.features?.dynamicOgImage ?? true,

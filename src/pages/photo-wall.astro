@@ -15,7 +15,9 @@ import config from "@/config";
 
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
-const photoWallItems = getPublishedPhotoWallItems(photoWallData);
+const photoWallItems = getPublishedPhotoWallItems(photoWallData, {
+  allowedExternalHosts: config.photoWall.allowedExternalHosts,
+});
 ---
 
 <Layout

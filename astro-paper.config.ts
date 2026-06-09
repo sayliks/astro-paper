@@ -17,6 +17,9 @@ export default defineAstroPaperConfig({
     perIndex: 4,
     scheduledPostMargin: 15 * 60 * 1000,
   },
+  photoWall: {
+    allowedExternalHosts: ["tg.matsumae.top"],
+  },
   features: {
     lightAndDarkMode: true,
     dynamicOgImage: true,

@@ -33,6 +33,14 @@ interface PostsConfig {
   scheduledPostMargin?: number;
 }
 
+interface PhotoWallConfig {
+  /**
+   * External image hosts allowed in CMS-managed photo wall data.
+   * Local repository images are always allowed.
+   */
+  allowedExternalHosts?: string[];
+}
+
 interface FeaturesConfig {
   /** Enable light/dark mode toggle. Defaults to true. */
   lightAndDarkMode?: boolean;
@@ -97,6 +105,7 @@ interface ShareLink {
 interface AstroPaperConfig {
   site: SiteConfig;
   posts?: PostsConfig;
+  photoWall?: PhotoWallConfig;
   features?: FeaturesConfig;
   /** Social profile links shown in header/footer */
   socials?: SocialLink[];
@@ -122,6 +131,7 @@ type ResolvedSiteConfig = Required<
 export interface ResolvedAstroPaperConfig {
   site: ResolvedSiteConfig;
   posts: Required<PostsConfig>;
+  photoWall: Required<PhotoWallConfig>;
   features: Required<FeaturesConfig>;
   socials: SocialLink[];
   shareLinks: ShareLink[];
