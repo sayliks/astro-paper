@@ -1,5 +1,4 @@
 import type { APIRoute } from "astro";
-import { getCollection } from "astro:content";
 import satori from "satori";
 import sharp from "sharp";
 import { experimental_getFontFileURL, fontData } from "astro:assets";
@@ -8,8 +7,8 @@ import {
   OG_FONT_FAMILY,
   OG_FONT_VARIABLE,
 } from "@/utils/ogFont";
+import { getPublishedSortedPosts } from "@/utils/contentQueries";
 import { getPostSlug } from "@/utils/getPostPaths";
-import { postFilter } from "@/utils/postFilter";
 import { shouldGenerateDynamicOgImagePost } from "@/utils/dynamicOgImageFilter";
 import config from "@/config";
 
@@ -18,8 +17,8 @@ export async function getStaticPaths() {
     return [];
   }
 
-  const posts = await getCollection("posts").then(posts =>
-    posts.filter(post => shouldGenerateDynamicOgImagePost(post, postFilter))
+  const posts = (await getPublishedSortedPosts()).filter(post =>
+    shouldGenerateDynamicOgImagePost(post, () => true)
   );
 
   return posts.map(post => ({

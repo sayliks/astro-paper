@@ -1,5 +1,5 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import Layout from "@/layouts/Layout.astro";
@@ -14,9 +14,11 @@ import {
   getMomentDescription,
   getMomentMetaTitle,
   getMomentUrl,
-  getSortedMoments,
 } from "@/utils/getSortedMoments";
-import { getSortedPosts } from "@/utils/getSortedPosts";
+import {
+  getPublishedSortedMoments,
+  getPublishedSortedPosts,
+} from "@/utils/contentQueries";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
@@ -25,11 +27,10 @@ const { socials, posts: postsConfig } = config;
 const locale = Astro.currentLocale ?? config.site.lang;
 const t = useTranslations(locale);
 
-const posts = await getCollection("posts");
-const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
-const moments = getSortedMoments(await getCollection("moments"));
+const posts = await getPublishedSortedPosts();
+const featuredPosts = posts.filter(({ data }) => data.featured);
+const recentPosts = posts.filter(({ data }) => !data.featured);
+const moments = await getPublishedSortedMoments();
 const homePath = getRelativeLocaleUrl(locale, "");
 const recentLimit = postsConfig.perIndex;
 

@@ -14,7 +14,7 @@
     "format:check": "prettier --check .",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "test": "node --experimental-strip-types --test tests/cms-auth.test.ts tests/hitokoto-cache.test.ts tests/moments.test.ts tests/photo-wall.test.ts tests/publication.test.ts"
+    "test": "node --experimental-strip-types --test tests/cms-auth.test.ts tests/hitokoto-cache.test.ts tests/moments.test.ts tests/og-font.test.ts tests/photo-wall.test.ts tests/publication.test.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^6.0.1",

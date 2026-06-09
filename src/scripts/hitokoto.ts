@@ -14,6 +14,7 @@ declare global {
 
 const HITOKOTO_API =
   "https://v1.hitokoto.cn/?c=d&c=e&c=k&max_length=42&encode=json";
+const QUOTE_IDLE_TIMEOUT_MS = 2_000;
 
 const hitokotoRequests = new WeakMap<HTMLElement, AbortController>();
 type QuoteFetchHandle =
@@ -107,11 +108,14 @@ async function fetchQuote(
 function scheduleQuoteFetch(card: HTMLElement): void {
   if (scheduledQuoteFetches.has(card)) return;
 
-  if ("requestIdleCallback" in window) {
-    const callbackId = window.requestIdleCallback(() => {
-      scheduledQuoteFetches.delete(card);
-      void fetchQuote(card, { showLoading: false });
-    });
+  if ("requestIdleCallback" in window && "cancelIdleCallback" in window) {
+    const callbackId = window.requestIdleCallback(
+      () => {
+        scheduledQuoteFetches.delete(card);
+        void fetchQuote(card, { showLoading: false });
+      },
+      { timeout: QUOTE_IDLE_TIMEOUT_MS }
+    );
     scheduledQuoteFetches.set(card, { type: "idle", id: callbackId });
     return;
   }
@@ -128,7 +132,7 @@ function cancelScheduledQuoteFetch(card: HTMLElement): void {
 
   if (!handle) return;
 
-  if (handle.type === "idle") {
+  if (handle.type === "idle" && "cancelIdleCallback" in window) {
     window.cancelIdleCallback(handle.id);
   } else {
     globalThis.clearTimeout(handle.id);

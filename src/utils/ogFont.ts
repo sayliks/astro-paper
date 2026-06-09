@@ -1,5 +1,5 @@
 import type { FontData } from "astro:assets";
-import { getFontPathByWeight } from "./getFontPathByWeight";
+import { getFontPathByWeight } from "./getFontPathByWeight.ts";
 
 export const OG_FONT_FAMILY = "Google Sans Code";
 export const OG_FONT_VARIABLE = "--font-google-sans-code-og";
@@ -52,6 +52,11 @@ function getOgFontData(
   });
 
   ogFontDataCache.set(cacheKey, fontDataPromise);
+  void fontDataPromise.catch(() => {
+    if (ogFontDataCache.get(cacheKey) === fontDataPromise) {
+      ogFontDataCache.delete(cacheKey);
+    }
+  });
 
   return fontDataPromise;
 }

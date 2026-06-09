@@ -1,5 +1,5 @@
 ---
-import { type CollectionEntry, getCollection, render } from "astro:content";
+import { type CollectionEntry, render } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import Header from "@/components/Header.astro";
@@ -11,17 +11,17 @@ import MomentImages from "@/components/moments/MomentImages.astro";
 import MomentMeta from "@/components/moments/MomentMeta.astro";
 import Layout from "@/layouts/Layout.astro";
 import { useTranslations } from "@/i18n";
+import { getPublishedSortedMoments } from "@/utils/contentQueries";
 import {
   getMomentDescription,
   getMomentMetaTitle,
   getMomentSlug,
   getMomentUrl,
-  getSortedMoments,
 } from "@/utils/getSortedMoments";
 import config from "@/config";
 
 export async function getStaticPaths() {
-  const moments = getSortedMoments(await getCollection("moments"));
+  const moments = await getPublishedSortedMoments();
 
   return moments.map(moment => ({
     params: { slug: getMomentSlug(moment) },

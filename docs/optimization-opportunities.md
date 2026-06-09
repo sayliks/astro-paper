@@ -13,9 +13,11 @@ preserved during future optimization work.
 | Area | Main files | Current state |
 | --- | --- | --- |
 | Photo wall host governance | `astro-paper.config.ts`, `src/utils/photoWall.ts`, `src/pages/photo-wall.astro`, `tests/photo-wall.test.ts` | External photo wall image URLs are restricted to `photoWall.allowedExternalHosts`; local images remain allowed. |
-| OG font loading | `src/utils/ogFont.ts`, `src/pages/og.png.ts`, `src/pages/posts/[...slug]/index.png.ts` | Satori font buffers are loaded through a shared module-level cache via `getOgSatoriFonts()`. |
-| Hitokoto cache misses | `src/scripts/hitokoto.ts` | Third-party quote fetches are scheduled with `requestIdleCallback` when available, with a short timeout fallback. |
+| Photo wall URL validation | `src/utils/photoWall.ts`, `tests/photo-wall.test.ts` | External photo wall URLs reject insecure `http://` sources and malformed `https:` shapes with stable validation errors. |
+| OG font loading | `src/utils/ogFont.ts`, `src/pages/og.png.ts`, `src/pages/posts/[...slug]/index.png.ts` | Satori font buffers are loaded through a shared module-level cache via `getOgSatoriFonts()`, and failed font fetches evict their cache key. |
+| Hitokoto cache misses | `src/scripts/hitokoto.ts` | Third-party quote fetches are scheduled with `requestIdleCallback` when available, with a 2-second idle timeout and a short timeout fallback. |
 | Touch interaction cleanup | `src/scripts/header-menu.ts`, `src/scripts/theme.ts`, `src/styles/global.css` | Header menu and theme toggle handle direct touch/pointer activation without relying only on delayed click events. |
+| Shared content queries | `src/utils/contentQueries.ts`, `src/pages/**` | Published posts, moments, and tags are loaded through shared helpers that memoize during static builds while staying fresh in dev. |
 | Vendored CMS bundle hygiene | `eslint.config.js`, `.prettierignore`, `public/cms/sveltia-cms.js` | The large self-hosted CMS runtime is excluded from lint/format paths. |
 
 ## Priority Map
@@ -23,7 +25,6 @@ preserved during future optimization work.
 | Priority | Area | Main files | Expected benefit |
 | --- | --- | --- | --- |
 | P1 | Responsive image delivery | `src/pages/photo-wall.astro`, `src/components/moments/MomentImages.astro`, `src/data/photoWall.json` | Lower image bytes, better LCP, less dependence on remote originals |
-| P1 | Shared content queries | `src/pages/**`, `src/utils/getSortedPosts.ts`, `src/utils/getSortedMoments.ts` | Less repeated build work and one source of truth for publication rules |
 | P1 | CMS/admin runtime asset policy | `public/cms/sveltia-cms.js`, `public/cms/index.html`, `public/cms/config.yml` | Clearer upgrade/cache story for the 1.9 MB vendored admin bundle |
 | P2 | OG renderer reuse | `src/pages/og.png.ts`, `src/pages/posts/[...slug]/index.png.ts`, `src/utils/ogFont.ts` | Less duplicated Satori markup after font caching |
 | P2 | Client script gating | `src/layouts/Layout.astro`, `src/scripts/*.ts`, `src/components/Header.astro` | Less JavaScript on routes that do not need every behavior |
@@ -58,41 +59,37 @@ Recommended work:
 This is the most visible optimization because these pages are image-heavy and
 currently cannot adapt bytes to the visitor's viewport.
 
-### 2. Add memoized shared content query helpers
+### 2. Keep shared content query helpers as the route data entry point
 
-`getCollection("posts")` and `getCollection("moments")` are called from many
-routes: homepage, posts pagination, post details, tags, archives, RSS, search,
-moments list, moment details, and dynamic OG paths. The utilities are mostly
-consistent, but each route repeats collection loading, filtering, and sorting.
+`src/utils/contentQueries.ts` now centralizes published posts, published
+moments, and published tags. Route modules should keep using these helpers
+instead of calling `getCollection()` directly, so build-time collection work
+stays memoized and publication rules remain easy to audit.
 
 Recommended work:
 
-- Add `src/utils/contentQueries.ts` with memoized functions such as
-  `getPublishedSortedPosts()`, `getPublishedSortedMoments()`, and
-  `getPublishedTags()`.
 - Keep behavior delegated to existing helpers: `postFilter`, `getSortedPosts`,
   `getSortedMoments`, and `getUniqueTags`.
-- Update routes to consume these helpers instead of calling `getCollection`
-  directly.
 - Include explicit helpers for different ordering needs, such as pinned moment
   order versus "last updated" homepage feed order.
+- Keep dev mode uncached so CMS/content edits stay visible without restarting
+  the dev server.
 
-This should reduce repeated static-build work and make publication rules easier
-to audit.
+This reduces repeated static-build work and makes publication rules easier to
+audit.
 
 ### 3. Share OG rendering code after font memoization
 
-`src/utils/ogFont.ts` now centralizes and memoizes OG font buffer loading, so
-the largest repeated font I/O issue has been addressed. The two OG image routes
-still contain near-identical Satori frame markup and Sharp conversion flow.
+`src/utils/ogFont.ts` now centralizes and memoizes OG font buffer loading, and
+failed font fetches evict their cache entries so later OG requests can retry.
+The two OG image routes still contain near-identical Satori frame markup and
+Sharp conversion flow.
 
 Recommended work:
 
 - Extract common OG frame styles/layout to a small renderer helper so the two
   routes only supply title, subtitle, and footer content.
 - Share the Satori-to-PNG conversion helper if more OG image types are added.
-- Consider whether rejected font fetch promises should be evicted from the cache
-  in long-lived server runtimes; static builds can fail fast as they do now.
 - Keep `config.features.dynamicOgImage` as the fast-build escape hatch.
 
 This is now a maintainability optimization rather than the first build-time
@@ -145,13 +142,14 @@ existing feature flags.
 
 The site avoids several critical-path third-party costs: Giscus lazy-loads near
 the viewport, Pagefind initializes on idle, and Hitokoto cache misses are now
-scheduled on idle. The next step is configuration and timeout control.
+scheduled on idle with a timeout. The next step is configuration and network
+timeout control.
 
 Recommended work:
 
 - Add a config flag to disable Hitokoto entirely for privacy-first or offline
   deployments.
-- Add a short fetch timeout so a slow Hitokoto request does not linger.
+- Add a short network fetch timeout so a slow Hitokoto request does not linger.
 - Consider a config flag for comments so `Giscus.astro` can be omitted from
   article pages without editing layouts.
 - Review the default for `features.speedInsights`; keep page-level opt-outs for
@@ -197,15 +195,14 @@ This is a small test investment that protects a high-impact rendering path.
 ### 9. Strengthen content integrity checks for slugs and remote media
 
 Current tests cover moment sorting/filtering and photo wall shape validation,
-including the new external-host allowlist. The next checks should catch content
-states that only fail later in routing or production performance.
+including the external-host allowlist, insecure external URLs, and malformed
+external URL shapes. The next checks should catch content states that only fail
+later in routing or production performance.
 
 Recommended work:
 
 - Add a test or script that asserts moment slugs are unique after route slug
   derivation.
-- Add test coverage for malformed photo wall URL shapes such as `https:foo` so
-  they fail validation instead of turning into broken local asset paths.
 - Warn on external image URLs without known dimensions or on oversized local
   uploads.
 - Consider checking CMS-generated image metadata before build.
@@ -267,8 +264,13 @@ Recommended work:
 - Photo wall and moment images include explicit dimensions and first-visible
   priority handling.
 - Photo wall external URLs are constrained by `photoWall.allowedExternalHosts`.
-- OG font buffers are memoized through `getOgSatoriFonts()`.
-- Hitokoto cache-miss fetches are deferred to idle time.
+- Photo wall external URLs reject insecure `http://` and malformed `https:`
+  shapes before rendering.
+- OG font buffers are memoized through `getOgSatoriFonts()` and failed fetches
+  evict their cache entries.
+- Hitokoto cache-miss fetches are deferred to idle time with a timeout.
+- Routes use `contentQueries.ts` for published posts, moments, and tags instead
+  of repeating direct `getCollection()` calls.
 - `Layout.astro` allows page-level opt-outs for `clientRouter`, font preload,
   and Speed Insights.
 - `eslint.config.js` and `.prettierignore` already exclude the vendored CMS
@@ -276,13 +278,10 @@ Recommended work:
 
 ## Recommended First Pass
 
-1. Implement shared memoized content query helpers and update routes to use
-   them.
-2. Add responsive image variant support for photo wall and moment uploads.
-3. Extract shared OG image frame/rendering helpers.
-4. Add regression tests for `rehypeImageOptimize()`, moment slug uniqueness, and
-   malformed photo wall URL validation.
-5. Gate optional global scripts and third-party work behind page needs or config
+1. Add responsive image variant support for photo wall and moment uploads.
+2. Extract shared OG image frame/rendering helpers.
+3. Add regression tests for `rehypeImageOptimize()` and moment slug uniqueness.
+4. Gate optional global scripts and third-party work behind page needs or config
    flags.
 
 ## Suggested Verification

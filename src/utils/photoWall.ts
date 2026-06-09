@@ -18,6 +18,10 @@ type PhotoWallOptions = {
   allowedExternalHosts?: readonly string[];
 };
 
+type ResolvedPhotoWallOptions = {
+  allowedExternalHostSet: ReadonlySet<string>;
+};
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value && typeof value === "object" && !Array.isArray(value));
 }
@@ -29,13 +33,49 @@ function readString(value: unknown, field: string, index: number): string {
   throw new Error(`Photo wall item ${index + 1} has an invalid ${field}.`);
 }
 
-function getExternalPhotoHost(src: string): string | undefined {
+function createResolvedPhotoWallOptions(
+  options: PhotoWallOptions
+): ResolvedPhotoWallOptions {
+  return {
+    allowedExternalHostSet: new Set(
+      (options.allowedExternalHosts ?? [])
+        .map(normalizeAllowedHost)
+        .filter(Boolean)
+    ),
+  };
+}
+
+function parseExternalPhotoUrl(url: string, index: number): URL {
+  try {
+    return new URL(url);
+  } catch {
+    throw new Error(
+      `Photo wall item ${index + 1} has a malformed external src.`
+    );
+  }
+}
+
+function getExternalPhotoHost(src: string, index: number): string | undefined {
   if (/^\/\//.test(src)) {
-    return new URL(`https:${src}`).hostname.toLowerCase();
+    throw new Error(
+      `Photo wall item ${index + 1} external src must use https://.`
+    );
   }
 
-  if (/^https?:\/\//i.test(src)) {
-    return new URL(src).hostname.toLowerCase();
+  if (/^https?:/i.test(src)) {
+    if (/^http:\/\//i.test(src)) {
+      throw new Error(
+        `Photo wall item ${index + 1} external src must use https://.`
+      );
+    }
+
+    if (!/^https:\/\/[^/]/i.test(src)) {
+      throw new Error(
+        `Photo wall item ${index + 1} has a malformed external src.`
+      );
+    }
+
+    return parseExternalPhotoUrl(src, index).hostname.toLowerCase();
   }
 
   return undefined;
@@ -47,18 +87,15 @@ function normalizeAllowedHost(host: string): string {
 
 function isAllowedExternalPhotoHost(
   host: string,
-  allowedHosts: readonly string[]
+  allowedHostSet: ReadonlySet<string>
 ): boolean {
-  return allowedHosts
-    .map(normalizeAllowedHost)
-    .filter(Boolean)
-    .some(allowedHost => host === allowedHost);
+  return allowedHostSet.has(host);
 }
 
 function readPhotoSrc(
   value: unknown,
   index: number,
-  options: PhotoWallOptions
+  options: ResolvedPhotoWallOptions
 ): string {
   const src = readString(value, "src", index);
   const hasProtocol = /^[a-z][\w+.-]*:/i.test(src);
@@ -67,13 +104,10 @@ function readPhotoSrc(
     throw new Error(`Photo wall item ${index + 1} has an unsupported src.`);
   }
 
-  const externalHost = getExternalPhotoHost(src);
+  const externalHost = getExternalPhotoHost(src, index);
   if (
     externalHost &&
-    !isAllowedExternalPhotoHost(
-      externalHost,
-      options.allowedExternalHosts ?? []
-    )
+    !isAllowedExternalPhotoHost(externalHost, options.allowedExternalHostSet)
   ) {
     throw new Error(
       `Photo wall item ${index + 1} uses an unapproved external src host.`
@@ -117,7 +151,7 @@ function readBoolean(value: unknown, field: string, index: number): boolean {
 }
 
 export function isExternalPhotoSrc(src: string): boolean {
-  return /^(?:https?:)?\/\//i.test(src);
+  return /^https:\/\//i.test(src);
 }
 
 export function resolvePhotoWallSrc(
@@ -135,6 +169,8 @@ export function getPublishedPhotoWallItems(
     throw new Error("Photo wall data must contain a photos array.");
   }
 
+  const resolvedOptions = createResolvedPhotoWallOptions(options);
+
   return data.photos
     .map((item, index) => {
       if (!isRecord(item)) {
@@ -142,7 +178,7 @@ export function getPublishedPhotoWallItems(
       }
 
       return {
-        src: readPhotoSrc(item.src, index, options),
+        src: readPhotoSrc(item.src, index, resolvedOptions),
         title: readString(item.title, "title", index),
         alt: readString(item.alt, "alt", index),
         width: readPositiveInteger(item.width, "width", index),

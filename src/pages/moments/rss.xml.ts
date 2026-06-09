@@ -1,15 +1,14 @@
 import rss from "@astrojs/rss";
-import { getCollection } from "astro:content";
+import { getPublishedSortedMoments } from "@/utils/contentQueries";
 import {
   getMomentDescription,
   getMomentMetaTitle,
   getMomentUrl,
-  getSortedMoments,
 } from "@/utils/getSortedMoments";
 import config from "@/config";
 
 export async function GET() {
-  const moments = getSortedMoments(await getCollection("moments"));
+  const moments = await getPublishedSortedMoments();
 
   return rss({
     title: "动态 | sayliks corner",

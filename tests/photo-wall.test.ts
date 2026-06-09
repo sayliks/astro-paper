@@ -46,7 +46,8 @@ test("resolves local photo wall sources with the asset path helper", () => {
 
 test("keeps external photo wall URLs unchanged", () => {
   assert.equal(isExternalPhotoSrc("https://example.com/a.jpg"), true);
-  assert.equal(isExternalPhotoSrc("//cdn.example.com/a.jpg"), true);
+  assert.equal(isExternalPhotoSrc("//cdn.example.com/a.jpg"), false);
+  assert.equal(isExternalPhotoSrc("http://example.com/a.jpg"), false);
   assert.equal(
     resolvePhotoWallSrc("https://example.com/a.jpg", path => `/base/${path}`),
     "https://example.com/a.jpg"
@@ -62,12 +63,6 @@ test("allows only configured external photo wall hosts", () => {
           src: "https://images.example.com/a.webp",
           title: "Allowed",
         },
-        {
-          ...validPhoto,
-          src: "//images.example.com/b.webp",
-          title: "Protocol relative",
-          order: 30,
-        },
       ],
     },
     { allowedExternalHosts: ["images.example.com"] }
@@ -75,7 +70,7 @@ test("allows only configured external photo wall hosts", () => {
 
   assert.deepEqual(
     photos.map(photo => photo.title),
-    ["Allowed", "Protocol relative"]
+    ["Allowed"]
   );
 });
 
@@ -94,6 +89,76 @@ test("rejects unapproved external photo wall hosts", () => {
         { allowedExternalHosts: ["images.example.com"] }
       ),
     /unapproved external src host/
+  );
+});
+
+test("rejects insecure external photo wall URLs", () => {
+  assert.throws(
+    () =>
+      getPublishedPhotoWallItems(
+        {
+          photos: [
+            {
+              ...validPhoto,
+              src: "http://images.example.com/a.webp",
+            },
+          ],
+        },
+        { allowedExternalHosts: ["images.example.com"] }
+      ),
+    /must use https:\/\//
+  );
+});
+
+test("rejects protocol-relative external photo wall URLs", () => {
+  assert.throws(
+    () =>
+      getPublishedPhotoWallItems(
+        {
+          photos: [
+            {
+              ...validPhoto,
+              src: "//images.example.com/a.webp",
+            },
+          ],
+        },
+        { allowedExternalHosts: ["images.example.com"] }
+      ),
+    /must use https:\/\//
+  );
+});
+
+test("reports malformed external photo wall URLs with validation errors", () => {
+  assert.throws(
+    () =>
+      getPublishedPhotoWallItems(
+        {
+          photos: [
+            {
+              ...validPhoto,
+              src: "https:images.example.com/a.webp",
+            },
+          ],
+        },
+        { allowedExternalHosts: ["images.example.com"] }
+      ),
+    /malformed external src/
+  );
+
+  assert.throws(
+    () =>
+      getPublishedPhotoWallItems(
+        {
+          photos: [
+            {
+              ...validPhoto,
+              src: "https://[bad]/a.webp",
+            },
+          ],
+        },
+        { allowedExternalHosts: ["images.example.com"] }
+      ),
+    /malformed external src/
   );
 });
 
