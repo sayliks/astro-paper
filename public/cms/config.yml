@@ -127,7 +127,7 @@ collections:
         name: slug
         widget: string
         required: true
-        hint: 用于生成稳定链接，建议使用简短英文或拼音，例如 evening-walk。
+        hint: 会进入文件名并影响动态详情路径；请保持唯一，建议使用简短英文或拼音，例如 evening-walk。
 
       - label: 图片
         name: images

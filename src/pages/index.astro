@@ -1,5 +1,4 @@
 ---
-import type { CollectionEntry } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import Layout from "@/layouts/Layout.astro";
@@ -19,6 +18,7 @@ import {
   getPublishedSortedMoments,
   getPublishedSortedPosts,
 } from "@/utils/contentQueries";
+import { getRecentFeedItems } from "@/utils/recentFeed";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
@@ -29,49 +29,14 @@ const t = useTranslations(locale);
 
 const posts = await getPublishedSortedPosts();
 const featuredPosts = posts.filter(({ data }) => data.featured);
-const recentPosts = posts.filter(({ data }) => !data.featured);
 const moments = await getPublishedSortedMoments();
 const homePath = getRelativeLocaleUrl(locale, "");
 const recentLimit = postsConfig.perIndex;
-
-type RecentFeedItem =
-  | {
-      type: "post";
-      sortTime: number;
-      post: CollectionEntry<"posts">;
-    }
-  | {
-      type: "moment";
-      sortTime: number;
-      moment: CollectionEntry<"moments">;
-    };
-
-const getSortTime = (date: Date | string | null | undefined) =>
-  date ? new Date(date).getTime() : 0;
-
-const recentPostCandidates = recentPosts.slice(0, recentLimit);
-const recentMomentCandidates = [...moments]
-  .sort(
-    (a, b) =>
-      getSortTime(b.data.modDatetime ?? b.data.pubDatetime) -
-      getSortTime(a.data.modDatetime ?? a.data.pubDatetime)
-  )
-  .slice(0, recentLimit);
-
-const recentFeedItems: RecentFeedItem[] = [
-  ...recentPostCandidates.map(post => ({
-    type: "post" as const,
-    sortTime: getSortTime(post.data.modDatetime ?? post.data.pubDatetime),
-    post,
-  })),
-  ...recentMomentCandidates.map(moment => ({
-    type: "moment" as const,
-    sortTime: getSortTime(moment.data.modDatetime ?? moment.data.pubDatetime),
-    moment,
-  })),
-]
-  .sort((a, b) => b.sortTime - a.sortTime)
-  .slice(0, recentLimit);
+const recentFeedItems = getRecentFeedItems({
+  posts,
+  moments,
+  limit: recentLimit,
+});
 ---
 
 <Layout clientRouter={false} preloadFont={false}>
