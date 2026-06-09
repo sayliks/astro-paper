@@ -63,6 +63,9 @@
 - `src/pages/search.astro` 只在搜索页、并且通过 idle callback 动态导入 Pagefind UI。
 - `src/utils/transformers/rehypeImageOptimize.ts` 已统一补充图片加载属性，后续优化应建立在这个 transformer 上。
 - 照片墙和动态图片已经有显式宽高、稳定 `aspect-ratio`、懒加载和首图优先级策略。
+- 照片墙外链图片已有 `photoWall.allowedExternalHosts` 约束，后续新增外链域名应先更新根配置。
+- 动态 OG 字体 buffer 已集中到 `getOgSatoriFonts()`，后续不要在路由内重新手写字体读取逻辑。
+- Hitokoto cache miss 已空闲请求，后续优化应补配置和超时，而不是回退为首屏立即请求。
 - `Layout.astro` 已支持 `clientRouter`、`preloadFont`、`speedInsights` 按页面关闭，继续优化时优先复用这些开关。
 
 ## 每次优化建议的验证集

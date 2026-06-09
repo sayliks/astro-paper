@@ -2,11 +2,11 @@
 
 ## Goal
 
-Add a photo wall feature to AstroPaper and expose it from the main header navigation. The new navigation item should sit immediately to the right of the existing "标签" item and link to a dedicated photo wall page.
+Add a photo wall feature to AstroPaper and expose it from the main header navigation. The photo wall item sits between the moments link and the about link.
 
 ## User-Facing Behavior
 
-- Header navigation order becomes: 文章, 标签, 照片墙, 关于, then the existing icon actions.
+- Header navigation order is: 文章, 动态, 照片墙, 关于, then the existing icon actions.
 - The new item is a normal text navigation link so it matches the current posts/tags/about behavior on desktop and mobile.
 - The photo wall route is `/photo-wall/`.
 - The page title is localized through the existing i18n system.
@@ -116,9 +116,9 @@ Add `photo-wall` to the breadcrumb label map in `src/components/Breadcrumb.astro
 
 ## Header Updates
 
-Update `src/components/Header.astro`:
+Current `src/components/Header.astro` behavior:
 
-- Insert the new nav item immediately after the tags item.
+- The photo wall nav item sits after moments and before about.
 - Use `getRelativeLocaleUrl(locale, "photo-wall")`.
 - Apply `active-nav` with `isActive("/photo-wall")`.
 - Keep the same `li` and anchor classes already used by text nav items.
