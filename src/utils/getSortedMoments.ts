@@ -5,7 +5,7 @@ import {
   FALLBACK_MOMENT_DESCRIPTION,
   formatMomentDateTimeKey,
   getMomentDescriptionFromMarkdown,
-  getMomentIdSlug,
+  getMomentRouteSlug,
   getPublishedMomentEntries,
   isPublishedMoment,
   isValidMomentImage,
@@ -34,7 +34,7 @@ export function getSortedMoments(moments: MomentEntry[]) {
 }
 
 export function getMomentSlug(moment: MomentEntry) {
-  return getMomentIdSlug(moment.id);
+  return getMomentRouteSlug(moment);
 }
 
 export function getMomentUrl(

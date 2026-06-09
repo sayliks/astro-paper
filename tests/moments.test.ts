@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
+import { readdirSync, readFileSync } from "node:fs";
+import path from "node:path";
 import { test } from "node:test";
 import {
   FALLBACK_MOMENT_DESCRIPTION,
   getPublishedMomentEntries,
   getMomentDescriptionFromMarkdown,
   getMomentIdSlug,
+  getMomentRouteSlug,
   getMomentTitle,
   isPublishedMoment,
   isValidMomentImage,
@@ -15,6 +18,8 @@ import {
 
 const NOW = new Date("2026-06-06T22:00:00+08:00");
 const PUBLICATION_OPTIONS = { now: NOW, isDev: false };
+const MOMENTS_CONTENT_DIR = path.join(process.cwd(), "src/content/moments");
+const CMS_CONFIG_PATH = path.join(process.cwd(), "public/cms/config.yml");
 
 function createMoment(
   overrides: Partial<MomentSortInput["data"]> = {},
@@ -24,12 +29,57 @@ function createMoment(
     id,
     body: "今天也认真生活。",
     data: {
+      slug: "evening-walk",
       pubDatetime: new Date("2026-06-06T21:30:00+08:00"),
       draft: false,
       pinned: false,
       ...overrides,
     },
   };
+}
+
+function listMomentContentFiles(directory: string): string[] {
+  return readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
+    if (entry.name.startsWith("_") || entry.name.startsWith(".")) return [];
+
+    const entryPath = path.join(directory, entry.name);
+    if (entry.isDirectory()) return listMomentContentFiles(entryPath);
+    if (/\.mdx?$/i.test(entry.name)) return [entryPath];
+
+    return [];
+  });
+}
+
+function readFrontmatterSlug(filePath: string): string {
+  const source = readFileSync(filePath, "utf8");
+  const frontmatter = source.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1];
+  const rawSlug = frontmatter?.match(/^slug:\s*(.+?)\s*$/m)?.[1];
+
+  assert.ok(rawSlug, `Missing frontmatter slug in ${filePath}`);
+
+  return rawSlug.replace(/^['"]|['"]$/g, "").trim();
+}
+
+function getMomentRouteSlugFromFile(filePath: string) {
+  return getMomentRouteSlug({
+    data: {
+      slug: readFrontmatterSlug(filePath),
+    },
+  });
+}
+
+function getCmsMomentPreviewPathTemplate() {
+  const config = readFileSync(CMS_CONFIG_PATH, "utf8");
+  const momentsCollection = config.match(
+    /(?:^|\n)\s*-\s+name:\s+moments\b([\s\S]*?)(?=\n\s*-\s+name:|\s*$)/
+  )?.[1];
+  const previewPath = momentsCollection?.match(
+    /^\s*preview_path:\s*["']?(.+?)["']?\s*$/m
+  )?.[1];
+
+  assert.ok(previewPath, "Missing moments preview_path in CMS config");
+
+  return previewPath;
 }
 
 test("filters draft moments out of the published set", () => {
@@ -106,11 +156,49 @@ test("sorts pinned moments first, then by descending publish date", () => {
   ]);
 });
 
-test("generates a stable permalink slug from the committed filename id", () => {
+test("can still derive the committed filename suffix when needed", () => {
   assert.equal(
     getMomentIdSlug("2026-06-06-2130-evening-walk"),
     "2026-06-06-2130-evening-walk"
   );
+});
+
+test("uses frontmatter slug for moment detail routes and CMS previews", () => {
+  const moment = createMoment(
+    { slug: "thinking" },
+    "2026-06-08-1453-thinking"
+  );
+  const routeSlug = getMomentRouteSlug(moment);
+  const previewPath = getCmsMomentPreviewPathTemplate().replace(
+    "{{slug}}",
+    routeSlug
+  );
+
+  assert.equal(routeSlug, "thinking");
+  assert.notEqual(routeSlug, moment.id);
+  assert.equal(previewPath, "moments/thinking/");
+});
+
+test("current committed moment frontmatter slugs generate unique detail routes", () => {
+  const routesBySlug = new Map<string, string[]>();
+
+  for (const filePath of listMomentContentFiles(MOMENTS_CONTENT_DIR)) {
+    const routeSlug = getMomentRouteSlugFromFile(filePath);
+    const relativeFilePath = path
+      .relative(process.cwd(), filePath)
+      .replaceAll(path.sep, "/");
+
+    routesBySlug.set(routeSlug, [
+      ...(routesBySlug.get(routeSlug) ?? []),
+      relativeFilePath,
+    ]);
+  }
+
+  const duplicateRoutes = [...routesBySlug.entries()]
+    .filter(([, filePaths]) => filePaths.length > 1)
+    .map(([routeSlug, filePaths]) => ({ routeSlug, filePaths }));
+
+  assert.deepEqual(duplicateRoutes, []);
 });
 
 test("generates metadata titles from the local publish time", () => {

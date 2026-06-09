@@ -28,6 +28,31 @@ const pagefindBundlePath = getAssetPath("pagefind/");
 
 const t = useTranslations(locale);
 const tags = await getPublishedTags();
+const devNotice = {
+  title: "开发模式提示：",
+  message: "Pagefind 索引只会在生产构建后生成，请使用预览模式查看搜索结果。",
+  command: "pnpm build && pnpm preview",
+};
+const pagefindTranslations = {
+  language: "zh-CN",
+  placeholder: "搜索站内",
+  clear_search: "清除",
+  load_more: "加载更多结果",
+  search_label: "站内搜索",
+  searching: "正在搜索 [SEARCH_TERM]...",
+  zero_results: "没有找到与 [SEARCH_TERM] 相关的结果",
+  one_result: "找到 [COUNT] 条与 [SEARCH_TERM] 相关的结果",
+  many_results: "找到 [COUNT] 条与 [SEARCH_TERM] 相关的结果",
+  total_zero_results: "无结果",
+  total_one_result: "[COUNT] 条结果",
+  total_many_results: "[COUNT] 条结果",
+  alt_search:
+    "没有找到与 [SEARCH_TERM] 相关的结果，正在显示 [DIFFERENT_TERM] 的结果",
+  search_suggestion: "没有找到与 [SEARCH_TERM] 相关的结果，可以试试以下搜索：",
+  searching_label: "搜索中",
+  results_label: "搜索结果",
+  zero_results_label: "无结果",
+};
 ---
 
 <Layout title={`${t.pages.searchTitle} | ${config.site.title}`}>
@@ -41,6 +66,10 @@ const tags = await getPublishedTags();
       transition:persist
       data-back-url={backUrl}
       data-bundle-path={pagefindBundlePath}
+      data-dev-notice-title={devNotice.title}
+      data-dev-notice-message={devNotice.message}
+      data-dev-notice-command={devNotice.command}
+      data-translations={JSON.stringify(pagefindTranslations)}
     >
     </div>
 
@@ -63,123 +92,7 @@ const tags = await getPublishedTags();
 </Layout>
 
 <script>
-  function showDevSearchNotice(container: HTMLElement) {
-    const notice = document.createElement("div");
-    notice.className = "bg-muted/75 mb-4 space-y-4 rounded p-4";
-
-    const message = document.createElement("p");
-    const prefix = document.createElement("strong");
-    prefix.textContent = "开发模式提示：";
-    message.append(
-      prefix,
-      "Pagefind 索引只会在生产构建后生成，请使用预览模式查看搜索结果。"
-    );
-
-    const command = document.createElement("code");
-    command.className = "block rounded bg-black px-2 py-1 text-white";
-    command.textContent = "pnpm build && pnpm preview";
-
-    notice.append(message, command);
-    container.replaceChildren(notice);
-  }
-
-  function initSearch() {
-    const pageFindSearch: HTMLElement | null =
-      document.querySelector("#pagefind-search");
-
-    if (!pageFindSearch) return;
-
-    const bundlePath = pageFindSearch?.dataset?.bundlePath;
-    if (!bundlePath) return;
-
-    const params = new URLSearchParams(window.location.search);
-
-    const onIdle = window.requestIdleCallback || (cb => setTimeout(cb, 1));
-
-    onIdle(async () => {
-      if (import.meta.env.DEV) {
-        showDevSearchNotice(pageFindSearch);
-        return;
-      }
-
-      // @ts-expect-error — Missing types for @pagefind/default-ui package.
-      const { PagefindUI } = await import("@pagefind/default-ui");
-
-      // Init pagefind ui
-      const search = new PagefindUI({
-        element: "#pagefind-search",
-        bundlePath,
-        showImages: false,
-        showSubResults: true,
-        translations: {
-          language: "zh-CN",
-          placeholder: "搜索站内",
-          clear_search: "清除",
-          load_more: "加载更多结果",
-          search_label: "站内搜索",
-          searching: "正在搜索 [SEARCH_TERM]...",
-          zero_results: "没有找到与 [SEARCH_TERM] 相关的结果",
-          one_result: "找到 [COUNT] 条与 [SEARCH_TERM] 相关的结果",
-          many_results: "找到 [COUNT] 条与 [SEARCH_TERM] 相关的结果",
-          total_zero_results: "无结果",
-          total_one_result: "[COUNT] 条结果",
-          total_many_results: "[COUNT] 条结果",
-          alt_search:
-            "没有找到与 [SEARCH_TERM] 相关的结果，正在显示 [DIFFERENT_TERM] 的结果",
-          search_suggestion:
-            "没有找到与 [SEARCH_TERM] 相关的结果，可以试试以下搜索：",
-          searching_label: "搜索中",
-          results_label: "搜索结果",
-          zero_results_label: "无结果",
-        },
-        processTerm: function (term: string) {
-          params.set("q", term); // Update the `q` parameter in the URL
-          history.replaceState(history.state, "", "?" + params.toString()); // Push the new URL without reloading
-
-          const backUrl =
-            pageFindSearch?.dataset?.backUrl ?? window.location.pathname;
-          try {
-            sessionStorage.setItem(
-              "backUrl",
-              `${backUrl}?${params.toString()}`
-            );
-          } catch {
-            // The regular back link still works when storage is unavailable.
-          }
-
-          return term;
-        },
-      });
-
-      // If search param exists (eg: search?q=astro), trigger search
-      const query = params.get("q");
-      if (query) {
-        search.triggerSearch(query);
-      }
-
-      // Reset search param if search input is cleared
-      const searchInput = document.querySelector(".pagefind-ui__search-input");
-      const clearButton = document.querySelector(".pagefind-ui__search-clear");
-      searchInput?.addEventListener("input", resetSearchParam);
-      clearButton?.addEventListener("click", resetSearchParam);
-
-      function resetSearchParam(e: Event) {
-        if ((e.target as HTMLInputElement)?.value.trim() === "") {
-          history.replaceState(history.state, "", window.location.pathname);
-        }
-      }
-    });
-  }
-
-  document.addEventListener("astro:after-swap", () => {
-    const pagefindSearch = document.querySelector("#pagefind-search");
-
-    // if pagefind search form already exists, don't initialize search component
-    if (pagefindSearch && pagefindSearch.querySelector("form")) return;
-
-    initSearch();
-  });
-  initSearch();
+  import "@/scripts/search";
 </script>
 
 <style is:global>
