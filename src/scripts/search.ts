@@ -15,6 +15,7 @@ const SEARCH_CONTAINER_SELECTOR = "#pagefind-search";
 const SEARCH_READY = "searchReady";
 const SEARCH_PENDING = "searchPending";
 const BACK_URL_KEY = "backUrl";
+const SAME_ORIGIN_BASE = "https://astro-paper.local";
 
 let pendingSearch:
   | {
@@ -115,17 +116,52 @@ export function getSearchUrlWithTerm(currentSearch: string, term: string) {
   return `?${params.toString()}`;
 }
 
-export function getBackUrlWithSearch(backUrl: string, search: string) {
-  return `${backUrl}${search}`;
+function getSameOriginPath(value: string): string | undefined {
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+
+  try {
+    const parsed = new URL(trimmed, SAME_ORIGIN_BASE);
+    return parsed.origin === SAME_ORIGIN_BASE ? parsed.pathname : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function getSafeSearch(search: string) {
+  return search.startsWith("?") ? search : "";
+}
+
+export function getSafeBackUrl(backUrl: string, fallbackPath = "/") {
+  const fallback = getSameOriginPath(fallbackPath) ?? "/";
+  const value = getSameOriginPath(backUrl);
+  if (!value) return fallback;
+
+  return value;
+}
+
+export function getBackUrlWithSearch(
+  backUrl: string,
+  search: string,
+  fallbackPath = "/"
+) {
+  return `${getSafeBackUrl(backUrl, fallbackPath)}${getSafeSearch(search)}`;
 }
 
 export function shouldResetSearchParam(value: string | null | undefined) {
   return (value ?? "").trim() === "";
 }
 
-function rememberSearchBackUrl(backUrl: string, search: string): void {
+function rememberSearchBackUrl(
+  backUrl: string,
+  search: string,
+  fallbackPath: string
+): void {
   try {
-    sessionStorage.setItem(BACK_URL_KEY, getBackUrlWithSearch(backUrl, search));
+    sessionStorage.setItem(
+      BACK_URL_KEY,
+      getBackUrlWithSearch(backUrl, search, fallbackPath)
+    );
   } catch {
     // The regular back link still works when storage is unavailable.
   }
@@ -150,6 +186,8 @@ async function initializePagefind(container: HTMLElement): Promise<void> {
     getDatasetValue(container, "backUrl") || window.location.pathname;
 
   const PagefindUI = await loadPagefindUI();
+  if (!document.contains(container)) return;
+
   const search = new PagefindUI({
     element: SEARCH_CONTAINER_SELECTOR,
     bundlePath,
@@ -159,7 +197,7 @@ async function initializePagefind(container: HTMLElement): Promise<void> {
     processTerm(term: string) {
       const nextSearch = getSearchUrlWithTerm(window.location.search, term);
       replaceCurrentUrl(nextSearch);
-      rememberSearchBackUrl(backUrl, nextSearch);
+      rememberSearchBackUrl(backUrl, nextSearch, window.location.pathname);
       return term;
     },
   });
@@ -201,9 +239,12 @@ function setupSearch(): void {
   container.dataset[SEARCH_PENDING] = "true";
 
   const handle = scheduleIdle(() => {
-    pendingSearch = undefined;
-    delete container.dataset[SEARCH_PENDING];
-    void initializePagefind(container);
+    void initializePagefind(container).finally(() => {
+      if (pendingSearch?.container === container) {
+        pendingSearch = undefined;
+      }
+      delete container.dataset[SEARCH_PENDING];
+    });
   });
 
   pendingSearch = { container, handle };

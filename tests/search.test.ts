@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   getBackUrlWithSearch,
+  getSafeBackUrl,
   getSearchUrlWithTerm,
   shouldResetSearchParam,
 } from "../src/scripts/search.ts";
@@ -14,10 +15,22 @@ test("updates the q search parameter while preserving existing parameters", () =
   assert.equal(params.get("q"), "astro paper");
 });
 
-test("creates a back URL from the source path and current search", () => {
+test("creates a same-origin back URL from the source path and current search", () => {
   assert.equal(
     getBackUrlWithSearch("/search", "?q=astro+paper"),
     "/search?q=astro+paper"
+  );
+});
+
+test("rejects unsafe external back URLs", () => {
+  assert.equal(
+    getBackUrlWithSearch("https://example.com/search", "?q=astro", "/search"),
+    "/search?q=astro"
+  );
+  assert.equal(getSafeBackUrl("//example.com/search", "/search"), "/search");
+  assert.equal(
+    getBackUrlWithSearch("/search", "//example.com", "//example.com"),
+    "/search"
   );
 });
 
