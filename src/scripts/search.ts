@@ -23,6 +23,7 @@ let pendingSearch:
       handle: IdleHandle;
     }
   | undefined;
+let searchRunId = 0;
 
 function getDatasetValue(
   container: HTMLElement,
@@ -62,6 +63,7 @@ function cancelPendingSearch(container?: HTMLElement): void {
   if (!pendingSearch) return;
   if (container && pendingSearch.container !== container) return;
 
+  searchRunId += 1;
   cancelIdle(pendingSearch.handle);
   delete pendingSearch.container.dataset[SEARCH_PENDING];
   pendingSearch = undefined;
@@ -171,8 +173,19 @@ function replaceCurrentUrl(search: string): void {
   history.replaceState(history.state, "", search || window.location.pathname);
 }
 
-async function initializePagefind(container: HTMLElement): Promise<void> {
-  if (!document.contains(container)) return;
+function isCurrentSearchContainer(container: HTMLElement, runId: number) {
+  return (
+    searchRunId === runId &&
+    document.contains(container) &&
+    getSearchContainer() === container
+  );
+}
+
+async function initializePagefind(
+  container: HTMLElement,
+  runId: number
+): Promise<void> {
+  if (!isCurrentSearchContainer(container, runId)) return;
 
   if (import.meta.env.DEV) {
     showDevSearchNotice(container);
@@ -186,7 +199,7 @@ async function initializePagefind(container: HTMLElement): Promise<void> {
     getDatasetValue(container, "backUrl") || window.location.pathname;
 
   const PagefindUI = await loadPagefindUI();
-  if (!document.contains(container)) return;
+  if (!isCurrentSearchContainer(container, runId)) return;
 
   const search = new PagefindUI({
     element: SEARCH_CONTAINER_SELECTOR,
@@ -237,10 +250,11 @@ function setupSearch(): void {
   if (!getDatasetValue(container, "bundlePath")) return;
 
   container.dataset[SEARCH_PENDING] = "true";
+  const runId = (searchRunId += 1);
 
   const handle = scheduleIdle(() => {
-    void initializePagefind(container).finally(() => {
-      if (pendingSearch?.container === container) {
+    void initializePagefind(container, runId).finally(() => {
+      if (searchRunId === runId && pendingSearch?.container === container) {
         pendingSearch = undefined;
       }
       delete container.dataset[SEARCH_PENDING];

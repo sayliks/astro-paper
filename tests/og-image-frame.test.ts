@@ -3,12 +3,11 @@ import { test } from "node:test";
 import {
   createCenteredOgBody,
   createOgFooter,
+  createOgImageResponse,
   createOgImageFrame,
   createOgSpan,
+  createOgSatoriOptions,
   createOgText,
-  OG_IMAGE_CONTENT_TYPE,
-  OG_IMAGE_HEIGHT,
-  OG_IMAGE_WIDTH,
   type OgNode,
 } from "../src/utils/ogImageFrame.ts";
 
@@ -22,10 +21,18 @@ function asNodeArray(value: unknown): OgNode[] {
   return value.map(asNode);
 }
 
-test("keeps shared OG image dimensions and response content type", () => {
-  assert.equal(OG_IMAGE_WIDTH, 1200);
-  assert.equal(OG_IMAGE_HEIGHT, 630);
-  assert.equal(OG_IMAGE_CONTENT_TYPE, "image/png");
+test("creates shared Satori options and PNG responses", () => {
+  const fonts = [{ name: "Test Font" }];
+  const options = createOgSatoriOptions(fonts);
+  const response = createOgImageResponse(new Uint8Array([1, 2, 3]));
+
+  assert.deepEqual(options, {
+    width: 1200,
+    height: 630,
+    embedFont: true,
+    fonts,
+  });
+  assert.equal(response.headers.get("Content-Type"), "image/png");
 });
 
 test("creates the shared OG frame shell around route-provided content", () => {

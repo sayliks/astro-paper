@@ -23,6 +23,21 @@ type OgFrameOptions = {
   footer: OgChild;
 };
 
+export function createOgSatoriOptions<TFonts>(fonts: TFonts) {
+  return {
+    width: OG_IMAGE_WIDTH,
+    height: OG_IMAGE_HEIGHT,
+    embedFont: true,
+    fonts,
+  };
+}
+
+export function createOgImageResponse(pngData: Uint8Array): Response {
+  return new Response(pngData as unknown as BodyInit, {
+    headers: { "Content-Type": OG_IMAGE_CONTENT_TYPE },
+  });
+}
+
 export function createOgText(children: OgChild, style: OgStyle): OgNode {
   return {
     type: "p",

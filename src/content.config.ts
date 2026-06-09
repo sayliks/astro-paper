@@ -6,9 +6,6 @@ import config from "@/config";
 export const BLOG_PATH = "src/content/posts";
 export const MOMENTS_PATH = "src/content/moments";
 
-const getFilenameId = ({ entry }: { entry: string }) =>
-  entry.replace(/\.(?:md|mdx)$/i, "").replace(/\/index$/i, "");
-
 const blankStringToUndefined = (value: unknown) =>
   typeof value === "string" && value.trim() === "" ? undefined : value;
 
@@ -50,7 +47,6 @@ const moments = defineCollection({
   loader: glob({
     pattern: "**/[^_]*.{md,mdx}",
     base: `./${MOMENTS_PATH}`,
-    generateId: getFilenameId,
   }),
   schema: z.object({
     slug: z.string().trim().min(1),

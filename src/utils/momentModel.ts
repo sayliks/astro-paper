@@ -9,9 +9,16 @@ export type MomentSortInput = {
   id: string;
   body?: string;
   data: {
+    slug: string;
     pubDatetime: Date | string;
     draft?: boolean;
     pinned?: boolean;
+  };
+};
+
+export type MomentRouteInput = {
+  data: {
+    slug: string;
   };
 };
 
@@ -49,6 +56,10 @@ export function getPublishedMomentEntries<T extends MomentSortInput>(
 export function getMomentIdSlug(id: string) {
   const segments = id.split("/");
   return segments.length > 0 ? String(segments[segments.length - 1]) : id;
+}
+
+export function getMomentRouteSlug(moment: MomentRouteInput) {
+  return moment.data.slug.trim();
 }
 
 export function formatMomentDateTimeKey(
