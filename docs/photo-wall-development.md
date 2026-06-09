@@ -41,9 +41,25 @@ type PhotoWallItem = {
 ```
 
 `src` may be either a local repository image, such as
-`photo-wall/window-light.svg`, or an external `http(s)` image URL. Local images
-are passed through the project base-path helper at build time; external URLs are
-left unchanged. The `order` field controls the final display order.
+`photo-wall/window-light.svg`, or an external `https` image URL whose hostname
+is listed in `photoWall.allowedExternalHosts` inside
+`astro-paper.config.ts`. Local images are passed through the project base-path
+helper at build time; approved external URLs are left unchanged. The `order`
+field controls the final display order.
+
+Current production photo wall data uses `tg.matsumae.top`, which is explicitly
+allowed in the root config. Add new external image hosts there before publishing
+CMS entries that reference them.
+
+```ts
+photoWall: {
+  allowedExternalHosts: ["tg.matsumae.top"],
+}
+```
+
+Hosts are matched exactly after lowercasing, so `tg.matsumae.top` does not
+automatically allow arbitrary subdomains. Add new hosts deliberately and verify
+them before publishing.
 
 The six initial placeholder images remain under `public/photo-wall/` and have
 been migrated into `src/data/photoWall.json`.
@@ -59,6 +75,10 @@ been migrated into `src/data/photoWall.json`.
 - To replace placeholders, upload or place new files in `public/photo-wall/`,
   update `src`, `title`, `alt`, `width`, `height`, `order`, and `published` in
   Sveltia CMS, then run the validation commands below.
+- For external images, use only approved `https://` hosts and keep width/height
+  values aligned with the real rendered asset.
+- Prefer the existing approved host or local repository assets over one-off
+  third-party URLs.
 
 ## Routing and Layout
 
@@ -129,6 +149,9 @@ After implementation:
 3. Request `/photo-wall/` from the running dev server.
 4. Request the home page and confirm the header still renders.
 5. Confirm the nav order is correct and `/photo-wall/` receives the active underline.
+6. If using external images, confirm every host is present in
+   `photoWall.allowedExternalHosts` and every image request returns 200 over
+   HTTPS.
 
 ## Future Extensions
 

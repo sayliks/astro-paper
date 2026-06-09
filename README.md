@@ -15,8 +15,8 @@ sayliks corner 是我的个人博客和小小的网络角落，用来记录学�
 
 - **文章（posts）** — 主博客，支持 Markdown / MDX、标签、精选、计划发布、上一篇/下一篇导航。
 - **日常（moments）** — 轻量的"碎碎念"动态流，支持图片、心情、位置和置顶，标题与摘要自动派生。
-- **照片墙（photo wall）** — 由 `src/data/photoWall.json` 驱动的静态相册，无需客户端 JavaScript。
-- **一言（hitokoto）** — 首页每日一句，按本地日期在 `localStorage` 缓存，失败时回退到内置句子。
+- **照片墙（photo wall）** — 由 `src/data/photoWall.json` 驱动的静态相册，外链图片域名由配置 allowlist 约束，无需客户端 JavaScript。
+- **一言（hitokoto）** — 首页每日一句，按本地日期在 `localStorage` 缓存；缓存未命中时空闲加载，失败时回退到内置句子。
 - **标签与归档** — 按标签分类浏览，以及按时间分组的归档页。
 - **静态搜索** — 基于 Pagefind，在构建时生成索引。
 - **RSS** — 文章 (`/rss.xml`) 与日常 (`/moments/rss.xml`) 各有独立订阅源。
@@ -70,7 +70,7 @@ src/content/pages/about.md
 
 ## CMS 与 GitHub 登录
 
-Sveltia CMS 以静态文件形式部署在 `/cms/`（从 unpkg 加载 `@sveltia/cms`，Schema 为 `public/cms/config.yml`）。GitHub OAuth 由 `api/cms-auth/` 下的 Vercel Functions 处理（`auth.js`、`callback.js`，核心逻辑在 `src/server/cmsAuth.js`），并保留访问令牌（token）登录作为备选方案。
+Sveltia CMS 以静态文件形式部署在 `/cms/`，运行时 bundle 自托管于 `public/cms/sveltia-cms.js`，Schema 为 `public/cms/config.yml`。GitHub OAuth 由 `api/cms-auth/` 下的 Vercel Functions 处理（`auth.js`、`callback.js`，核心逻辑在 `src/server/cmsAuth.js`），并保留访问令牌（token）登录作为备选方案。
 
 要启用生产环境的 OAuth 登录，先创建一个 GitHub OAuth App：
 
