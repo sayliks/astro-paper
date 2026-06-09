@@ -4,8 +4,6 @@
 
 本文件是当前维护路线图；`docs/optimization-opportunities.md` 保留更完整的审计背景。完成新的优化分支后，优先更新本文件：把已完成事项移入“已完成的小优化记录”，并保持“下一步执行包”只指向一个清晰的后续分支。
 
-本文件是下一轮优化的主清单；`optimization-opportunities.md` 只作为详细背景资料。开始新任务时，优先从这里选一个 P1 或高收益 P2 项，避免把历史分析当成新的执行清单。
-
 ## 优先级说明
 
 - **P1**：建议近期处理，能降低真实维护风险或明显改善性能。
@@ -45,7 +43,7 @@
 | P2 | 首页聚合数据抽离 | `src/pages/index.astro` | 首页把文章和动态合并排序的逻辑在页面内完成。随着动态/文章增多，可抽成纯函数并补测试，避免首页展示规则散落在模板中。 |
 | P2 | 全局客户端脚本拆分 | `src/layouts/Layout.astro`, `src/scripts/navigation-state.ts`, `src/scripts/header-menu.ts`, `src/scripts/theme.ts` | `theme`、`header-menu`、`navigation-state` 目前从基础布局全局加载。主题脚本需要保持全局，但可评估把只在部分页面有意义的逻辑拆分或按需加载，并审计 `ClientRouter` 是否需要默认开启。 |
 | P3 | 主题脚本 DOM 查询整理 | `src/scripts/theme.ts` | `reflect()` 会重新查询主题按钮和 `theme-color` meta。后续可在 `setup()`/`astro:after-swap` 周期内刷新缓存引用，减少重复 DOM 查询，同时避免跨页面 View Transitions 使用旧节点。 |
-| P3 | 图片占位资源替换计划 | `public/photo-wall/*.svg`, `docs/photo-wall-development.md` | 照片墙仍保留临时 SVG 占位资源。后续替换为真实图片时，建议统一转 WebP/AVIF，记录原始尺寸，并保持 CMS 中宽高准确。 |
+| P3 | 历史照片墙 SVG 清理 | `public/photo-wall/*.svg`, `docs/photo-wall-development.md` | 当前生产照片墙数据已不依赖早期 SVG 占位资源。后续如确认 CMS 示例也不需要它们，可在单独资产清理分支删除；否则保留为本地占位示例。 |
 | P3 | 主题与评论联动回归检查 | `src/scripts/theme.ts`, `src/components/Giscus.astro` | Giscus 已跟随站点主题。后续改主题按钮或 View Transitions 时，应手动验证评论 iframe 是否同步变色。 |
 | P3 | Giscus 占位高度微调 | `src/components/Giscus.astro`, `src/pages/posts/[...slug]/index.astro`, `src/pages/moments/[slug]/index.astro` | 评论已用 IntersectionObserver 懒加载。后续可测量移动端和桌面端实际 iframe 高度，微调 `contain-intrinsic-size`，减少评论区出现时的跳动。 |
 | P3 | Hitokoto 配置开关 | `src/components/home/HitokotoCard.astro`, `src/scripts/hitokoto.ts`, `src/types/config.ts` | 一言 cache miss 已改为空闲调度并设置 idle timeout。后续可加入配置开关，方便隐私优先或离线部署直接关闭第三方请求。 |

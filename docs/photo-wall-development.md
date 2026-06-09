@@ -74,9 +74,10 @@ shape.
 - Target maximum file size: roughly `250 KB` per image after compression; smaller is better when visual quality holds.
 - File names should be lowercase kebab-case, descriptive, and stable, for example `rain-walk.webp`.
 - Compress and strip unnecessary metadata before adding files to the repository.
-- To replace or add photos, upload or place new files in `public/photo-wall/`,
-  update `src`, `title`, `alt`, `width`, `height`, `order`, and `published` in
-  Sveltia CMS, then run the validation commands below.
+- To replace or add photos, upload/place new files in `public/photo-wall/` or
+  paste an approved external URL, then update `src`, `title`, `alt`, `width`,
+  `height`, `order`, and `published` in Sveltia CMS before running the
+  validation commands below.
 - For external images, use only approved `https://` hosts and keep width/height
   values aligned with the real rendered asset.
 - Prefer the existing approved host or local repository assets over one-off
@@ -161,5 +162,6 @@ After changing photo wall content, config, or rendering:
 ## Deferred Extensions
 
 - Move photo entries into an Astro content collection only if captions become long-form.
-- Add tag or year filtering once the photo count grows.
+- Keep the current static grid model unless a separate scoped task explicitly
+  asks for new interaction features.
 - Add responsive image variants when local image processing is introduced.

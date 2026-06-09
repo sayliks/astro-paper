@@ -35,7 +35,7 @@ becomes the main title shown on the home feed, detail page, and RSS; when blank
 or omitted the title falls back to the publish-time form `动态 · YYYY-MM-DD HH:mm`.
 The resolution lives in `resolveMomentTitle` (`src/utils/momentModel.ts`).
 Tags, description, featured flag, reading time, social metrics, automatic
-location, weather, and EXIF fields are intentionally not part of Phase 1.
+location, weather, and EXIF fields are intentionally deferred.
 
 ## CMS
 

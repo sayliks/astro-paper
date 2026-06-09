@@ -5,10 +5,6 @@ reading the current AstroPaper codebase, with emphasis on practical changes that
 reduce page weight, build cost, third-party runtime work, and long-term
 maintenance risk.
 
-This is the detailed reference document. Use
-`optimization-roadmap-2026-06-09.md` as the canonical execution queue, then come
-back here for rationale and implementation notes for a selected item.
-
 Use this as the reference audit, not as a task tracker. The active next-step
 queue is maintained in `docs/optimization-roadmap-2026-06-09.md`; update the
 roadmap after each optimization pass so completed items do not drift between
