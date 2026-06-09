@@ -1,8 +1,10 @@
 # 优化点记录（2026-06-09）
 
-本文件记录本次代码阅读中发现的后续优化方向。当前项目整体状态已经比较稳：静态构建、内容校验、CMS、RSS、评论、搜索、动态和照片墙都有基础防护与测试覆盖。下面的建议不要求一次性完成，适合作为长期维护清单，按影响面逐项推进。
+本文件记录本次代码阅读中发现的后续优化方向。当前项目整体状态已经比较稳：静态构建、内容校验、CMS、RSS、评论、搜索、动态和照片墙都有基础防护与测试覆盖。下面的建议不要求一次性完成，按影响面逐项推进即可。
 
-本文件作为后续维护路线图使用。当前工作树已有部分优化实现，见“已完成的小优化记录”；建议清单只保留仍需要继续推进或补强的事项。
+本文件是当前维护路线图；`docs/optimization-opportunities.md` 保留更完整的审计背景。完成新的优化分支后，优先更新本文件：把已完成事项移入“已完成的小优化记录”，并保持“下一步执行包”只指向一个清晰的后续分支。
+
+本文件是下一轮优化的主清单；`optimization-opportunities.md` 只作为详细背景资料。开始新任务时，优先从这里选一个 P1 或高收益 P2 项，避免把历史分析当成新的执行清单。
 
 ## 优先级说明
 
@@ -50,12 +52,36 @@
 | P3 | 字体预加载按页面审计 | `astro.config.ts`, `src/layouts/Layout.astro` | Layout 默认预加载浏览器字体，首页已关闭。后续可审计照片墙、CMS、搜索等轻量页面是否也应关闭 `preloadFont`，只在长文详情等文字密集页面保留。 |
 | P3 | 构建产物体积观察 | `package.json`, `public/cms/sveltia-cms.js`, `dist/` | 目前没有固定的 bundle/asset 体积报告。可以在需要时添加轻量的构建后检查脚本，记录公共资源体积变化，避免静态资源悄悄膨胀。 |
 
-## 推荐执行顺序
+## 下一步执行顺序
 
 1. **先处理安全与内容可靠性**：CMS 权限、slug 唯一性检查。
 2. **再处理高收益资源优化**：照片墙响应式图片管线、CMS runtime 版本维护、Markdown 图片 transformer 测试。
 3. **然后处理构建与脚本维护性**：搜索脚本抽离、首页聚合逻辑抽离、动态 OG 模板复用。
 4. **最后处理长期体验优化**：RSS 阅读器实测、Giscus 占位高度、Hitokoto 配置开关、字体预加载审计、体积观察脚本。
+
+## 下一步执行包
+
+建议下一条优化分支先做“内容完整性与图片加载回归测试”。这个范围小、风险低，也能保护后续更大的图片管线和 CMS 调整。
+
+建议分支名：
+
+```bash
+codex/content-integrity-tests
+```
+
+建议包含：
+
+1. **动态 slug 唯一性测试**：在 `tests/moments.test.ts` 或新增测试中，按现有 `getMomentSlug()` 规则检查 `src/content/moments/*.md` 不会生成重复详情路由。
+2. **Markdown 图片 transformer 测试**：为 `src/utils/transformers/rehypeImageOptimize.ts` 增加直接测试，覆盖首图 `fetchpriority="high"`、后续图懒加载、已有属性不被误覆盖、缺少宽高时仍保持安全输出。
+3. **CMS 提示微调**：如果测试暴露内容约束不够清楚，再更新 `public/cms/config.yml` 的字段 hint，避免作者生成重复 slug 或提交过大的图片。
+
+完成条件：
+
+- `pnpm astro check`
+- `pnpm lint`
+- `pnpm run format:check`
+- `pnpm test`
+- `pnpm build`
 
 ## 已经值得保留的模式
 
@@ -65,7 +91,7 @@
 - 照片墙和动态图片已经有显式宽高、稳定 `aspect-ratio`、懒加载和首图优先级策略。
 - 照片墙外链图片已有 `photoWall.allowedExternalHosts` 约束，后续新增外链域名应先更新根配置。
 - 动态 OG 字体 buffer 已集中到 `getOgSatoriFonts()`，后续不要在路由内重新手写字体读取逻辑。
-- Hitokoto cache miss 已空闲请求，后续优化应补配置开关和 fetch 超时，而不是回退为首屏立即请求。
+- Hitokoto cache miss 已空闲请求并设置 idle timeout，后续优化应补配置开关和 fetch 超时，而不是回退为首屏立即请求。
 - 路由应继续通过 `src/utils/contentQueries.ts` 获取已发布文章、动态和标签，不要重新散落 `getCollection()` 调用。
 - `Layout.astro` 已支持 `clientRouter`、`preloadFont`、`speedInsights` 按页面关闭，继续优化时优先复用这些开关。
 

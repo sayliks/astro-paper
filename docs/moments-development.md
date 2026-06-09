@@ -5,6 +5,10 @@ separate from formal articles and remains fully static: Markdown files are
 committed to Git, Astro builds the feed/detail pages, and Vercel publishes the
 generated output.
 
+This document describes the implemented static Moments flow. Treat it as the
+source of truth for content shape, routing, validation, and intentionally
+deferred functionality before starting the next Moments-related change.
+
 ## Content
 
 Moment files live in `src/content/moments/` and use the `moments` collection in
@@ -85,8 +89,25 @@ separate `/moments/rss.xml` feed.
 Pagefind indexes detail pages only via `data-pagefind-body`; the feed page is
 not marked for indexing to avoid duplicate results.
 
-## Phase 1 Limits
+## Deferred Functionality
 
 No likes, reposts, reactions, accounts, counters, private posts, database,
 realtime updates, infinite scrolling, client-side pagination, lightbox,
 carousel, remote image API, automatic location, or automatic weather is included.
+
+## Verification After Changes
+
+After changing Moments components, schemas, feed/detail routes, or CMS fields,
+run:
+
+```bash
+pnpm astro check
+pnpm lint
+pnpm run format:check
+pnpm test
+pnpm build
+```
+
+Also verify `/moments/`, at least one `/moments/<filename-slug>/` detail route,
+and `/moments/rss.xml` return 200 in the built site. Confirm drafts and future
+Moments stay excluded from generated output.

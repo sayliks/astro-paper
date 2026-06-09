@@ -5,6 +5,15 @@ reading the current AstroPaper codebase, with emphasis on practical changes that
 reduce page weight, build cost, third-party runtime work, and long-term
 maintenance risk.
 
+This is the detailed reference document. Use
+`optimization-roadmap-2026-06-09.md` as the canonical execution queue, then come
+back here for rationale and implementation notes for a selected item.
+
+Use this as the reference audit, not as a task tracker. The active next-step
+queue is maintained in `docs/optimization-roadmap-2026-06-09.md`; update the
+roadmap after each optimization pass so completed items do not drift between
+documents.
+
 ## Recently Completed
 
 These improvements are already present in the current working tree and should be
@@ -276,11 +285,14 @@ Recommended work:
 - `eslint.config.js` and `.prettierignore` already exclude the vendored CMS
   runtime bundle.
 
-## Recommended First Pass
+## Candidate Pool
 
-1. Add responsive image variant support for photo wall and moment uploads.
-2. Extract shared OG image frame/rendering helpers.
-3. Add regression tests for `rehypeImageOptimize()` and moment slug uniqueness.
+Use the roadmap document for final ordering and branch scope. The remaining
+high-signal candidates from this audit are:
+
+1. Add regression tests for `rehypeImageOptimize()` and moment slug uniqueness.
+2. Add responsive image variant support for photo wall and moment uploads.
+3. Extract shared OG image frame/rendering helpers.
 4. Gate optional global scripts and third-party work behind page needs or config
    flags.
 
