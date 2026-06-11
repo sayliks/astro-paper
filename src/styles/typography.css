@@ -63,6 +63,17 @@
       margin-top: 0;
     }
 
+    /* Drop cap — first letter of the opening paragraph */
+    > p:first-of-type::first-letter {
+      float: left;
+      font-size: 3.75rem;
+      font-weight: 500;
+      line-height: 1;
+      margin-inline-end: 0.1em;
+      margin-top: 0.05em;
+      color: var(--article-body);
+    }
+
     ol,
     ul {
       margin-block: 0 1.35em;
