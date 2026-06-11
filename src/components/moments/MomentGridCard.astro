@@ -1,0 +1,53 @@
+---
+import type { MomentEntry } from "@/utils/getSortedMoments";
+import { getMomentUrl, getMomentMetaTitle, getMomentDescription } from "@/utils/getSortedMoments";
+import MomentMeta from "./MomentMeta.astro";
+
+type Props = {
+  moment: MomentEntry;
+  staggerIndex?: number;
+};
+
+const { moment, staggerIndex } = Astro.props;
+const locale = Astro.currentLocale;
+const href = getMomentUrl(moment, locale);
+const title = getMomentMetaTitle(moment);
+const description = getMomentDescription(moment, 96);
+const firstImage = moment.data.images[0];
+---
+
+<li
+  class="card-grid-item fade-in-up"
+  style={staggerIndex !== undefined ? `--i: ${staggerIndex}` : undefined}
+>
+  <article class="card-grid-card">
+    {
+      firstImage && (
+        <a href={href} class="card-grid-img-link" tabindex="-1">
+          <img
+            src={firstImage.src}
+            alt={firstImage.alt}
+            width={firstImage.width}
+            height={firstImage.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+      )
+    }
+    <div class="card-grid-body">
+      <a
+        href={href}
+        class:list={[
+          "text-accent inline-block font-medium",
+          "decoration-dashed underline-offset-4 hover:underline",
+          "focus-visible:no-underline focus-visible:underline-offset-0",
+        ]}
+      >
+        <h3 class="text-lg leading-snug">{title}</h3>
+      </a>
+      <MomentMeta moment={moment} class="mt-1" />
+      <p class="flex-1">{description}</p>
+    </div>
+  </article>
+</li>

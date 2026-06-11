@@ -75,7 +75,7 @@ const isActive = (path: string) => {
         id="menu-items"
         class="[&>li>a]:hover:text-accent mt-4 w-56 grid-cols-2 place-content-center gap-2 overflow-hidden transition-all duration-250 ease-in-out max-h-0 opacity-0 sm:mt-0 sm:flex sm:w-auto sm:max-h-none sm:opacity-100 sm:gap-x-2 sm:gap-y-0 md:gap-x-4 sm:[&>li]:h-8 [&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-bold sm:[&>li>a]:px-1.5 sm:[&>li>a]:py-1 md:[&>li>a]:px-2"
       >
-        <li class="col-span-2">
+        <li class="col-span-2 sm:order-1">
           <a
             href={getRelativeLocaleUrl(locale, "posts")}
             class:list={["relative", { "text-accent font-bold": isActive("/posts") }]}
@@ -83,7 +83,7 @@ const isActive = (path: string) => {
             {t.nav.posts}
           </a>
         </li>
-        <li class="col-span-2">
+        <li class="col-span-2 sm:order-2">
           <a
             href={getRelativeLocaleUrl(locale, "moments")}
             class:list={["relative", { "text-accent font-bold": isActive("/moments") }]}
@@ -91,17 +91,9 @@ const isActive = (path: string) => {
             {t.nav.moments}
           </a>
         </li>
-        <li class="col-span-2">
-          <a
-            href={getRelativeLocaleUrl(locale, "about")}
-            class:list={["relative", { "text-accent font-bold": isActive("/about") }]}
-          >
-            {t.nav.about}
-          </a>
-        </li>
         {
           features.showArchives && (
-            <li class="col-span-2">
+            <li class="col-span-2 sm:order-4">
               <LinkButton
                 href={getRelativeLocaleUrl(locale, "archives")}
                 class:list={[
@@ -117,9 +109,17 @@ const isActive = (path: string) => {
             </li>
           )
         }
+        <li class="col-span-2 sm:order-3">
+          <a
+            href={getRelativeLocaleUrl(locale, "about")}
+            class:list={["relative", { "text-accent font-bold": isActive("/about") }]}
+          >
+            {t.nav.about}
+          </a>
+        </li>
         {
           features.search !== false && (
-            <li class="col-span-1 flex items-center justify-center">
+            <li class="col-span-1 flex items-center justify-center sm:order-5">
               <LinkButton
                 href={getRelativeLocaleUrl(locale, "search")}
                 class:list={[
@@ -137,7 +137,7 @@ const isActive = (path: string) => {
         }
         {
           features.lightAndDarkMode && (
-            <li class="col-span-1 flex items-center justify-center">
+            <li class="col-span-1 flex items-center justify-center sm:order-6">
               <button
                 id="theme-btn"
                 class="focus-outline hover:[&>svg]:stroke-accent relative size-12 p-4 sm:size-8"

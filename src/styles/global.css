@@ -112,7 +112,13 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
 .card-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.75rem;
+}
+
+@media (min-width: 40em) {
+  .card-grid {
+    gap: 1rem;
+  }
 }
 
 .card-grid-item {
@@ -146,6 +152,11 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
   box-shadow: 0 4px 12px rgb(0 0 0 / 0.08);
 }
 
+.card-grid-card:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
 [data-theme=dark] .card-grid-card:hover {
   box-shadow: 0 4px 12px rgb(0 0 0 / 0.3);
 }
@@ -165,7 +176,13 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
-  padding: 1em;
+  padding: 0.75em;
+}
+
+@media (min-width: 40em) {
+  .card-grid-body {
+    padding: 1em;
+  }
 }
 
 .card-grid-tags {

@@ -7,12 +7,7 @@ import Footer from "@/components/Footer.astro";
 import Card from "@/components/Card.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import HitokotoCard from "@/components/home/HitokotoCard.astro";
-import MomentMeta from "@/components/moments/MomentMeta.astro";
-import {
-  getMomentDescription,
-  getMomentMetaTitle,
-  getMomentUrl,
-} from "@/utils/getSortedMoments";
+import MomentGridCard from "@/components/moments/MomentGridCard.astro";
 import {
   getPublishedSortedMoments,
   getPublishedSortedPosts,
@@ -41,7 +36,7 @@ const recentFeedItems = getRecentFeedItems({
 <Layout clientRouter={false} preloadFont={false}>
   <Header />
   <main id="main-content" data-back-url={homePath} class="app-layout">
-    <section id="hero" class="border-border border-b pt-2 pb-2 reveal-section">
+    <section id="hero" class="pt-2 pb-2 reveal-section">
       <HitokotoCard />
     </section>
 
@@ -72,25 +67,12 @@ const recentFeedItems = getRecentFeedItems({
           <h2 class="text-2xl font-semibold tracking-wide">
             {t.home.recentPosts}
           </h2>
-          <ul>
+          <ul class="card-grid">
             {recentFeedItems.map((item, index) =>
               item.type === "post" ? (
                 <Card variant="h3" staggerIndex={index} {...item.post} />
               ) : (
-                <li class="my-6">
-                  <a
-                    href={getMomentUrl(item.moment, locale)}
-                    class:list={[
-                      "text-accent inline-block text-lg font-medium",
-                      "decoration-dashed underline-offset-4 hover:underline",
-                      "focus-visible:no-underline focus-visible:underline-offset-0",
-                    ]}
-                  >
-                    <h3>{getMomentMetaTitle(item.moment)}</h3>
-                  </a>
-                  <MomentMeta moment={item.moment} class="mt-1" />
-                  <p>{getMomentDescription(item.moment, 96)}</p>
-                </li>
+                <MomentGridCard moment={item.moment} staggerIndex={index} />
               )
             )}
           </ul>
