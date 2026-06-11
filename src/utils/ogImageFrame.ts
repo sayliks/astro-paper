@@ -1,8 +1,8 @@
 import { OG_FONT_FAMILY } from "./ogFont.ts";
 
-export const OG_IMAGE_WIDTH = 1200;
-export const OG_IMAGE_HEIGHT = 630;
-export const OG_IMAGE_CONTENT_TYPE = "image/png";
+const OG_IMAGE_WIDTH = 1200;
+const OG_IMAGE_HEIGHT = 630;
+const OG_IMAGE_CONTENT_TYPE = "image/png";
 
 type OgStyleValue = string | number;
 type OgStyle = Record<string, OgStyleValue>;

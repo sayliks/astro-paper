@@ -37,7 +37,7 @@ CI runs tests before `pnpm build`. "Type checking" means `astro check` (run via 
 Three collections, all defined in `src/content.config.ts` (which exports `BLOG_PATH` and `MOMENTS_PATH`):
 
 - **`posts`** — `src/content/posts/`, served under `/posts/`. The main blog. Rich frontmatter (featured, tags, ogImage, canonicalURL, etc.).
-- **`moments`** — `src/content/moments/`, served under `/moments/` (with its own `moments/rss.xml`). Short "日常" status updates with optional images, mood, location, and a `pinned` flag. An optional `title` overrides the derived `日常 · <datetime>` title (see `resolveMomentTitle`); descriptions are always derived from the body.
+- **`moments`** — `src/content/moments/`, served under `/moments/` (with its own `moments/rss.xml`). Short "日常" status updates with optional images, mood, location, and a `pinned` flag. An optional `title` overrides the derived `动态 · <datetime>` title (see `resolveMomentTitle`); descriptions are always derived from the body.
 - **`pages`** — `src/content/pages/` (e.g. `about.md`). Minimal schema.
 
 Shared mechanics:

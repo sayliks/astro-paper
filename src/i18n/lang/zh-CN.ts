@@ -26,7 +26,7 @@ export default {
   },
   moments: {
     title: "动态",
-    description: "一些轻一点、近一点的状态更新。",
+    description: "",
     empty: "还没有发布动态。",
     pinned: "置顶",
     draft: "草稿",
@@ -45,7 +45,6 @@ export default {
     page: "第",
   },
   home: {
-    socialLinks: "社交链接",
     featured: "精选",
     recentPosts: "最近",
     allPosts: "全部",
@@ -65,10 +64,10 @@ export default {
     photoWallDesc: "一些被留下来的画面。",
 
     momentsTitle: "动态",
-    momentsDesc: "一些轻一点、近一点的状态更新。",
+    momentsDesc: "",
 
     postsTitle: "文章",
-    postsDesc: "我发布过的所有文章。",
+    postsDesc: "",
 
     archivesTitle: "归档",
     archivesDesc: "按时间整理的所有文章。",

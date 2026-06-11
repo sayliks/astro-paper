@@ -1,7 +1,10 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 import IconRss from "@/assets/icons/IconRss.svg";
-import Socials from "./Socials.astro";
+import IconGithub from "@/assets/icons/socials/github.svg";
+import IconX from "@/assets/icons/socials/x.svg";
+import IconDiscord from "@/assets/icons/socials/discord.svg";
+import IconMail from "@/assets/icons/socials/mail.svg";
 import LinkButton from "./LinkButton.astro";
 import config from "@/config";
 import { getAssetPath } from "@/utils/withBase";
@@ -33,7 +36,44 @@ const footerStyle = [
     class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"
   >
     <div class="flex flex-wrap items-center gap-1">
-      <Socials />
+      <LinkButton
+        href="https://github.com/sayliks"
+        class="p-1.5 hover:rotate-6 sm:p-1"
+        title="GitHub 上的 sayliks"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <IconGithub class="inline-block size-5 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent" />
+        <span class="sr-only">GitHub 上的 sayliks</span>
+      </LinkButton>
+      <LinkButton
+        href="https://x.com/frsayliks"
+        class="p-1.5 hover:rotate-6 sm:p-1"
+        title="X 上的 sayliks"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <IconX class="inline-block size-5 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent" />
+        <span class="sr-only">X 上的 sayliks</span>
+      </LinkButton>
+      <LinkButton
+        href="https://discord.gg/5khVRKUv"
+        class="p-1.5 hover:rotate-6 sm:p-1"
+        title="Discord 上的 saylikx"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <IconDiscord class="inline-block size-5 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent" />
+        <span class="sr-only">Discord 上的 saylikx</span>
+      </LinkButton>
+      <LinkButton
+        href="mailto:sayliks@outlook.com"
+        class="p-1.5 hover:rotate-6 sm:p-1"
+        title="给 sayliks 发邮件"
+      >
+        <IconMail class="inline-block size-5 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent" />
+        <span class="sr-only">给 sayliks 发邮件</span>
+      </LinkButton>
       <LinkButton
         href={rssHref}
         class="p-1.5 hover:rotate-6 sm:p-1"

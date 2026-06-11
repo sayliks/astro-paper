@@ -6,14 +6,15 @@ import Datetime from "./Datetime.astro";
 
 type Props = {
   variant?: "h2" | "h3";
+  staggerIndex?: number;
 } & CollectionEntry<"posts">;
 
-const { variant: Heading = "h2", id, data, filePath } = Astro.props;
+const { variant: Heading = "h2", staggerIndex, id, data, filePath } = Astro.props;
 
 const { title, description, ...props } = data;
 ---
 
-<li class="my-6">
+<li class="my-6 fade-in-up" style={staggerIndex !== undefined ? `--i: ${staggerIndex}` : undefined}>
   <a
     href={getPostUrl(id, filePath, Astro.currentLocale)}
     class:list={[
