@@ -41,7 +41,7 @@ const recentFeedItems = getRecentFeedItems({
 <Layout clientRouter={false} preloadFont={false}>
   <Header />
   <main id="main-content" data-back-url={homePath} class="app-layout">
-    <section id="hero" class="border-border border-b pt-8 pb-6 reveal-section">
+    <section id="hero" class="border-border border-b pt-2 pb-2 reveal-section">
       <HitokotoCard />
     </section>
 
@@ -68,7 +68,7 @@ const recentFeedItems = getRecentFeedItems({
 
     {
       recentFeedItems.length > 0 && (
-        <section id="recent-posts" class="pt-6 pb-6 reveal-section">
+        <section id="recent-posts" class="pt-2 pb-6 reveal-section">
           <h2 class="text-2xl font-semibold tracking-wide">
             {t.home.recentPosts}
           </h2>
