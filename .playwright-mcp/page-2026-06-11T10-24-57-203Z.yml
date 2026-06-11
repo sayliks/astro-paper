@@ -1,0 +1,139 @@
+- generic [active] [ref=e1]:
+  - link "跳到正文" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "SALIX" [ref=e5] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e6]:
+        - button "打开菜单" [ref=e7] [cursor=pointer]:
+          - img [ref=e8]
+        - list:
+          - listitem [ref=e11]:
+            - link "文章" [ref=e12] [cursor=pointer]:
+              - /url: /posts/
+          - listitem [ref=e13]:
+            - link "动态" [ref=e14] [cursor=pointer]:
+              - /url: /moments/
+          - listitem [ref=e15]:
+            - link "关于" [ref=e16] [cursor=pointer]:
+              - /url: /about/
+          - listitem [ref=e17]:
+            - link "归档" [ref=e18] [cursor=pointer]:
+              - /url: /archives/
+          - listitem [ref=e19]:
+            - link "搜索" [ref=e20] [cursor=pointer]:
+              - /url: /search/
+              - img [ref=e21]
+              - generic [ref=e24]: 搜索
+          - listitem [ref=e25]:
+            - 'button "切换主题 (当前主题: 跟随系统)" [ref=e26] [cursor=pointer]':
+              - img [ref=e27]
+              - img [ref=e30]
+              - img [ref=e33]
+  - navigation "面包屑导航" [ref=e36]:
+    - list [ref=e37]:
+      - listitem [ref=e38]:
+        - link "首页" [ref=e39] [cursor=pointer]:
+          - /url: /
+        - text: »
+      - listitem [ref=e40]: 动态
+  - main [ref=e41]:
+    - heading "动态" [level=1] [ref=e42]
+    - paragraph
+    - list [ref=e43]:
+      - listitem [ref=e44]:
+        - article [ref=e45]:
+          - generic [ref=e46]:
+            - link "春" [ref=e47] [cursor=pointer]:
+              - /url: /moments/thinking/
+              - heading "春" [level=3] [ref=e48]
+            - list "动态元信息" [ref=e49]:
+              - listitem [ref=e50]: 置顶
+              - listitem [ref=e51]:
+                - generic [ref=e52]: "发布于:"
+                - time [ref=e53]: 2026年3月12日 10:52
+            - paragraph [ref=e54]: 有时真希望自己可以在春天消逝 春天 太温柔了 暖风吹的心甜滋滋的 春雨总浇在我的头顶上 槐花开了 玉兰开了 春天很香 在春天死去 很浪漫
+      - listitem [ref=e55]:
+        - article [ref=e56]:
+          - generic [ref=e57]:
+            - link "花" [ref=e58] [cursor=pointer]:
+              - /url: /moments/winter-flowers/
+              - heading "花" [level=3] [ref=e59]
+            - list "动态元信息" [ref=e60]:
+              - listitem [ref=e61]: 置顶
+              - listitem [ref=e62]:
+                - generic [ref=e63]: "发布于:"
+                - time [ref=e64]: 2026年2月18日 22:05
+            - paragraph [ref=e65]: 雪花也是花 烟花也是花。 如果觉得等待春天太漫长了，那就看看冬天的花吧，那就好好享受现在的温暖吧。 愿我们都能回溯到春天之前，好好享受当下，去看看生活的「花」。
+      - listitem [ref=e66]:
+        - article [ref=e67]:
+          - generic [ref=e68]:
+            - link "句子分享" [ref=e69] [cursor=pointer]:
+              - /url: /moments/quote/
+              - heading "句子分享" [level=3] [ref=e70]
+            - list "动态元信息" [ref=e71]:
+              - listitem [ref=e72]:
+                - generic [ref=e73]: "发布于:"
+                - time [ref=e74]: 2026年6月9日 23:51
+            - paragraph [ref=e75]: 因为世界在本质上是不幸的，我们就应该创造幸福。 因为正义缺失，就应该为正义而努力。 因为世界是荒谬的，就应该提供某种意义。 ——加缪·《人类的危机》
+      - listitem [ref=e76]:
+        - article [ref=e77]:
+          - link "高考加油" [ref=e78] [cursor=pointer]:
+            - /url: /moments/gaokao-jiayou-2026/
+            - img "高考加油" [ref=e79]
+          - generic [ref=e80]:
+            - link "高考加油" [ref=e81] [cursor=pointer]:
+              - /url: /moments/gaokao-jiayou-2026/
+              - heading "高考加油" [level=3] [ref=e82]
+            - list "动态元信息" [ref=e83]:
+              - listitem [ref=e84]:
+                - generic [ref=e85]: "发布于:"
+                - time [ref=e86]: 2026年6月7日 08:00
+            - paragraph [ref=e87]: 高考加油
+      - listitem [ref=e88]:
+        - article [ref=e89]:
+          - generic [ref=e90]:
+            - link "一语" [ref=e91] [cursor=pointer]:
+              - /url: /moments/tagore-light-steps/
+              - heading "一语" [level=3] [ref=e92]
+            - list "动态元信息" [ref=e93]:
+              - listitem [ref=e94]:
+                - generic [ref=e95]: "发布于:"
+                - time [ref=e96]: 2026年4月9日 19:19
+            - paragraph [ref=e97]: 之前读过泰戈尔写的一段话：“有一个夜晚我烧毁了所有的记忆，从此我的梦就透明了；有一个早晨我扔掉了所有的昨天，从此我的脚步就轻盈了。” 虽然这句话不理解，但我非常认可这句话，一直叠加在身上的期…
+      - listitem [ref=e98]:
+        - article [ref=e99]:
+          - generic [ref=e100]:
+            - link "时光倒流" [ref=e101] [cursor=pointer]:
+              - /url: /moments/moment/
+              - heading "时光倒流" [level=3] [ref=e102]
+            - list "动态元信息" [ref=e103]:
+              - listitem [ref=e104]:
+                - generic [ref=e105]: "发布于:"
+                - time [ref=e106]: 2024年12月7日 09:26
+            - paragraph [ref=e107]: 我能不能回到小学？最好能时光倒流，我想再上一次。
+  - contentinfo [ref=e108]:
+    - generic [ref=e109]:
+      - generic [ref=e110]:
+        - link "GitHub 上的 sayliks" [ref=e111] [cursor=pointer]:
+          - /url: https://github.com/sayliks
+          - img [ref=e112]
+          - generic [ref=e115]: GitHub 上的 sayliks
+        - link "X 上的 sayliks" [ref=e116] [cursor=pointer]:
+          - /url: https://x.com/frsayliks
+          - img [ref=e117]
+          - generic [ref=e120]: X 上的 sayliks
+        - link "Discord 上的 saylikx" [ref=e121] [cursor=pointer]:
+          - /url: https://discord.gg/5khVRKUv
+          - img [ref=e122]
+          - generic [ref=e127]: Discord 上的 saylikx
+        - link "给 sayliks 发邮件" [ref=e128] [cursor=pointer]:
+          - /url: mailto:sayliks@outlook.com
+          - img [ref=e129]
+          - generic [ref=e133]: 给 sayliks 发邮件
+        - link "订阅 RSS" [ref=e134] [cursor=pointer]:
+          - /url: /rss.xml
+          - img [ref=e135]
+          - generic [ref=e138]: 订阅 RSS
+      - generic [ref=e140]: © 2026 sayliks
