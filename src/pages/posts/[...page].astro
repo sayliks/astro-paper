@@ -29,7 +29,7 @@ const t = useTranslations(locale);
 
   <Main pageTitle={t.pages.postsTitle} pageDesc={t.pages.postsDesc}>
     <ul>
-      {page.data.map(data => <Card {...data} />)}
+      {page.data.map((data, index) => <Card staggerIndex={index} {...data} />)}
     </ul>
   </Main>
 
@@ -37,3 +37,8 @@ const t = useTranslations(locale);
 
   <Footer noMarginTop={page.lastPage > 1} />
 </Layout>
+
+<script>
+  import "@/scripts/reveal";
+  import "@/scripts/image-fade";
+</script>

@@ -27,8 +27,13 @@ function setupHeaderMenu(): void {
     button.setAttribute("aria-expanded", String(open));
     button.setAttribute("aria-label", open ? closeLabel : openLabel);
 
-    items.classList.toggle("hidden", !open);
-    items.classList.toggle("grid", open);
+    if (open) {
+      items.classList.remove("max-h-0", "opacity-0");
+      items.classList.add("max-h-44", "opacity-100", "grid");
+    } else {
+      items.classList.remove("max-h-44", "opacity-100", "grid");
+      items.classList.add("max-h-0", "opacity-0");
+    }
     iconMenu.classList.toggle("hidden", open);
     iconClose.classList.toggle("hidden", !open);
   }
