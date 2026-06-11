@@ -81,6 +81,15 @@ export default defineConfig({
       styles: ["normal"],
       formats: ["woff"],
     },
+    {
+      name: "Noto Serif SC",
+      cssVariable: "--font-noto-serif-sc",
+      provider: fontProviders.google(),
+      fallbacks: ["Georgia", "Noto Serif TC", "Songti SC", "SimSun", "serif"],
+      weights: [400, 500],
+      styles: ["normal"],
+      formats: ["woff2"],
+    },
   ],
   env: {
     schema: {

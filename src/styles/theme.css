@@ -18,7 +18,7 @@
     Menlo,
     monospace
   );
-  --font-serif: Georgia, "Noto Serif CJK SC", "Source Han Serif SC",
+  --font-serif: var(--font-noto-serif-sc), Georgia, "Noto Serif TC",
     "Songti SC", "SimSun", serif;
 }
 

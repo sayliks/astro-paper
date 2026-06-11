@@ -7,9 +7,10 @@ import MomentMeta from "./MomentMeta.astro";
 type Props = {
   moment: MomentEntry;
   staggerIndex?: number;
+  eager?: boolean;
 };
 
-const { moment, staggerIndex } = Astro.props;
+const { moment, staggerIndex, eager = false } = Astro.props;
 const locale = Astro.currentLocale;
 const href = getMomentUrl(moment, locale);
 const title = getMomentMetaTitle(moment);
@@ -35,7 +36,7 @@ const imageSrc = firstImage
             alt={firstImage.alt}
             width={firstImage.width}
             height={firstImage.height}
-            loading="lazy"
+            loading={eager ? "eager" : "lazy"}
             decoding="async"
           />
         </a>

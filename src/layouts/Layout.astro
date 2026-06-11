@@ -74,13 +74,19 @@ window.speedInsightsBeforeSend = function (event) {
     <!-- Font -->
     {
       preloadFont && (
-        <Font
-          cssVariable="--font-google-sans-code"
-          preload={[
-            { subset: "latin", weight: 400, style: "normal" },
-            { subset: "latin", weight: 700, style: "normal" },
-          ]}
-        />
+        <>
+          <Font
+            cssVariable="--font-google-sans-code"
+            preload={[
+              { subset: "latin", weight: 400, style: "normal" },
+              { subset: "latin", weight: 700, style: "normal" },
+            ]}
+          />
+          <Font
+            cssVariable="--font-noto-serif-sc"
+            preload={[{ subset: "chinese-simplified", weight: 400 }]}
+          />
+        </>
       )
     }
 
