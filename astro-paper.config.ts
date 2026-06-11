@@ -14,7 +14,7 @@ export default defineAstroPaperConfig({
   },
   posts: {
     perPage: 4,
-    perIndex: 4,
+    perIndex: 5,
     scheduledPostMargin: 15 * 60 * 1000,
   },
   photoWall: {
@@ -32,28 +32,7 @@ export default defineAstroPaperConfig({
     search: "pagefind",
     speedInsights: true,
   },
-  socials: [
-    {
-      name: "github",
-      url: "https://github.com/sayliks",
-      linkTitle: "GitHub 上的 sayliks",
-    },
-    {
-      name: "x",
-      url: "https://x.com/frsayliks",
-      linkTitle: "X 上的 sayliks",
-    },
-    {
-      name: "discord",
-      url: "https://discord.gg/5khVRKUv",
-      linkTitle: "Discord 上的 saylikx",
-    },
-    {
-      name: "mail",
-      url: "mailto:sayliks@outlook.com",
-      linkTitle: "给 sayliks 发邮件",
-    },
-  ],
+  socials: [],
   shareLinks: [
     { name: "wechat", url: "", linkTitle: "分享到微信" },
     {
