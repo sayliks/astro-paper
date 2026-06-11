@@ -114,6 +114,7 @@ const pagefindTranslations = {
 
     input {
       font-weight: 400;
+      font-size: max(16px, 1rem);
       border: 1px solid var(--border);
     }
 
@@ -142,6 +143,22 @@ const pagefindTranslations = {
 
     .pagefind-ui__result-nested .pagefind-ui__result-link:before {
       font-family: system-ui;
+    }
+
+    /* Mobile touch targets */
+    .pagefind-ui__result {
+      padding-block: 1rem;
+    }
+
+    .pagefind-ui__result-title a {
+      display: inline-block;
+      min-height: 44px;
+      line-height: 44px;
+    }
+
+    .pagefind-ui__search-clear {
+      min-height: 44px;
+      min-width: 44px;
     }
   }
 </style>
