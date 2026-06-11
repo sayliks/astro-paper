@@ -23,7 +23,6 @@ function setupReveal(): void {
   );
 
   for (const el of elements) {
-    el.style.animationPlayState = "paused";
     observer.observe(el);
   }
 }

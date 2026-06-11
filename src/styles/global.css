@@ -29,10 +29,6 @@
   @apply max-w-app mx-auto w-full px-4;
 }
 
-@utility active-nav {
-  @apply underline decoration-wavy decoration-2 underline-offset-8;
-}
-
 :target {
   scroll-margin-block: 1rem;
 }
@@ -113,17 +109,21 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
 }
 
 /* ===== Scroll-triggered reveal animations ===== */
+/* animation-play-state: paused by default — the IntersectionObserver in
+   reveal.ts sets it to "running" when the element enters the viewport.
+   Without this, above-the-fold elements complete their animation before
+   JS has a chance to pause them, breaking the stagger effect. */
 .fade-in-up {
   opacity: 0;
   transform: translateY(12px);
-  animation: fadeInUp 0.4s ease-out forwards;
+  animation: fadeInUp 0.4s ease-out forwards paused;
   animation-delay: calc(var(--i, 0) * 60ms);
 }
 
 .reveal-section {
   opacity: 0;
   transform: translateY(20px);
-  animation: revealSection 0.5s ease-out forwards;
+  animation: revealSection 0.5s ease-out forwards paused;
 }
 
 @keyframes fadeInUp {
