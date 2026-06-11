@@ -22,9 +22,8 @@ export function rehypeImageOptimize() {
         );
         const canPrioritize = isFirstImage && hasDimensions;
 
-        node.properties.loading = canPrioritize ? "eager" : "lazy";
+        node.properties.loading ??= canPrioritize ? "eager" : "lazy";
         node.properties.decoding ??= "async";
-        node.properties.sizes ??= "(max-width: 768px) 100vw, 768px";
 
         if (canPrioritize) {
           node.properties.fetchpriority ??= "high";

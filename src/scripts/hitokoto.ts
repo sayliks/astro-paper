@@ -80,7 +80,7 @@ async function fetchQuote(
 
   try {
     const response = await fetch(HITOKOTO_API, {
-      cache: "no-store",
+      cache: "no-cache",
       signal: controller.signal,
     });
     if (!response.ok) throw new Error("Hitokoto request failed");
