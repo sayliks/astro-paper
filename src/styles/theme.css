@@ -29,6 +29,7 @@
   --accent-foreground: #ffffff;
   --article-body: #202124;
   --post-title: #255f78;
+  --card: #ffffff;
   --muted: #e6e6e6;
   --muted-foreground: #6b7280;
   --border: #ece9e9;
@@ -39,6 +40,7 @@
 /* Dark theme values */
 [data-theme="dark"] {
   --background: #1b1f24;
+  --card: #242830;
   --foreground: #eaedf3;
   --accent: #7abfff;
   --accent-foreground: #ffffff;

@@ -28,7 +28,7 @@ const t = useTranslations(locale);
   <Breadcrumb />
 
   <Main pageTitle={t.pages.postsTitle} pageDesc={t.pages.postsDesc}>
-    <ul>
+    <ul class="card-grid">
       {page.data.map((data, index) => <Card staggerIndex={index} {...data} />)}
     </ul>
   </Main>
