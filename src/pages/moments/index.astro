@@ -4,10 +4,9 @@ import Header from "@/components/Header.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Main from "@/components/Main.astro";
 import Footer from "@/components/Footer.astro";
-import MomentCard from "@/components/moments/MomentCard.astro";
+import MomentGridCard from "@/components/moments/MomentGridCard.astro";
 import { useTranslations } from "@/i18n";
 import { getPublishedSortedMoments } from "@/utils/contentQueries";
-import { getMomentUrl } from "@/utils/getSortedMoments";
 import { getAssetPath } from "@/utils/withBase";
 import config from "@/config";
 
@@ -38,15 +37,11 @@ const momentsRssHref = new URL(getAssetPath("moments/rss.xml"), Astro.site);
   <Main pageTitle={t.pages.momentsTitle} pageDesc={t.pages.momentsDesc}>
     {
       moments.length > 0 ? (
-        <section class="mt-2" aria-label={t.moments.title} data-pagefind-ignore>
+        <ul class="card-grid" data-pagefind-ignore>
           {moments.map((moment, index) => (
-            <MomentCard
-              moment={moment}
-              href={getMomentUrl(moment, locale)}
-              loadImagesNormally={index === 0}
-            />
+            <MomentGridCard moment={moment} staggerIndex={index} />
           ))}
-        </section>
+        </ul>
       ) : (
         <p class="text-muted-foreground border-border border-t border-dashed py-6">
           {t.moments.empty}
