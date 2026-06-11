@@ -91,17 +91,9 @@ const isActive = (path: string) => {
             {t.nav.moments}
           </a>
         </li>
-        <li class="col-span-2">
-          <a
-            href={getRelativeLocaleUrl(locale, "about")}
-            class:list={["relative", { "text-accent font-bold": isActive("/about") }]}
-          >
-            {t.nav.about}
-          </a>
-        </li>
         {
           features.showArchives && (
-            <li class="col-span-2">
+            <li class="col-span-2 sm:order-3">
               <LinkButton
                 href={getRelativeLocaleUrl(locale, "archives")}
                 class:list={[
@@ -117,6 +109,14 @@ const isActive = (path: string) => {
             </li>
           )
         }
+        <li class="col-span-2 sm:order-2">
+          <a
+            href={getRelativeLocaleUrl(locale, "about")}
+            class:list={["relative", { "text-accent font-bold": isActive("/about") }]}
+          >
+            {t.nav.about}
+          </a>
+        </li>
         {
           features.search !== false && (
             <li class="col-span-1 flex items-center justify-center">
