@@ -18,6 +18,8 @@
     Menlo,
     monospace
   );
+  --font-serif: var(--font-noto-serif-sc), Georgia, "Noto Serif TC",
+    "Songti SC", "SimSun", serif;
 }
 
 /* Light theme values */

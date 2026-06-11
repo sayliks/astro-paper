@@ -1,19 +1,26 @@
 ---
 import type { MomentEntry } from "@/utils/getSortedMoments";
 import { getMomentUrl, getMomentMetaTitle, getMomentDescription } from "@/utils/getSortedMoments";
+import { getAssetPath } from "@/utils/withBase";
 import MomentMeta from "./MomentMeta.astro";
 
 type Props = {
   moment: MomentEntry;
   staggerIndex?: number;
+  eager?: boolean;
 };
 
-const { moment, staggerIndex } = Astro.props;
+const { moment, staggerIndex, eager = false } = Astro.props;
 const locale = Astro.currentLocale;
 const href = getMomentUrl(moment, locale);
 const title = getMomentMetaTitle(moment);
 const description = getMomentDescription(moment, 96);
 const firstImage = moment.data.images[0];
+const imageSrc = firstImage
+  ? /^(?:https?:)?\/\//i.test(firstImage.src) || firstImage.src.startsWith("data:")
+    ? firstImage.src
+    : getAssetPath(firstImage.src)
+  : undefined;
 ---
 
 <li
@@ -22,14 +29,14 @@ const firstImage = moment.data.images[0];
 >
   <article class="card-grid-card">
     {
-      firstImage && (
+      firstImage && imageSrc && (
         <a href={href} class="card-grid-img-link" tabindex="-1">
           <img
-            src={firstImage.src}
+            src={imageSrc}
             alt={firstImage.alt}
             width={firstImage.width}
             height={firstImage.height}
-            loading="lazy"
+            loading={eager ? "eager" : "lazy"}
             decoding="async"
           />
         </a>

@@ -39,7 +39,7 @@ const momentsRssHref = new URL(getAssetPath("moments/rss.xml"), Astro.site);
       moments.length > 0 ? (
         <ul class="card-grid" data-pagefind-ignore>
           {moments.map((moment, index) => (
-            <MomentGridCard moment={moment} staggerIndex={index} />
+            <MomentGridCard moment={moment} staggerIndex={index} eager={index === 0} />
           ))}
         </ul>
       ) : (
@@ -54,5 +54,6 @@ const momentsRssHref = new URL(getAssetPath("moments/rss.xml"), Astro.site);
 </Layout>
 
 <script>
+  import "@/scripts/reveal";
   import "@/scripts/image-fade";
 </script>

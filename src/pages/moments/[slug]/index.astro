@@ -111,6 +111,8 @@ const ogImage = moment.data.images[0]?.src;
   <Footer />
 </Layout>
 
+{hasLinkableHeadings && <script>import "@/scripts/heading-links";</script>}
+{hasCodeBlocks && <script>import "@/scripts/code-copy";</script>}
 <script>
-  import "@/scripts/post-enhancements";
+  import "@/scripts/image-fade";
 </script>

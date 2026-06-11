@@ -126,12 +126,12 @@ const ogImage = ogImageUrl
   >
     <h1
       style={{ viewTransitionName: toTransitionName(title) }}
-      class="post-title inline-block text-2xl leading-snug font-bold sm:text-3xl sm:leading-tight"
+      class="post-title text-center text-2xl leading-snug font-bold sm:text-3xl sm:leading-tight"
     >
       {title}
     </h1>
 
-    <div class="mt-2 mb-3 flex flex-wrap items-center gap-x-4 gap-y-1">
+    <div class="mt-2 mb-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
       <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
       <EditPost {hideEditPost} {post} class="max-sm:hidden" />
     </div>
@@ -168,8 +168,10 @@ const ogImage = ogImageUrl
   <Footer />
 </PostLayout>
 
+{hasLinkableHeadings && <script>import "@/scripts/heading-links";</script>}
+{hasCodeBlocks && <script>import "@/scripts/code-copy";</script>}
 <script>
-  import "@/scripts/post-enhancements";
+  import "@/scripts/image-fade";
 </script>
 
 <script is:inline>
