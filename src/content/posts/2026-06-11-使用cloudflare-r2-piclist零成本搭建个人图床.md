@@ -4,7 +4,7 @@ pubDatetime: 2026-06-11T22:11:00+08:00
 description: 如何使用 Cloudflare R2 + 自定义域名 + PicList 搭建一个免费、稳定、支持 CDN 加速的个人图床，并实现 Obsidian/Markdown 的自动上传与外链引用。
 tags:
   - 随笔
-draft: true
+draft: false
 featured: false
 ogImage: ""
 canonicalURL: ""
