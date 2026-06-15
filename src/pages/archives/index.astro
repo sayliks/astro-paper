@@ -49,7 +49,9 @@ const monthFormatter = new Intl.DateTimeFormat(locale, { month: "long" });
           <section class="archive-year">
             <h2 class="archive-year-heading">
               {year}
-              <sup class="text-muted-foreground text-sm font-normal">{yearGroup.length}</sup>
+              <sup class="text-muted-foreground text-sm font-normal">
+                {yearGroup.length}
+              </sup>
             </h2>
             {Object.entries(
               getPostsByGroupCondition(
@@ -64,7 +66,9 @@ const monthFormatter = new Intl.DateTimeFormat(locale, { month: "long" });
                     {monthFormatter.format(
                       new Date(2000, Number(month) - 1, 1)
                     )}
-                    <sup class="text-muted-foreground text-xs font-normal">{monthGroup.length}</sup>
+                    <sup class="text-muted-foreground text-xs font-normal">
+                      {monthGroup.length}
+                    </sup>
                   </h3>
                   <ul class="archive-list">
                     {monthGroup
@@ -82,12 +86,18 @@ const monthFormatter = new Intl.DateTimeFormat(locale, { month: "long" });
                           .tz(config.site.timezone)
                           .locale("zh-cn")
                           .format("M月D日");
-                        const postUrl = getPostUrl(data.id, data.filePath, locale);
+                        const postUrl = getPostUrl(
+                          data.id,
+                          data.filePath,
+                          locale
+                        );
                         return (
                           <li class="archive-item fade-in-up">
                             <time
                               class="archive-date"
-                              datetime={new Date(data.data.pubDatetime).toISOString()}
+                              datetime={new Date(
+                                data.data.pubDatetime
+                              ).toISOString()}
                             >
                               {postDate}
                             </time>

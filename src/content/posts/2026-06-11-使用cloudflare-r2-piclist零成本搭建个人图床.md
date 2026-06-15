@@ -6,8 +6,8 @@ tags:
   - 随笔
 draft: true
 featured: false
-ogImage: ''
-canonicalURL: ''
+ogImage: ""
+canonicalURL: ""
 timezone: Asia/Hong_Kong
 ---
 
@@ -19,11 +19,11 @@ timezone: Asia/Hong_Kong
 
 相比直接将图片存放在项目仓库或服务器中，图床具有以下优势：
 
-* **减小仓库体积**：避免大量图片占用 Git 仓库空间。
-* **提高网站性能**：图片与网站内容分离，降低构建和部署压力。
-* **统一管理资源**：所有图片集中存储，便于维护和迁移。
-* **支持多处复用**：同一张图片可以在多个平台和项目中共享使用。
-* **提升访问速度**：多数图床提供 CDN 加速，图片加载更快。
+- **减小仓库体积**：避免大量图片占用 Git 仓库空间。
+- **提高网站性能**：图片与网站内容分离，降低构建和部署压力。
+- **统一管理资源**：所有图片集中存储，便于维护和迁移。
+- **支持多处复用**：同一张图片可以在多个平台和项目中共享使用。
+- **提升访问速度**：多数图床提供 CDN 加速，图片加载更快。
 
 对于个人博客和知识库而言，图床本质上是一套“图片存储 + 外链访问”的解决方案，能够让内容管理更加灵活和高效。目前较为流行的方案包括 **Cloudflare R2**、[GitHub](https://github.com?utm_source=chatgpt.com) 仓库图床、Telegram 图床以及各类对象存储服务。
 
@@ -31,36 +31,36 @@ timezone: Asia/Hong_Kong
 
 把图片直接丢进 Git 仓库是很多人起步时的习惯，但用久了会发现：
 
-* 仓库克隆越来越慢，git blame 都不想跑
-* CI 每次都要拖一堆几百 KB 的图片，构建时间翻倍
-* 换一次博客框架，所有图片链接碎一地
-* 想整理历史图片，发现和代码/文章混在一起，不敢乱动
+- 仓库克隆越来越慢，git blame 都不想跑
+- CI 每次都要拖一堆几百 KB 的图片，构建时间翻倍
+- 换一次博客框架，所有图片链接碎一地
+- 想整理历史图片，发现和代码/文章混在一起，不敢乱动
 
 独立图床的本质就是**存储与内容分离**。一个图片链接可以同时在博客、Obsidian、论坛、邮件里使用，换什么工具都不影响。
 
 如果你只想选一个免费且长久可用的方案，**Cloudflare R2** 无疑是目前最成熟的选择。
 
-***
+---
 
 ## 优势
 
-* Cloudflare R2（S3 兼容，每月 10GB 免费）
-* PicList（开源，支持 macOS / Windows / Linux）
-* 自定义域名 + Cloudflare CDN 自动加速
+- Cloudflare R2（S3 兼容，每月 10GB 免费）
+- PicList（开源，支持 macOS / Windows / Linux）
+- 自定义域名 + Cloudflare CDN 自动加速
 
 R2 的关键优势是 **出站流量不收费**，这是它比 AWS S3 或阿里云 OSS 更适合做图床的地方。
 
-***
+---
 
 # 准备工作
 
-* **一个域名**（可选但强烈建议，`r2.dev` 在某些网络下速度一般）
-* **Cloudflare 账号**
-* **PicList 客户端**：https://piclist.cn/
+- **一个域名**（可选但强烈建议，`r2.dev` 在某些网络下速度一般）
+- **Cloudflare 账号**
+- **PicList 客户端**：https://piclist.cn/
 
 [![image.webp](https://tg.matsumae.top/file/1781187728381_image.webp "PicList官网")](https://piclist.cn/)
 
-***
+---
 
 ## 一、域名接入 Cloudflare
 
@@ -76,7 +76,7 @@ R2 的关键优势是 **出站流量不收费**，这是它比 AWS S3 或阿里�
 
 > 如果后面绑定自定义域名后访问不了，先回 DNS 检查这个域名是不是走了代理（橙色）。走灰色 DNS Only 的话，R2 的公开桶也能访问，但不会走 Cloudflare 边缘缓存。
 
-***
+---
 
 ## 二、创建 R2 存储桶
 
@@ -102,7 +102,7 @@ R2 的关键优势是 **出站流量不收费**，这是它比 AWS S3 或阿里�
 
 ![image.webp](https://tg.matsumae.top/file/1781188358478_image.webp)
 
-***
+---
 
 ## 三、绑定自定义域名（推荐）
 
@@ -122,28 +122,28 @@ https://img.yourdomain.com/图片名
 
 ![image.webp](https://tg.matsumae.top/file/1781188401388_image.webp)
 
-***
+---
 
 ## 四、生成 API 密钥（给 PicList 用）
 
 R2 → Manage API Tokens → Create API token。
 
-* Name：`piclist-upload`
-* Permission：**Admin read & write**
-* Specify bucket：选你刚创建的 bucket
+- Name：`piclist-upload`
+- Permission：**Admin read & write**
+- Specify bucket：选你刚创建的 bucket
 
 创建后 **立刻保存 Secret Access Key**，只出现一次。
 
 同时记下：
 
-* Access Key ID
-* Endpoint（格式 `https://<account_id>.r2.cloudflarestorage.com`，account_id 在 Cloudflare 控制台右侧）
+- Access Key ID
+- Endpoint（格式 `https://<account_id>.r2.cloudflarestorage.com`，account_id 在 Cloudflare 控制台右侧）
 
 ![image.webp](https://tg.matsumae.top/file/1781188532642_image.webp)
 
 ![image.webp](https://tg.matsumae.top/file/1781188532679_image.webp)
 
-***
+---
 
 ## 五、安装并配置 PicList
 
@@ -158,16 +158,16 @@ PicList 原生支持 S3
 
 填下面这些：
 
-| 字段 | 值 |
-| --- | --- |
-| AccessKeyID | 上一步生成的 Access Key ID |
-| SecretAccessKey | 上一步的 Secret Key |
-| BucketName | `blog-img`（你的 bucket 名） |
-| FilePath | 可选，比如 `images/`（虚拟目录，不填则直接放根目录） |
-| CustomUrl | `https://img.yourdomain.com`（你的自定义域名，不要加尾部斜杠） |
-| Endpoint | `https://<account_id>.r2.cloudflarestorage.com` |
-| Region | 留空或填 `auto`（R2 会忽略） |
-| ACL | `public-read`（关键） |
+| 字段            | 值                                                             |
+| --------------- | -------------------------------------------------------------- |
+| AccessKeyID     | 上一步生成的 Access Key ID                                     |
+| SecretAccessKey | 上一步的 Secret Key                                            |
+| BucketName      | `blog-img`（你的 bucket 名）                                   |
+| FilePath        | 可选，比如 `images/`（虚拟目录，不填则直接放根目录）           |
+| CustomUrl       | `https://img.yourdomain.com`（你的自定义域名，不要加尾部斜杠） |
+| Endpoint        | `https://<account_id>.r2.cloudflarestorage.com`                |
+| Region          | 留空或填 `auto`（R2 会忽略）                                   |
+| ACL             | `public-read`（关键）                                          |
 
 ![image.webp](https://tg.matsumae.top/file/1781188665581_image.webp)
 
@@ -175,7 +175,7 @@ PicList 原生支持 S3
 
 保存，并设为默认图床。
 
-***
+---
 
 ## 六、测试上传
 
@@ -192,11 +192,11 @@ PicList 原生支持 S3
 
 如果返回 `AccessDenied`：
 
-* 检查 bucket 的公开访问开了没有
-* 检查 ACL 是不是 `public-read`
-* 检查自定义域名的 CNAME 是否正确（可以用 `dig img.yourdomain.com` 看一眼）
+- 检查 bucket 的公开访问开了没有
+- 检查 ACL 是不是 `public-read`
+- 检查自定义域名的 CNAME 是否正确（可以用 `dig img.yourdomain.com` 看一眼）
 
-***
+---
 
 ## 七、Obsidian 自动上传（可选）
 
@@ -210,7 +210,7 @@ PicList 原生支持 S3
 ![image.webp](https://tg.matsumae.top/file/1781188797853_image.webp)
 ![image.webp](https://tg.matsumae.top/file/1781188815272_image.webp)
 
-***
+---
 
 ## 八、目录组织建议
 
@@ -229,7 +229,7 @@ blog-img/
 PicList 可以在 FilePath 里写 `{year}/{month}/`（它支持变量），或者直接写固定前缀。
 配合 PicList 的「时间戳重命名」功能，上传后自动生成唯一文件名，省去命名的麻烦。
 
-***
+---
 
 ## 总结
 
