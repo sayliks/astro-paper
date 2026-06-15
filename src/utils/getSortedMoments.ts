@@ -15,7 +15,10 @@ export function getMomentMetaTitle(moment: MomentEntry) {
 }
 
 export function getSortedMoments(moments: MomentEntry[]) {
-  return getPublishedMomentEntries(moments, { isDev: import.meta.env.DEV });
+  return getPublishedMomentEntries(moments, {
+    isDev: import.meta.env.DEV,
+    scheduledPostMargin: config.posts.scheduledPostMargin,
+  });
 }
 
 export function getMomentSlug(moment: MomentEntry) {
