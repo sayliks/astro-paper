@@ -17,12 +17,12 @@
     "test": "node --experimental-strip-types --test tests/cms-auth.test.ts tests/hitokoto-cache.test.ts tests/moments.test.ts tests/og-font.test.ts tests/og-image-frame.test.ts tests/photo-wall.test.ts tests/publication.test.ts tests/recent-feed.test.ts tests/rehype-image-optimize.test.ts tests/search.test.ts"
   },
   "dependencies": {
-    "@astrojs/mdx": "^6.0.1",
+    "@astrojs/mdx": "^6.0.3",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/vite": "^4.3.0",
     "@vercel/speed-insights": "^2.0.0",
-    "astro": "^6.4.2",
+    "astro": "^6.4.7",
     "dayjs": "^1.11.21",
     "lodash.kebabcase": "^4.1.1",
     "remark-collapse": "^0.1.2",
