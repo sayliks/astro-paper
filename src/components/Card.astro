@@ -10,7 +10,13 @@ type Props = {
   staggerIndex?: number;
 } & CollectionEntry<"posts">;
 
-const { variant: Heading = "h2", staggerIndex, id, data, filePath } = Astro.props;
+const {
+  variant: Heading = "h2",
+  staggerIndex,
+  id,
+  data,
+  filePath,
+} = Astro.props;
 
 const { title, description, tags, ogImage, ...props } = data;
 const postUrl = getPostUrl(id, filePath, Astro.currentLocale);
@@ -27,7 +33,14 @@ const postUrl = getPostUrl(id, filePath, Astro.currentLocale);
           {typeof ogImage === "string" ? (
             <img src={ogImage} alt="" loading="lazy" decoding="async" />
           ) : (
-            <Image src={ogImage} alt="" widths={[400, 800]} sizes="(min-width: 640px) 400px, 100%" loading="lazy" decoding="async" />
+            <Image
+              src={ogImage}
+              alt=""
+              widths={[400, 800]}
+              sizes="(min-width: 640px) 400px, 100%"
+              loading="lazy"
+              decoding="async"
+            />
           )}
         </a>
       )
@@ -51,9 +64,7 @@ const postUrl = getPostUrl(id, filePath, Astro.currentLocale);
       <Datetime {...props} />
       <p class="flex-1">{description}</p>
       <div class="card-grid-tags">
-        {tags.map(tag => (
-          <span class="card-grid-tag">{tag}</span>
-        ))}
+        {tags.map(tag => <span class="card-grid-tag">{tag}</span>)}
       </div>
     </div>
   </article>

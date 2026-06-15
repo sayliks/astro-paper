@@ -4,7 +4,7 @@
 
 基于 [AstroPaper](https://github.com/satnaing/astro-paper) 构建，但本仓库是个人发布空间，不是可复用的主题模板。
 
-## 
+##
 
 建这个站的初衷很简单：想要一个属于自己的角落。
 

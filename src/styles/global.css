@@ -157,7 +157,7 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
   transition: transform 0.1s ease;
 }
 
-[data-theme=dark] .card-grid-card:hover {
+[data-theme="dark"] .card-grid-card:hover {
   box-shadow: 0 4px 12px rgb(0 0 0 / 0.3);
 }
 
