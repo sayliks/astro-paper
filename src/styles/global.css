@@ -217,14 +217,6 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
   }
 }
 
-/* Limit description to 2 lines for uniform card heights */
-.card-grid-body > p {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
 .card-grid-tags {
   display: flex;
   flex-wrap: wrap;
