@@ -36,11 +36,13 @@
     overscroll-behavior-y: contain;
   }
 
-  /* Optimize scroll performance */
-  .card-grid,
-  .card-grid-item,
-  .card-grid-card {
-    will-change: transform;
+  /* Optimize scroll performance — only on hover-capable devices */
+  @media (hover: hover) {
+    .card-grid,
+    .card-grid-item,
+    .card-grid-card {
+      will-change: transform;
+    }
   }
 
   /* Improve touch feedback on mobile */
@@ -190,10 +192,7 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
   box-shadow: 0 4px 12px rgb(0 0 0 / 0.08);
 }
 
-.card-grid-card:active {
-  transform: scale(0.98);
-  transition: transform 0.1s ease;
-}
+/* :active scale handled by generic rule above (lines 46-56) */
 
 [data-theme="dark"] .card-grid-card:hover {
   box-shadow: 0 4px 12px rgb(0 0 0 / 0.3);
@@ -263,12 +262,12 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
 /* Optimize animations for mobile */
 @media (hover: none) and (pointer: coarse) {
   .fade-in-up {
-    animation-duration: 0.3s;
-    animation-delay: calc(var(--i, 0) * 40ms);
+    animation-duration: 0.25s;
+    animation-delay: calc(var(--i, 0) * 20ms);
   }
 
   .reveal-section {
-    animation-duration: 0.35s;
+    animation-duration: 0.3s;
   }
 }
 
