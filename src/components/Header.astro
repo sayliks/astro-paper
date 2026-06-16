@@ -2,11 +2,9 @@
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
-import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconDeviceDesktop from "@/assets/icons/IconDeviceDesktop.svg";
 import IconX from "@/assets/icons/IconX.svg";
-import LinkButton from "./LinkButton.astro";
 import { stripBase, stripLocale } from "@/utils/withBase";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
@@ -72,7 +70,7 @@ const isActive = (path: string) => {
       </button>
       <ul
         id="menu-items"
-        class="[&>li>a]:hover:text-accent mt-4 grid max-h-0 w-56 grid-cols-2 place-content-center gap-2 overflow-hidden opacity-0 transition-all duration-250 ease-in-out sm:mt-0 sm:flex sm:max-h-none sm:w-auto sm:gap-x-2 sm:gap-y-0 sm:opacity-100 md:gap-x-4 sm:[&>li]:h-8 [&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-bold sm:[&>li>a]:px-1.5 sm:[&>li>a]:py-1 md:[&>li>a]:px-2"
+        class="[&>li>a]:hover:text-accent mt-4 grid max-h-0 w-56 grid-cols-2 place-content-center gap-2 overflow-hidden opacity-0 transition-all duration-250 ease-in-out sm:mt-0 sm:flex sm:max-h-none sm:w-auto sm:gap-x-2 sm:gap-y-0 sm:opacity-100 md:gap-x-4 sm:[&>li]:h-8 [&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-bold sm:[&>li>a]:px-1.5 sm:[&>li>a]:py-1 md:[&>li>a]:px-2 nav-link-font"
       >
         <li class="col-span-2 sm:order-1">
           <a
@@ -100,7 +98,22 @@ const isActive = (path: string) => {
             </li>
           )
         }
-        <li class="col-span-2 sm:order-3">
+        {
+          features.search !== false && (
+            <li class="col-span-2 sm:order-3">
+              <a
+                href={getRelativeLocaleUrl(locale, "search")}
+                class:list={[
+                  "relative",
+                  { "text-accent font-bold": isActive("/search") },
+                ]}
+              >
+                {t.nav.search}
+              </a>
+            </li>
+          )
+        }
+        <li class="col-span-2 sm:order-4">
           <a
             href={getRelativeLocaleUrl(locale, "about")}
             class:list={[
@@ -112,26 +125,8 @@ const isActive = (path: string) => {
           </a>
         </li>
         {
-          features.search !== false && (
-            <li class="col-span-1 mt-2 flex items-center justify-center sm:order-5 sm:mt-0">
-              <LinkButton
-                href={getRelativeLocaleUrl(locale, "search")}
-                class:list={[
-                  "focus-outline relative size-11 sm:size-8",
-                  { "text-accent": isActive("/search") },
-                ]}
-                title={t.nav.search}
-                aria-label={t.nav.search}
-              >
-                <IconSearch class="absolute top-1/2 left-1/2 size-6 -translate-x-1/2 -translate-y-1/2" />
-                <span class="sr-only">{t.nav.search}</span>
-              </LinkButton>
-            </li>
-          )
-        }
-        {
           features.lightAndDarkMode && (
-            <li class="col-span-1 mt-2 flex items-center justify-center sm:order-6 sm:mt-0">
+            <li class="col-span-1 mt-2 hidden items-center justify-center sm:order-6 sm:mt-0 sm:flex">
               <button
                 id="theme-btn"
                 class="focus-outline hover:[&>svg]:stroke-accent relative size-11 p-3 sm:size-8 sm:p-2"
