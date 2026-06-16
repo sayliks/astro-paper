@@ -25,7 +25,7 @@ timezone: Asia/Hong_Kong
 - **支持多处复用**：同一张图片可以在多个平台和项目中共享使用。
 - **提升访问速度**：多数图床提供 CDN 加速，图片加载更快。
 
-对于个人博客和知识库而言，图床本质上是一套“图片存储 + 外链访问”的解决方案，能够让内容管理更加灵活和高效。目前较为流行的方案包括 **Cloudflare R2**、[GitHub](https://github.com?utm_source=chatgpt.com) 仓库图床、Telegram 图床以及各类对象存储服务。
+对于个人博客和知识库而言，图床本质上是一套"图片存储 + 外链访问"的解决方案，能够让内容管理更加灵活和高效。目前较为流行的方案包括 **Cloudflare R2**、[GitHub](https://github.com?utm_source=chatgpt.com) 仓库图床、Telegram 图床以及各类对象存储服务。
 
 ## 为什么需要图床
 
@@ -52,11 +52,11 @@ R2 的关键优势是 **出站流量不收费**，这是它比 AWS S3 或阿里�
 
 ---
 
-# 准备工作
+## 准备工作
 
 - **一个域名**（可选但强烈建议，`r2.dev` 在某些网络下速度一般）
 - **Cloudflare 账号**
-- **PicList 客户端**：https://piclist.cn/
+- **PicList 客户端**：[piclist.cn](https://piclist.cn/)
 
 [![image.webp](https://tg.matsumae.top/file/1781187728381_image.webp "PicList官网")](https://piclist.cn/)
 
@@ -147,9 +147,7 @@ R2 → Manage API Tokens → Create API token。
 
 ## 五、安装并配置 PicList
 
-下载安装 PicList：
-https://piclist.cn/
-（选对应系统版本）
+下载安装 PicList：[piclist.cn](https://piclist.cn/)（选对应系统版本）
 PicList 原生支持 S3
 
 ## 配置 R2 连接
@@ -203,7 +201,7 @@ PicList 原生支持 S3
 推荐插件：**Image Auto Upload**。
 
 1. Obsidian 社区插件搜索安装
-2. 插件设置 → Uploader 选 \*\*PicGo(app)\*\*（PicList 兼容这个接口）
+2. 插件设置 → Uploader 选 **PicGo(app)**（PicList 兼容这个接口）
 3. PicList 里开启 Server：设置 → 设置 Server → 打开开关，端口默认 36677
 
 之后在 Obsidian 里 `Ctrl + V` 粘贴图片，会自动上传并替换成 Markdown 链接。
