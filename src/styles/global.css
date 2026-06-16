@@ -31,6 +31,15 @@
     padding-right: env(safe-area-inset-right);
   }
 
+  /* Grid background pattern */
+  body {
+    background-image:
+      linear-gradient(var(--color-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center center;
+  }
+
   /* Prevent pull-to-refresh on mobile */
   body {
     overscroll-behavior-y: contain;
@@ -162,13 +171,7 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
 @media (min-width: 40em) {
   .card-grid {
     gap: 1rem;
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 64em) {
-  .card-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
 }
 
