@@ -6,7 +6,7 @@ description: "个人介绍。"
 <!-- markdownlint-disable-next-line MD033 -->
 <img src="https://tg.matsumae.top/file/1781602026516_about-banner.gif" alt="about-banner.gif" style="width:50%;max-width:50%" referrerpolicy="no-referrer" />
 
-很感谢你能浏览或是发现这一板块。
+很感谢你能发现这一板块。
 
 这只是一个简单的作者信息。
 
