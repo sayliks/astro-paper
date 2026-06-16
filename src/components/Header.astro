@@ -2,11 +2,9 @@
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
-import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconDeviceDesktop from "@/assets/icons/IconDeviceDesktop.svg";
 import IconX from "@/assets/icons/IconX.svg";
-import LinkButton from "./LinkButton.astro";
 import { stripBase, stripLocale } from "@/utils/withBase";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
@@ -113,19 +111,16 @@ const isActive = (path: string) => {
         </li>
         {
           features.search !== false && (
-            <li class="col-span-1 mt-2 flex items-center justify-center sm:order-5 sm:mt-0">
-              <LinkButton
+            <li class="col-span-2 sm:order-5">
+              <a
                 href={getRelativeLocaleUrl(locale, "search")}
                 class:list={[
-                  "focus-outline relative size-11 sm:size-8",
-                  { "text-accent": isActive("/search") },
+                  "relative",
+                  { "text-accent font-bold": isActive("/search") },
                 ]}
-                title={t.nav.search}
-                aria-label={t.nav.search}
               >
-                <IconSearch class="absolute top-1/2 left-1/2 size-6 -translate-x-1/2 -translate-y-1/2" />
-                <span class="sr-only">{t.nav.search}</span>
-              </LinkButton>
+                {t.nav.search}
+              </a>
             </li>
           )
         }
