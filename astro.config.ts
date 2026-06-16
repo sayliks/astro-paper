@@ -98,6 +98,15 @@ export default defineConfig({
       styles: ["normal"],
       formats: ["woff2"],
     },
+    {
+      name: "Pacifico",
+      cssVariable: "--font-pacifico",
+      provider: fontProviders.google(),
+      fallbacks: ["cursive"],
+      weights: [400],
+      styles: ["normal"],
+      formats: ["woff2"],
+    },
   ],
   env: {
     schema: {

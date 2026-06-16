@@ -1,7 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
-import IconArchive from "@/assets/icons/IconArchive.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
@@ -50,8 +49,8 @@ const isActive = (path: string) => {
   >
     <a
       href={getRelativeLocaleUrl(locale, "")}
-      class="absolute py-1 font-serif text-xl leading-8 font-bold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
-      style="font-family: 'CMU Serif', 'Latin Modern Roman', 'Computer Modern Serif', Georgia, 'Times New Roman', serif; letter-spacing: 0.05em;"
+      class="absolute py-1 text-xl leading-8 whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
+      style="font-family: var(--font-pacifico), cursive; letter-spacing: 0.02em;"
     >
       {site.title}
     </a>
