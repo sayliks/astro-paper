@@ -132,7 +132,7 @@ const isActive = (path: string) => {
               <LinkButton
                 href={getRelativeLocaleUrl(locale, "search")}
                 class:list={[
-                  "focus-outline relative size-8",
+                  "focus-outline relative size-11 sm:size-8",
                   { "text-accent": isActive("/search") },
                 ]}
                 title={t.nav.search}
@@ -149,7 +149,7 @@ const isActive = (path: string) => {
             <li class="col-span-1 flex items-center justify-center sm:order-6">
               <button
                 id="theme-btn"
-                class="focus-outline hover:[&>svg]:stroke-accent relative size-12 p-4 sm:size-8"
+                class="focus-outline hover:[&>svg]:stroke-accent relative size-11 p-3 sm:size-8 sm:p-2"
                 title={t.a11y.toggleTheme}
                 aria-label={t.a11y.toggleTheme}
                 aria-live="polite"

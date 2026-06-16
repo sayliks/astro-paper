@@ -41,7 +41,7 @@ function attachCopyButtons(): void {
     const computedStyle = getComputedStyle(codeBlock);
     const hasFileNameOffset =
       computedStyle.getPropertyValue("--file-name-offset").trim() !== "";
-    const topClass = hasFileNameOffset ? "top-(--file-name-offset)" : "-top-3";
+    const topClass = hasFileNameOffset ? "top-(--file-name-offset)" : "top-3";
 
     const copyButton = document.createElement("button");
     copyButton.className = `copy-code absolute end-3 ${topClass} rounded border border-muted bg-muted px-2 py-1 text-xs leading-4 font-medium text-foreground`;
