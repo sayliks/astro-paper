@@ -3,6 +3,8 @@ title: "Hello 👋"
 description: "个人介绍。"
 ---
 
+<img src="/assets/about-banner.gif" alt="about banner" width="64" height="64" />
+
 很感谢你能浏览或是发现这一板块。
 
 这只是一个简单的作者信息。
