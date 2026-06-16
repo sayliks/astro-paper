@@ -212,10 +212,10 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
   }
 }
 
-/* Limit description to 3 lines for uniform card heights */
+/* Limit description to 2 lines for uniform card heights */
 .card-grid-body > p {
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
