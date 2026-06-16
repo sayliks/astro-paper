@@ -5,7 +5,7 @@ import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconDeviceDesktop from "@/assets/icons/IconDeviceDesktop.svg";
 import IconX from "@/assets/icons/IconX.svg";
-import { stripBase, stripLocale } from "@/utils/withBase";
+import { getAssetPath, stripBase, stripLocale } from "@/utils/withBase";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
@@ -47,10 +47,15 @@ const isActive = (path: string) => {
   >
     <a
       href={getRelativeLocaleUrl(locale, "")}
-      class="absolute py-1 text-xl leading-8 whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
-      style="font-family: var(--font-app); letter-spacing: 0.02em;"
+      class="absolute flex items-center py-1 sm:static sm:my-auto"
     >
-      {site.title}
+      <img
+        src={getAssetPath("logo-title.webp")}
+        alt={site.title}
+        class="h-8 w-8 sm:h-10 sm:w-10"
+        loading="eager"
+        decoding="sync"
+      />
     </a>
     <nav
       id="nav-menu"
