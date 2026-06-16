@@ -181,8 +181,7 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
 }
 
 .card-grid-item {
-  display: flex;
-  height: 100%;
+  display: grid;
 }
 
 .card-grid-card {
@@ -192,7 +191,6 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 100%;
   transition: box-shadow 0.2s ease;
 }
 
