@@ -9,15 +9,51 @@
     @apply border-border outline-accent/75;
     scrollbar-width: auto;
     scrollbar-color: var(--color-muted) transparent;
+    -webkit-tap-highlight-color: transparent;
   }
   a,
   button {
     @apply outline-accent outline-offset-1 focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-dashed;
     touch-action: manipulation;
+    min-height: 44px;
+    min-width: 44px;
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
+  }
+
+  /* Safe area insets for notched devices */
+  html {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* Prevent pull-to-refresh on mobile */
+  body {
+    overscroll-behavior-y: contain;
+  }
+
+  /* Optimize scroll performance */
+  .card-grid,
+  .card-grid-item,
+  .card-grid-card {
+    will-change: transform;
+  }
+
+  /* Improve touch feedback on mobile */
+  @media (hover: none) and (pointer: coarse) {
+    a:active,
+    button:active,
+    [role="button"]:active {
+      opacity: 0.8;
+      transform: scale(0.98);
+      transition:
+        transform 0.1s ease,
+        opacity 0.1s ease;
+    }
   }
 }
 
@@ -212,12 +248,26 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
   transform: translateY(12px);
   animation: fadeInUp 0.4s ease-out forwards paused;
   animation-delay: calc(var(--i, 0) * 60ms);
+  will-change: opacity, transform;
 }
 
 .reveal-section {
   opacity: 0;
   transform: translateY(20px);
   animation: revealSection 0.5s ease-out forwards paused;
+  will-change: opacity, transform;
+}
+
+/* Optimize animations for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .fade-in-up {
+    animation-duration: 0.3s;
+    animation-delay: calc(var(--i, 0) * 40ms);
+  }
+
+  .reveal-section {
+    animation-duration: 0.35s;
+  }
 }
 
 @keyframes fadeInUp {
@@ -238,8 +288,19 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
 .img-fade {
   opacity: 0;
   transition: opacity 0.3s ease;
+  content-visibility: auto;
+  contain-intrinsic-size: 300px 200px;
 }
 
 .img-fade.loaded {
   opacity: 1;
+}
+
+/* Optimize image rendering for mobile */
+@media (max-width: 768px) {
+  img {
+    image-rendering: auto;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
 }

@@ -26,7 +26,7 @@ const t = useTranslations(locale);
     prevPost && (
       <a
         href={getPostUrl(prevPost.id, prevPost.filePath, locale)}
-        class="flex w-full gap-1 hover:opacity-75"
+        class="flex min-h-11 w-full gap-1 p-3 hover:opacity-75"
       >
         <IconArrowLeft class="inline-block flex-none rtl:rotate-180" />
         <div>
