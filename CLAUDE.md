@@ -8,7 +8,9 @@ This is **sayliks corner** — a personal blog built on AstroPaper, maintained a
 
 ```bash
 pnpm dev            # dev server at localhost:5173 (shows drafts + scheduled posts/moments)
-pnpm build          # astro check (typecheck) + astro build + pagefind index into dist/pagefind/
+pnpm build          # astro build + pagefind index into dist/pagefind/ (no typecheck)
+pnpm build:full     # astro check + astro build + pagefind (full pipeline with typecheck)
+pnpm check          # astro check (typecheck only)
 pnpm preview        # preview the production build
 pnpm lint           # eslint .
 pnpm format         # prettier --write .   (format:check for CI)
@@ -22,7 +24,7 @@ Tests are plain `node:test` + `node:assert/strict` over the pure helper modules 
 node --experimental-strip-types --test tests/moments.test.ts
 ```
 
-CI runs tests before `pnpm build`. "Type checking" means `astro check` (run via `pnpm build`, or directly with `pnpm astro check`). Run `pnpm sync` after editing `content.config.ts` so the generated types match. **Logic that needs unit tests lives in framework-free `.ts` helpers** (no `astro:*` imports), and the `.astro` route is a thin consumer — this is what keeps the test suite runnable under bare Node.
+CI runs tests before `pnpm build`. "Type checking" means `astro check` (run via `pnpm check` or `pnpm build:full`). Run `pnpm sync` after editing `content.config.ts` so the generated types match. **Logic that needs unit tests lives in framework-free `.ts` helpers** (no `astro:*` imports), and the `.astro` route is a thin consumer — this is what keeps the test suite runnable under bare Node.
 
 ## Configuration system (three layers — edit only the first)
 
