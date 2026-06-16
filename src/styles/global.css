@@ -166,13 +166,6 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
   height: 100%;
 }
 
-/* Cards with images span 2 columns on larger screens */
-@media (min-width: 40em) {
-  .card-grid-item--large {
-    grid-column: span 2;
-  }
-}
-
 /* Card content determines height naturally */
 .card-grid-card {
   background-color: var(--card);
