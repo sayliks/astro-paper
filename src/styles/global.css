@@ -70,7 +70,7 @@
 
 /* Navigation link font */
 .nav-link-font a {
-  font-family: var(--font-pacifico), cursive;
+  font-family: var(--font-app);
 }
 
 @utility max-w-app {

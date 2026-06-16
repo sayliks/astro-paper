@@ -1,9 +1,4 @@
-import {
-  defineConfig,
-  envField,
-  fontProviders,
-  svgoOptimizer,
-} from "astro/config";
+import { defineConfig, envField, svgoOptimizer } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
@@ -17,7 +12,6 @@ import {
 } from "@shikijs/transformers";
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import { rehypeImageOptimize } from "./src/utils/transformers/rehypeImageOptimize";
-import { OG_FONT_FAMILY, OG_FONT_VARIABLE } from "./src/utils/ogFont";
 import config from "./astro-paper.config";
 
 export default defineConfig({
@@ -70,44 +64,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  fonts: [
-    {
-      name: OG_FONT_FAMILY,
-      cssVariable: "--font-google-sans-code",
-      provider: fontProviders.google(),
-      fallbacks: ["monospace"],
-      weights: [400, 500, 700],
-      styles: ["normal"],
-      formats: ["woff2"],
-    },
-    {
-      name: OG_FONT_FAMILY,
-      cssVariable: OG_FONT_VARIABLE,
-      provider: fontProviders.google(),
-      fallbacks: ["monospace"],
-      weights: [400, 700],
-      styles: ["normal"],
-      formats: ["woff"],
-    },
-    {
-      name: "Noto Serif SC",
-      cssVariable: "--font-noto-serif-sc",
-      provider: fontProviders.google(),
-      fallbacks: ["Georgia", "Noto Serif TC", "Songti SC", "SimSun", "serif"],
-      weights: [400, 500],
-      styles: ["normal"],
-      formats: ["woff2"],
-    },
-    {
-      name: "Pacifico",
-      cssVariable: "--font-pacifico",
-      provider: fontProviders.google(),
-      fallbacks: ["cursive"],
-      weights: [400],
-      styles: ["normal"],
-      formats: ["woff2"],
-    },
-  ],
   env: {
     schema: {
       PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({

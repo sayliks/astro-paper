@@ -82,7 +82,7 @@ R2 的关键优势是 **出站流量不收费**，这是它比 AWS S3 或阿里�
 
 进入 Cloudflare 控制台 → R2 → Create bucket。
 
-命名规则：全小写、用连字符，比如 `blog-img` 或 `frostsalix-assets`。
+命名规则：全小写、用连字符，比如 `blog-img` 或 `frostSAYLIKS-assets`。
 
 区域选 **Auto** 就行。
 

@@ -3,7 +3,7 @@ import { defineAstroPaperConfig } from "./src/types/config";
 export default defineAstroPaperConfig({
   site: {
     url: "https://www.matsumae.top/",
-    title: "SALIX",
+    title: "SAYLIKS",
     description: "一个用来记录学习、项目、阅读、音乐和日常想法的个人空间。",
     author: "sayliks",
     profile: "https://github.com/sayliks",
@@ -22,7 +22,7 @@ export default defineAstroPaperConfig({
   },
   features: {
     lightAndDarkMode: true,
-    dynamicOgImage: true,
+    dynamicOgImage: false,
     showArchives: true,
     showBackButton: true,
     editPost: {

@@ -1,5 +1,4 @@
 ---
-import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
 import { getAssetPath } from "@/utils/withBase";
@@ -14,7 +13,6 @@ type Props = {
   canonicalURL?: string;
   ogType?: "website" | "article";
   clientRouter?: boolean;
-  preloadFont?: boolean;
   speedInsights?: boolean;
 };
 
@@ -27,7 +25,6 @@ const {
   canonicalURL: initCanonicalURL,
   ogType = "website",
   clientRouter = true,
-  preloadFont = true,
   speedInsights = config.features.speedInsights,
 } = Astro.props;
 
@@ -66,29 +63,11 @@ window.speedInsightsBeforeSend = function (event) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="preconnect" href="https://v1.hitokoto.cn" crossorigin />
-    <link rel="icon" type="image/svg+xml" href={getAssetPath("favicon.svg")} />
+    <link rel="icon" type="image/png" href={getAssetPath("favicon-180.png")} sizes="180x180" />
+    <link rel="icon" type="image/x-icon" href={getAssetPath("favicon.ico")} sizes="32x32" />
     <link rel="manifest" href={getAssetPath("site.webmanifest")} />
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
-
-    <!-- Font -->
-    {
-      preloadFont && (
-        <>
-          <Font
-            cssVariable="--font-google-sans-code"
-            preload={[
-              { subset: "latin", weight: 400, style: "normal" },
-              { subset: "latin", weight: 700, style: "normal" },
-            ]}
-          />
-          <Font
-            cssVariable="--font-noto-serif-sc"
-            preload={[{ subset: "chinese-simplified", weight: 400 }]}
-          />
-        </>
-      )
-    }
 
     <!-- Primary meta -->
     <title>{title}</title>
