@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import "dayjs/locale/zh-cn";
+import IconCalendar from "@/assets/icons/IconCalendar.svg";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 import type { MomentEntry } from "@/utils/getSortedMoments";
@@ -31,63 +32,60 @@ const formattedModDatetime = modDatetime?.format("YYYY年M月D日 HH:mm");
 const modDatetimeIso = modDatetime?.toISOString();
 ---
 
-<ul
+<div
   class:list={[
-    "moment-meta text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-sm",
+    "text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1",
     className,
   ]}
   aria-label={t.moments.metadataLabel}
 >
+  <IconCalendar class="inline-block size-5 min-w-5 scale-90" />
   {
     moment.data.pinned && (
-      <li class="text-accent font-medium">{t.moments.pinned}</li>
+      <span class="text-accent text-sm font-medium">{t.moments.pinned}</span>
     )
   }
   {
     moment.data.draft && (
-      <li class="text-accent font-medium">{t.moments.draft}</li>
+      <span class="text-accent text-sm font-medium">{t.moments.draft}</span>
     )
   }
-  <li>
-    <span class="sr-only">{t.post.publishedAt}: </span>
-    <time datetime={pubDatetime.toISOString()}>{formattedPubDatetime}</time>
-  </li>
+  <time class="text-sm" datetime={pubDatetime.toISOString()}>
+    {formattedPubDatetime}
+  </time>
   {
     isModified && formattedModDatetime && modDatetimeIso && (
-      <li>
-        {t.moments.updatedAt}
-        {": "}
+      <span class="text-sm">
+        {t.moments.updatedAt}:{" "}
         <time datetime={modDatetimeIso}>{formattedModDatetime}</time>
-      </li>
+      </span>
     )
   }
   {
     moment.data.mood && (
-      <li aria-label={`${t.moments.moodLabel}: ${moment.data.mood}`}>
+      <span
+        class="text-sm"
+        aria-label={`${t.moments.moodLabel}: ${moment.data.mood}`}
+      >
         {moment.data.mood}
-      </li>
+      </span>
     )
   }
   {
     moment.data.location && (
-      <li aria-label={`${t.moments.locationLabel}: ${moment.data.location}`}>
+      <span
+        class="text-sm"
+        aria-label={`${t.moments.locationLabel}: ${moment.data.location}`}
+      >
         {moment.data.location}
-      </li>
+      </span>
     )
   }
   {
     commentsHref && (
-      <li>
-        <a class="hover:text-accent focus-outline" href={commentsHref}>
-          {t.moments.comments}
-        </a>
-      </li>
+      <a class="hover:text-accent focus-outline text-sm" href={commentsHref}>
+        {t.moments.comments}
+      </a>
     )
   }
-</ul>
-
-<style>
-  .moment-meta {
-    min-width: 0;
-  }
-</style>
+</div>
