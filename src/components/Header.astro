@@ -1,7 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
-import IconArchive from "@/assets/icons/IconArchive.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
@@ -50,8 +49,8 @@ const isActive = (path: string) => {
   >
     <a
       href={getRelativeLocaleUrl(locale, "")}
-      class="absolute py-1 font-serif text-xl leading-8 font-bold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
-      style="font-family: 'CMU Serif', 'Latin Modern Roman', 'Computer Modern Serif', Georgia, 'Times New Roman', serif; letter-spacing: 0.05em;"
+      class="absolute py-1 text-xl leading-8 whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
+      style="font-family: var(--font-pacifico), cursive; letter-spacing: 0.02em;"
     >
       {site.title}
     </a>
@@ -73,7 +72,7 @@ const isActive = (path: string) => {
       </button>
       <ul
         id="menu-items"
-        class="[&>li>a]:hover:text-accent mt-4 max-h-0 w-56 grid-cols-2 place-content-center gap-2 overflow-hidden opacity-0 transition-all duration-250 ease-in-out sm:mt-0 sm:flex sm:max-h-none sm:w-auto sm:gap-x-2 sm:gap-y-0 sm:opacity-100 md:gap-x-4 sm:[&>li]:h-8 [&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-bold sm:[&>li>a]:px-1.5 sm:[&>li>a]:py-1 md:[&>li>a]:px-2"
+        class="[&>li>a]:hover:text-accent mt-4 grid max-h-0 w-56 grid-cols-2 place-content-center gap-2 overflow-hidden opacity-0 transition-all duration-250 ease-in-out sm:mt-0 sm:flex sm:max-h-none sm:w-auto sm:gap-x-2 sm:gap-y-0 sm:opacity-100 md:gap-x-4 sm:[&>li]:h-8 [&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-bold sm:[&>li>a]:px-1.5 sm:[&>li>a]:py-1 md:[&>li>a]:px-2"
       >
         <li class="col-span-2 sm:order-1">
           <a
@@ -86,32 +85,18 @@ const isActive = (path: string) => {
             {t.nav.posts}
           </a>
         </li>
-        <li class="col-span-2 sm:order-2">
-          <a
-            href={getRelativeLocaleUrl(locale, "moments")}
-            class:list={[
-              "relative",
-              { "text-accent font-bold": isActive("/moments") },
-            ]}
-          >
-            {t.nav.moments}
-          </a>
-        </li>
         {
           features.showArchives && (
-            <li class="col-span-2 sm:order-4">
-              <LinkButton
+            <li class="col-span-2 sm:order-2">
+              <a
                 href={getRelativeLocaleUrl(locale, "archives")}
                 class:list={[
-                  "focus-outline flex size-full justify-center p-3 sm:relative sm:size-8 sm:p-0",
-                  { "text-accent": isActive("/archives") },
+                  "relative",
+                  { "text-accent font-bold": isActive("/archives") },
                 ]}
-                title={t.nav.archives}
-                aria-label={t.nav.archives}
               >
-                <IconArchive class="hidden sm:absolute sm:top-1/2 sm:left-1/2 sm:block sm:size-6 sm:-translate-x-1/2 sm:-translate-y-1/2" />
-                <span class="sm:sr-only">{t.nav.archives}</span>
-              </LinkButton>
+                {t.nav.archives}
+              </a>
             </li>
           )
         }
@@ -128,7 +113,7 @@ const isActive = (path: string) => {
         </li>
         {
           features.search !== false && (
-            <li class="col-span-1 flex items-center justify-center sm:order-5">
+            <li class="col-span-1 mt-2 flex items-center justify-center sm:order-5 sm:mt-0">
               <LinkButton
                 href={getRelativeLocaleUrl(locale, "search")}
                 class:list={[
@@ -146,7 +131,7 @@ const isActive = (path: string) => {
         }
         {
           features.lightAndDarkMode && (
-            <li class="col-span-1 flex items-center justify-center sm:order-6">
+            <li class="col-span-1 mt-2 flex items-center justify-center sm:order-6 sm:mt-0">
               <button
                 id="theme-btn"
                 class="focus-outline hover:[&>svg]:stroke-accent relative size-11 p-3 sm:size-8 sm:p-2"

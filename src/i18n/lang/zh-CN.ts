@@ -3,7 +3,7 @@ import type { UIStrings } from "../types";
 export default {
   nav: {
     home: "首页",
-    posts: "文章",
+    posts: "随笔",
     tags: "标签",
     moments: "动态",
     photoWall: "照片墙",
@@ -14,9 +14,9 @@ export default {
   post: {
     publishedAt: "发布于",
     updatedAt: "更新于",
-    sharePostIntro: "分享这篇文章：",
+    sharePostIntro: "分享这篇随笔：",
     sharePostOn: "分享到 {{platform}}",
-    sharePostViaEmail: "通过邮件分享这篇文章",
+    sharePostViaEmail: "通过邮件分享这篇随笔",
     tagLabel: "标签",
     backToTop: "回到顶部",
     goBack: "返回",
@@ -55,10 +55,10 @@ export default {
   },
   pages: {
     tagTitle: "标签",
-    tagDesc: "包含该标签的所有文章",
+    tagDesc: "包含该标签的所有随笔",
 
     tagsTitle: "标签",
-    tagsDesc: "文章中使用过的所有标签。",
+    tagsDesc: "随笔中使用过的所有标签。",
 
     photoWallTitle: "照片墙",
     photoWallDesc: "一些被留下来的画面。",
@@ -66,11 +66,11 @@ export default {
     momentsTitle: "动态",
     momentsDesc: "",
 
-    postsTitle: "文章",
+    postsTitle: "随笔",
     postsDesc: "",
 
     archivesTitle: "归档",
-    archivesDesc: "按时间整理的所有文章。",
+    archivesDesc: "按时间整理的所有随笔。",
 
     searchTitle: "搜索",
     searchDesc: "搜索站内",
@@ -84,7 +84,7 @@ export default {
     themeSystem: "跟随系统",
     themeLight: "浅色",
     themeDark: "深色",
-    searchPlaceholder: "搜索文章……",
+    searchPlaceholder: "搜索随笔……",
     noResults: "没有找到结果",
     goToPreviousPage: "前往上一页",
     goToNextPage: "前往下一页",
