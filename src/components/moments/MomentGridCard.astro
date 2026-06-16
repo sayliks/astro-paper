@@ -29,7 +29,7 @@ const imageSrc = firstImage
 ---
 
 <li
-  class="card-grid-item fade-in-up"
+  class:list={["card-grid-item fade-in-up", { "card-grid-item--large": firstImage }]}
   style={staggerIndex !== undefined ? `--i: ${staggerIndex}` : undefined}
 >
   <article class="card-grid-card">
