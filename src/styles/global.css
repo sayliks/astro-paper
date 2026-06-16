@@ -59,6 +59,11 @@
   }
 }
 
+/* Navigation link font */
+.nav-link-font a {
+  font-family: var(--font-pacifico), cursive;
+}
+
 @utility max-w-app {
   @apply max-w-5xl;
 }
