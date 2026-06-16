@@ -5,15 +5,26 @@ import Header from "@/components/Header.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Main from "@/components/Main.astro";
 import Card from "@/components/Card.astro";
+import MomentGridCard from "@/components/moments/MomentGridCard.astro";
 import Footer from "@/components/Footer.astro";
 import Pagination from "@/components/Pagination.astro";
-import { getPublishedSortedPosts } from "@/utils/contentQueries";
+import {
+  getPublishedSortedPosts,
+  getPublishedSortedMoments,
+} from "@/utils/contentQueries";
+import { getRecentFeedItems } from "@/utils/recentFeed";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getPublishedSortedPosts();
-  return paginate(posts, { pageSize: config.posts.perPage });
+  const moments = await getPublishedSortedMoments();
+  const feedItems = getRecentFeedItems({
+    posts,
+    moments,
+    limit: 1000,
+  });
+  return paginate(feedItems, { pageSize: config.posts.perPage });
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
@@ -29,7 +40,13 @@ const t = useTranslations(locale);
 
   <Main pageTitle={t.pages.postsTitle} pageDesc={t.pages.postsDesc}>
     <ul class="card-grid">
-      {page.data.map((data, index) => <Card staggerIndex={index} {...data} />)}
+      {page.data.map((item, index) =>
+        item.type === "post" ? (
+          <Card staggerIndex={index} {...item.post} />
+        ) : (
+          <MomentGridCard moment={item.moment} staggerIndex={index} />
+        )
+      )}
     </ul>
   </Main>
 

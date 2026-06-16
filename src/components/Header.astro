@@ -86,17 +86,6 @@ const isActive = (path: string) => {
             {t.nav.posts}
           </a>
         </li>
-        <li class="col-span-2 sm:order-2">
-          <a
-            href={getRelativeLocaleUrl(locale, "moments")}
-            class:list={[
-              "relative",
-              { "text-accent font-bold": isActive("/moments") },
-            ]}
-          >
-            {t.nav.moments}
-          </a>
-        </li>
         {
           features.showArchives && (
             <li class="col-span-2 sm:order-4">
