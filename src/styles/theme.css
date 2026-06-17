@@ -8,10 +8,12 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --color-giscus-surface: var(--giscus-surface);
-  --font-app: "Noto Sans SC", -apple-system, "PingFang SC", "Microsoft YaHei",
-    "Segoe UI", system-ui, sans-serif;
-  --font-serif: "Noto Sans SC", -apple-system, "PingFang SC", "Microsoft YaHei",
-    Georgia, "Noto Serif TC", "Songti SC", "SimSun", serif;
+  --font-app:
+    "Noto Sans SC", -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI",
+    system-ui, sans-serif;
+  --font-serif:
+    "Noto Sans SC", -apple-system, "PingFang SC", "Microsoft YaHei", Georgia,
+    "Noto Serif TC", "Songti SC", "SimSun", serif;
 }
 
 /* Light theme values */

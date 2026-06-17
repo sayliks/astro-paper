@@ -1,14 +1,8 @@
 ---
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-import "dayjs/locale/zh-cn";
+import dayjs from "@/utils/dateFormat";
 import IconCalendar from "@/assets/icons/IconCalendar.svg";
 import config from "@/config";
 import { useTranslations } from "@/i18n";
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 type Props = {
   class?: string;

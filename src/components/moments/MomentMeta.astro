@@ -1,15 +1,9 @@
 ---
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-import "dayjs/locale/zh-cn";
+import dayjs from "@/utils/dateFormat";
 import IconCalendar from "@/assets/icons/IconCalendar.svg";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 import type { MomentEntry } from "@/utils/getSortedMoments";
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 type Props = {
   moment: MomentEntry;
@@ -83,7 +77,7 @@ const modDatetimeIso = modDatetime?.toISOString();
   }
   {
     commentsHref && (
-      <a class="hover:text-accent focus-outline text-sm" href={commentsHref}>
+      <a class="hover:text-accent text-sm" href={commentsHref}>
         {t.moments.comments}
       </a>
     )

@@ -10,6 +10,12 @@ function setupReveal(): void {
   const elements = document.querySelectorAll<HTMLElement>(REVEAL_SELECTOR);
   if (elements.length === 0) return;
 
+  // Pause all reveal animations initially so they can be triggered on scroll.
+  // CSS defaults to "running" as a JS-fail fallback; JS takes over here.
+  for (const el of elements) {
+    el.style.animationPlayState = "paused";
+  }
+
   const observer = new IntersectionObserver(
     entries => {
       for (const entry of entries) {

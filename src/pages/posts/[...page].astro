@@ -12,18 +12,30 @@ import {
   getPublishedSortedPosts,
   getPublishedSortedMoments,
 } from "@/utils/contentQueries";
-import { getRecentFeedItems } from "@/utils/recentFeed";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getPublishedSortedPosts();
   const moments = await getPublishedSortedMoments();
-  const feedItems = getRecentFeedItems({
-    posts,
-    moments,
-    limit: 1000,
-  });
+
+  const getSortTime = (entry: {
+    data: { modDatetime?: Date | string | null; pubDatetime: Date | string };
+  }) => new Date(entry.data.modDatetime ?? entry.data.pubDatetime).getTime();
+
+  const feedItems = [
+    ...posts.map(post => ({
+      type: "post" as const,
+      sortTime: getSortTime(post),
+      post,
+    })),
+    ...moments.map(moment => ({
+      type: "moment" as const,
+      sortTime: getSortTime(moment),
+      moment,
+    })),
+  ].sort((a, b) => b.sortTime - a.sortTime);
+
   return paginate(feedItems, { pageSize: config.posts.perPage });
 }) satisfies GetStaticPaths;
 
@@ -40,13 +52,15 @@ const t = useTranslations(locale);
 
   <Main pageTitle={t.pages.postsTitle} pageDesc={t.pages.postsDesc}>
     <ul class="card-grid">
-      {page.data.map((item, index) =>
-        item.type === "post" ? (
-          <Card staggerIndex={index} {...item.post} />
-        ) : (
-          <MomentGridCard moment={item.moment} staggerIndex={index} />
+      {
+        page.data.map((item, index) =>
+          item.type === "post" ? (
+            <Card staggerIndex={index} {...item.post} />
+          ) : (
+            <MomentGridCard moment={item.moment} staggerIndex={index} />
+          )
         )
-      )}
+      }
     </ul>
   </Main>
 
