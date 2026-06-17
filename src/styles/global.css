@@ -25,10 +25,10 @@
 
   /* Safe area insets for notched devices */
   html {
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
   }
 
   /* Grid background pattern */
@@ -246,14 +246,13 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
 }
 
 /* ===== Scroll-triggered reveal animations ===== */
-/* animation-play-state: paused by default — the IntersectionObserver in
-   reveal.ts sets it to "running" when the element enters the viewport.
-   Without this, above-the-fold elements complete their animation before
-   JS has a chance to pause them, breaking the stagger effect. */
+/* animation-play-state: running by default so animations still play when JS
+   fails or is disabled. The IntersectionObserver in reveal.ts pauses them
+   on load and re-enables them when the element enters the viewport. */
 .fade-in-up {
   opacity: 0;
   transform: translateY(12px);
-  animation: fadeInUp 0.4s ease-out forwards paused;
+  animation: fadeInUp 0.4s ease-out forwards running;
   animation-delay: calc(var(--i, 0) * 60ms);
   will-change: opacity, transform;
 }
@@ -261,8 +260,17 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
 .reveal-section {
   opacity: 0;
   transform: translateY(20px);
-  animation: revealSection 0.5s ease-out forwards paused;
+  animation: revealSection 0.5s ease-out forwards running;
   will-change: opacity, transform;
+}
+
+/* When scripting is unavailable, skip animations entirely and show content */
+@media (scripting: none) {
+  .fade-in-up,
+  .reveal-section {
+    opacity: 1;
+    animation: none;
+  }
 }
 
 /* Optimize animations for mobile */
