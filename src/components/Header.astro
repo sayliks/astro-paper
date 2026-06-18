@@ -53,8 +53,8 @@ const isActive = (path: string) => {
       >
         {site.title}
       </a>
-      <span class="ms-2 text-lg font-normal tracking-normal opacity-70 sm:text-xl">
-        for <input type="text" placeholder="token" class="inline-block w-16 border-b border-current bg-transparent px-1 text-lg font-normal tracking-normal outline-none sm:text-xl" />
+      <span class="ms-2 text-lg font-normal tracking-normal opacity-70 sm:text-xl" style="font-family: 'KaiTi', 'STKaiti', 'Kaiti SC', serif;">
+        for <input type="text" placeholder="token" id="token-input" class="inline-block w-32 border-b border-current bg-transparent px-1 text-lg font-normal tracking-normal text-center outline-none sm:text-xl" style="font-family: ui-monospace, 'Cascadia Code', Consolas, 'Source Code Pro', monospace;" />
       </span>
     </div>
     <nav
@@ -167,3 +167,19 @@ const isActive = (path: string) => {
     </nav>
   </div>
 </header>
+
+<script>
+  const input = document.getElementById("token-input");
+  if (input) {
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const val = input.value.trim().toLowerCase();
+        if (val === "photo wall" || val === "photo") {
+          window.location.href = "/photo-wall";
+        } else if (val === "about") {
+          window.location.href = "/about";
+        }
+      }
+    });
+  }
+</script>
