@@ -4,7 +4,7 @@ description: "个人介绍。"
 ---
 
 <!-- markdownlint-disable-next-line MD033 -->
-<img src="https://tg.matsumae.top/file/1781602026516_about-banner.gif" alt="about-banner.gif" style="width:50%;max-width:50%" referrerpolicy="no-referrer" />
+<img src="https://tg.matsumae.top/file/1781602026516_about-banner.gif" alt="about-banner.gif" style="width:30%;max-width:30%;float:right;margin-left:1em;margin-bottom:0.5em" referrerpolicy="no-referrer" />
 
 很感谢你能发现这一板块。
 
