@@ -77,9 +77,9 @@ const isActive = (path: string) => {
       </button>
       <ul
         id="menu-items"
-        class="[&>li>a]:hover:text-accent nav-link-font fixed inset-x-0 top-0 z-50 mt-[60px] grid w-full max-h-0 grid-cols-2 place-content-center gap-3 overflow-hidden opacity-0 border-0 bg-background/95 backdrop-blur-xl transition-all duration-250 ease-in-out pb-0 sm:static sm:mt-0 sm:flex sm:max-h-none sm:w-auto sm:border-0 sm:bg-transparent sm:backdrop-blur-none sm:gap-x-2 sm:gap-y-0 sm:opacity-100 md:gap-x-4 sm:[&>li]:h-8 [&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-4 [&>li>a]:text-center [&>li>a]:font-bold sm:[&>li>a]:px-1.5 sm:[&>li>a]:py-1 md:[&>li>a]:px-2"
+        class="[&>li>a]:hover:text-accent nav-link-font fixed inset-x-0 top-0 z-50 mt-[60px] grid w-full max-h-0 grid-cols-1 place-content-start gap-2 overflow-y-auto opacity-0 border-0 bg-background/95 backdrop-blur-xl transition-all duration-250 ease-in-out pb-4 px-4 sm:static sm:mt-0 sm:flex sm:max-h-none sm:w-auto sm:border-0 sm:bg-transparent sm:backdrop-blur-none sm:gap-x-2 sm:gap-y-0 sm:opacity-100 md:gap-x-4 sm:[&>li]:h-8 [&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-bold sm:[&>li>a]:px-1.5 sm:[&>li>a]:py-1 md:[&>li>a]:px-2"
       >
-        <li class="col-span-2 sm:order-1">
+        <li class="sm:order-1">
           <a
             href={getRelativeLocaleUrl(locale, "posts")}
             class:list={[
@@ -92,7 +92,7 @@ const isActive = (path: string) => {
         </li>
         {
           features.showArchives && (
-            <li class="col-span-2 sm:order-2">
+            <li class="sm:order-2">
               <a
                 href={getRelativeLocaleUrl(locale, "archives")}
                 class:list={[
@@ -107,7 +107,7 @@ const isActive = (path: string) => {
         }
         {
           features.search !== false && (
-            <li class="col-span-2 sm:order-3">
+            <li class="sm:order-3">
               <a
                 href={getRelativeLocaleUrl(locale, "search")}
                 class:list={[
@@ -120,7 +120,7 @@ const isActive = (path: string) => {
             </li>
           )
         }
-        <li class="col-span-2 sm:order-4">
+        <li class="sm:order-4">
           <a
             href={getRelativeLocaleUrl(locale, "about")}
             class:list={[
@@ -133,7 +133,7 @@ const isActive = (path: string) => {
         </li>
         {
           features.lightAndDarkMode && (
-            <li class="col-span-1 mt-2 hidden items-center justify-center sm:order-6 sm:mt-0 sm:flex">
+            <li class="mt-2 flex items-center justify-center border-t border-border/50 pt-3 sm:order-6 sm:mt-0 sm:border-0 sm:pt-0">
               <button
                 id="theme-btn"
                 class="hover:[&>svg]:stroke-accent relative size-11 p-3 sm:size-8 sm:p-2"
