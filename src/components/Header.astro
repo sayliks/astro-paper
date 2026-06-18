@@ -60,11 +60,12 @@ const isActive = (path: string) => {
     </div>
     <nav
       id="nav-menu"
-      class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"
+      class="flex items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"
     >
       <button
         id="menu-btn"
-        class="self-end p-2 sm:hidden"
+        class="flex items-center justify-center p-2 sm:hidden"
+        style="min-width:44px;min-height:44px"
         aria-label={t.a11y.openMenu}
         aria-expanded="false"
         aria-controls="menu-items"
