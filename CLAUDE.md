@@ -18,13 +18,13 @@ pnpm sync           # regenerate astro:content / astro:* TS types after schema c
 pnpm test           # node --test on tests/*.test.ts (uses --experimental-strip-types)
 ```
 
-Tests are plain `node:test` + `node:assert/strict` over the pure helper modules in `src/utils/` and `src/scripts/` (moments, photo-wall, publication filter, hitokoto cache). Run a single test file directly:
+Tests are plain `node:test` + `node:assert/strict` over the pure helper modules in `src/utils/` and `src/scripts/` (moments, photo-wall, publication filter, hitokoto cache, OG image frame/font, rehype image optimize, search, recent feed, CMS auth). The test command in `package.json` explicitly lists all 10 test files. Run a single test file directly:
 
 ```bash
 node --experimental-strip-types --test tests/moments.test.ts
 ```
 
-CI runs `pnpm astro check`, `pnpm lint`, `pnpm test`, then `pnpm build`. "Type checking" means `astro check` (run via `pnpm check` or `pnpm build:full`). Run `pnpm sync` after editing `content.config.ts` so the generated types match. **Logic that needs unit tests lives in framework-free `.ts` helpers** (no `astro:*` imports), and the `.astro` route is a thin consumer — this is what keeps the test suite runnable under bare Node.
+CI runs `pnpm astro check`, `pnpm lint`, `pnpm test`, then `pnpm build`. "Type checking" means `astro check` (run via `pnpm check` or `pnpm build:full`; note that `pnpm build` alone does **not** typecheck). Run `pnpm sync` after editing `content.config.ts` so the generated types match. **Logic that needs unit tests lives in framework-free `.ts` helpers** (no `astro:*` imports), and the `.astro` route is a thin consumer — this is what keeps the test suite runnable under bare Node.
 
 ## Configuration system (three layers — edit only the first)
 
