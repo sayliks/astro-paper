@@ -45,13 +45,18 @@ const isActive = (path: string) => {
   <div
     class="border-border bg-background relative flex w-full items-baseline justify-between border-b py-4 sm:items-center sm:py-6"
   >
-    <a
-      href={getRelativeLocaleUrl(locale, "")}
-      class="absolute py-1 text-xl leading-8 whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
-      style="font-family: var(--font-app); letter-spacing: 0.02em;"
-    >
-      {site.title}
-    </a>
+    <div class="flex flex-nowrap items-baseline gap-0 whitespace-nowrap">
+      <a
+        href={getRelativeLocaleUrl(locale, "")}
+        class="py-1 text-xl leading-8 whitespace-nowrap sm:text-2xl sm:leading-none"
+        style="font-family: var(--font-app); letter-spacing: 0.02em;"
+      >
+        {site.title}
+      </a>
+      <span class="ms-2 text-lg font-normal tracking-normal opacity-70 sm:text-xl">
+        for <input type="text" placeholder="token" class="inline-block w-16 border-b border-current bg-transparent px-1 text-lg font-normal tracking-normal outline-none sm:text-xl" />
+      </span>
+    </div>
     <nav
       id="nav-menu"
       class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"
