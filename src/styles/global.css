@@ -185,23 +185,32 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
 }
 
 .card-grid-card {
-  background-color: var(--card);
-  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 0.5rem;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .card-grid-card:hover {
-  box-shadow: 0 4px 12px rgb(0 0 0 / 0.08);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
-/* :active scale handled by generic rule above (lines 46-56) */
+[data-theme="light"] .card-grid-card {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
 
-[data-theme="dark"] .card-grid-card:hover {
-  box-shadow: 0 4px 12px rgb(0 0 0 / 0.3);
+[data-theme="light"] .card-grid-card:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.12);
 }
 
 .card-grid-img-link {
@@ -228,6 +237,78 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
   }
 }
 
+.card-grid-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.card-grid-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="light"] .card-grid-card {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .card-grid-card:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+/* Mobile improvements */
+@media (hover: none) and (pointer: coarse) {
+  .card-grid-card {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+
+  .card-grid-tag {
+    font-size: 0.6875rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  header {
+    min-height: 56px;
+  }
+
+  #menu-btn {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-grid-body p {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .fade-in-up {
+    animation-duration: 0.25s;
+    animation-delay: calc(var(--i, 0) * 20ms);
+  }
+
+  .reveal-section {
+    animation-duration: 0.3s;
+  }
+
+  h2 {
+    font-size: 1.125rem;
+  }
+}
+
 .card-grid-tags {
   display: flex;
   flex-wrap: wrap;
@@ -240,9 +321,15 @@ html[data-theme-mode="dark"] [data-theme-icon="dark"] {
   line-height: 1;
   padding: 0.25rem 0.5rem;
   border-radius: 9999px;
-  background-color: var(--color-muted);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--color-foreground);
   opacity: 0.8;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="light"] .card-grid-tag {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.06);
 }
 
 /* ===== Scroll-triggered reveal animations ===== */

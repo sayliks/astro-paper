@@ -29,9 +29,9 @@ function setupHeaderMenu(): void {
 
     if (open) {
       items.classList.remove("max-h-0", "opacity-0");
-      items.classList.add("max-h-80", "opacity-100", "grid");
+      items.classList.add("max-h-96", "opacity-100", "grid");
     } else {
-      items.classList.remove("max-h-80", "opacity-100", "grid");
+      items.classList.remove("max-h-96", "opacity-100", "grid");
       items.classList.add("max-h-0", "opacity-0");
     }
     iconMenu.classList.toggle("hidden", open);
