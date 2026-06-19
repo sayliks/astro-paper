@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
 import { getAssetPath } from "@/utils/withBase";
 import SpeedInsights from "@vercel/speed-insights/astro";
+import Analytics from "@vercel/analytics/astro";
 import config from "@/config";
 import "@/styles/global.css";
 
@@ -114,6 +115,9 @@ window.speedInsightsBeforeSend = function (event) {
 
     <!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->
     <slot name="head" />
+
+    <!-- Vercel Web Analytics -->
+    <Analytics />
 
     {
       site.googleVerification && (
