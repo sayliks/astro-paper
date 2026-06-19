@@ -154,19 +154,6 @@ PicList 原生支持 S3
 
 进入 PicList → 图床设置 → Amazon S3（或类似的 S3 选项）。
 
-填下面这些：
-
-| 字段 | 值 |
-| --- | --- |
-| AccessKeyID | 上一步生成的 Access Key ID |
-| SecretAccessKey | 上一步的 Secret Key |
-| BucketName | `blog-img`（你的 bucket 名） |
-| FilePath | 可选，比如 `images/`（虚拟目录，不填则直接放根目录） |
-| CustomUrl | `https://img.yourdomain.com`（你的自定义域名，不要加尾部斜杠） |
-| Endpoint | `https://<account_id>.r2.cloudflarestorage.com` |
-| Region | 留空或填 `auto`（R2 会忽略） |
-| ACL | `public-read`（关键） |
-
 ![image.webp](https://tg.matsumae.top/file/1781188665581_image.webp)
 
 ![image.webp](https://tg.matsumae.top/file/1781188671230_image.webp)
