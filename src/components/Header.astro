@@ -1,6 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
+import IconStar from "@/assets/icons/IconStar.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconDeviceDesktop from "@/assets/icons/IconDeviceDesktop.svg";
@@ -46,10 +47,11 @@ const isActive = (path: string) => {
   >
     <a
       href={getRelativeLocaleUrl(locale, "")}
-      class="py-1 text-xl leading-8 whitespace-nowrap sm:text-2xl sm:leading-none"
-      style="font-family: var(--font-app); letter-spacing: 0.02em;"
+      class="text-foreground hover:text-accent flex size-10 items-center justify-center rounded-full transition-colors"
+      aria-label={site.title}
+      title={site.title}
     >
-      {site.title}
+      <IconStar class="size-6" aria-hidden="true" />
     </a>
 
     <!-- Desktop nav: inline links -->
