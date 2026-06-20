@@ -21,7 +21,6 @@ export default defineAstroPaperConfig({
     allowedExternalHosts: ["tg.matsumae.top"],
   },
   features: {
-    lightAndDarkMode: true,
     dynamicOgImage: false,
     showArchives: true,
     showBackButton: true,
