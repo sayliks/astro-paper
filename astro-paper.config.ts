@@ -14,7 +14,7 @@ export default defineAstroPaperConfig({
   },
   posts: {
     perPage: 9,
-    perIndex: 10,
+    perIndex: 12,
     scheduledPostMargin: 15 * 60 * 1000,
   },
   photoWall: {
