@@ -51,13 +51,28 @@ function setupHeaderMenu(): void {
 
     let lastDirectTapAt = 0;
 
+    function handleDirectTap(event: Event): void {
+      const now = window.performance.now();
+
+      if (
+        lastDirectTapAt &&
+        now - lastDirectTapAt < DIRECT_TAP_CLICK_GRACE_MS
+      ) {
+        event.preventDefault();
+        return;
+      }
+
+      lastDirectTapAt = now;
+      event.preventDefault();
+      toggleMenuOpen();
+    }
+
     button.addEventListener("pointerup", event => {
       if (event.pointerType === "mouse") return;
 
-      lastDirectTapAt = window.performance.now();
-      event.preventDefault();
-      toggleMenuOpen();
+      handleDirectTap(event);
     });
+    button.addEventListener("touchend", handleDirectTap);
 
     button.addEventListener("click", () => {
       if (
@@ -80,16 +95,6 @@ function setupHeaderMenu(): void {
     if (link.dataset.menuReady === "true") return;
 
     link.dataset.menuReady = "true";
-
-    link.addEventListener(
-      "pointerup",
-      event => {
-        if (event.pointerType !== "mouse") {
-          setMenuOpen(false);
-        }
-      },
-      { passive: true }
-    );
     link.addEventListener("click", () => setMenuOpen(false));
   });
 }
