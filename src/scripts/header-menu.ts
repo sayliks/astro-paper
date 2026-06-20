@@ -10,32 +10,34 @@ let closeCurrentMenu: (() => void) | undefined;
 
 function setupHeaderMenu(): void {
   const menuBtn = document.querySelector<HTMLButtonElement>("#menu-btn");
-  const menuItems = document.querySelector<HTMLElement>("#menu-items");
-  const menuIcon = document.querySelector<HTMLElement>("#menu-icon");
-  const closeIcon = document.querySelector<HTMLElement>("#close-icon");
+  const overlay = document.querySelector<HTMLElement>("#mobile-menu-overlay");
+  const closeBtn = document.querySelector<HTMLButtonElement>(
+    "#mobile-menu-close"
+  );
 
-  if (!menuBtn || !menuItems || !menuIcon || !closeIcon) return;
+  if (!menuBtn || !overlay) return;
 
   const button = menuBtn;
-  const items = menuItems;
-  const iconMenu = menuIcon;
-  const iconClose = closeIcon;
+  const menuOverlay = overlay;
   const openLabel = button.dataset.labelOpen ?? "Open menu";
-  const closeLabel = button.dataset.labelClose ?? "Close menu";
+  const closeLabel =
+    button.dataset.labelClose ??
+    closeBtn?.getAttribute("aria-label") ??
+    "Close menu";
 
   function setMenuOpen(open: boolean): void {
     button.setAttribute("aria-expanded", String(open));
     button.setAttribute("aria-label", open ? closeLabel : openLabel);
 
     if (open) {
-      items.classList.remove("max-h-0", "opacity-0");
-      items.classList.add("max-h-96", "opacity-100", "grid");
+      menuOverlay.classList.remove("hidden");
+      menuOverlay.classList.add("flex");
+      document.body.style.overflow = "hidden";
     } else {
-      items.classList.remove("max-h-96", "opacity-100", "grid");
-      items.classList.add("max-h-0", "opacity-0");
+      menuOverlay.classList.remove("flex");
+      menuOverlay.classList.add("hidden");
+      document.body.style.overflow = "";
     }
-    iconMenu.classList.toggle("hidden", open);
-    iconClose.classList.toggle("hidden", !open);
   }
 
   function toggleMenuOpen(): void {
@@ -69,7 +71,12 @@ function setupHeaderMenu(): void {
     });
   }
 
-  items.querySelectorAll<HTMLAnchorElement>("a").forEach(link => {
+  if (closeBtn && closeBtn.dataset.menuReady !== "true") {
+    closeBtn.dataset.menuReady = "true";
+    closeBtn.addEventListener("click", () => setMenuOpen(false));
+  }
+
+  menuOverlay.querySelectorAll<HTMLAnchorElement>("a").forEach(link => {
     if (link.dataset.menuReady === "true") return;
 
     link.dataset.menuReady = "true";
@@ -99,19 +106,26 @@ function setupHeaderMenuListeners(): void {
   if (window.__astroPaperHeaderMenuReady) return;
 
   window.__astroPaperHeaderMenuReady = true;
+  document.addEventListener("astro:page-load", setupHeaderMenu);
   document.addEventListener("astro:after-swap", setupHeaderMenu);
+  document.addEventListener("astro:before-swap", () => {
+    closeHeaderMenu();
+    document.body.style.overflow = "";
+  });
   document.addEventListener("keydown", event => {
     if (event.key === "Escape") {
       closeHeaderMenu();
     }
   });
   const closeWhenOutside = (eventTarget: EventTarget | null) => {
-    const navMenu = document.querySelector("#nav-menu");
+    const menuBtn = document.querySelector("#menu-btn");
+    const overlay = document.querySelector("#mobile-menu-overlay");
 
     if (
       eventTarget instanceof Node &&
-      navMenu &&
-      !navMenu.contains(eventTarget)
+      overlay &&
+      !overlay.contains(eventTarget) &&
+      !menuBtn?.contains(eventTarget)
     ) {
       closeHeaderMenu();
     }

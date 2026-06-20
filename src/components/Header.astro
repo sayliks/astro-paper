@@ -90,6 +90,8 @@ const isActive = (path: string) => {
       aria-label={t.a11y.openMenu}
       aria-expanded="false"
       aria-controls="mobile-menu-overlay"
+      data-label-open={t.a11y.openMenu}
+      data-label-close={t.a11y.closeMenu}
     >
       <IconMenuDeep id="menu-icon" class="size-6" />
     </button>
@@ -106,31 +108,6 @@ const isActive = (path: string) => {
   {features.search !== false && <a href={getRelativeLocaleUrl(locale, "search")} class="mobile-nav-link text-3xl font-semibold">{t.nav.search}</a>}
   <a href={getRelativeLocaleUrl(locale, "about")} class="mobile-nav-link text-3xl font-semibold">{t.nav.about}</a>
 </div>
-
-<script>
-  const menuBtn = document.getElementById("menu-btn");
-  const overlay = document.getElementById("mobile-menu-overlay");
-  const closeBtn = document.getElementById("mobile-menu-close");
-  const links = overlay?.querySelectorAll("a");
-
-  function open() {
-    overlay?.classList.remove("hidden");
-    overlay?.classList.add("flex");
-    document.body.style.overflow = "hidden";
-    menuBtn?.setAttribute("aria-expanded", "true");
-  }
-  function close() {
-    overlay?.classList.remove("flex");
-    overlay?.classList.add("hidden");
-    document.body.style.overflow = "";
-    menuBtn?.setAttribute("aria-expanded", "false");
-  }
-
-  menuBtn?.addEventListener("click", open);
-  closeBtn?.addEventListener("click", close);
-  links?.forEach(a => a.addEventListener("click", close));
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
-</script>
 
 <style>
   .mobile-nav-link {
