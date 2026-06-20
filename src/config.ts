@@ -30,7 +30,6 @@ const config: ResolvedAstroPaperConfig = {
     allowedExternalHosts: userConfig.photoWall?.allowedExternalHosts ?? [],
   },
   features: {
-    lightAndDarkMode: userConfig.features?.lightAndDarkMode ?? true,
     dynamicOgImage: userConfig.features?.dynamicOgImage ?? true,
     showArchives: userConfig.features?.showArchives ?? true,
     showBackButton: userConfig.features?.showBackButton ?? true,

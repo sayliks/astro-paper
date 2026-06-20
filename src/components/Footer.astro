@@ -6,7 +6,6 @@ import IconX from "@/assets/icons/socials/x.svg";
 import IconDiscord from "@/assets/icons/socials/discord.svg";
 import IconMail from "@/assets/icons/socials/mail.svg";
 import LinkButton from "./LinkButton.astro";
-import config from "@/config";
 import { getAssetPath } from "@/utils/withBase";
 
 type Props = {
@@ -15,8 +14,6 @@ type Props = {
 
 const { noMarginTop = false, class: className, style, ...attrs } = Astro.props;
 
-const currentYear = new Date().getFullYear();
-const { site } = config;
 const rssHref = getAssetPath("rss.xml");
 
 const footerStyle = [style].filter(Boolean).join("; ") || undefined;
@@ -28,9 +25,9 @@ const footerStyle = [style].filter(Boolean).join("; ") || undefined;
   {...attrs}
 >
   <div
-    class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"
+    class="border-border flex items-center justify-center border-t py-6 sm:py-4"
   >
-    <div class="flex flex-wrap items-center gap-1">
+    <div class="flex flex-wrap items-center justify-center gap-1" aria-label="联系方式">
       <LinkButton
         href="https://github.com/sayliks"
         class="p-1.5 hover:rotate-6 sm:p-1"
@@ -87,8 +84,6 @@ const footerStyle = [style].filter(Boolean).join("; ") || undefined;
         />
         <span class="sr-only">订阅 RSS</span>
       </LinkButton>
-    </div>
-    <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row">
     </div>
   </div>
 </footer>

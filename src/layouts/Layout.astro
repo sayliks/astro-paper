@@ -134,15 +134,6 @@ window.speedInsightsBeforeSend = function (event) {
     -->
     <script is:inline>
       (function () {
-        const isResolvedTheme = value => value === "light" || value === "dark";
-        const isThemeMode = value =>
-          isResolvedTheme(value) || value === "system";
-        let stored;
-        try {
-          stored = localStorage.getItem("theme");
-        } catch {
-          stored = null;
-        }
         let prefersDark = false;
         try {
           prefersDark = window.matchMedia(
@@ -151,16 +142,11 @@ window.speedInsightsBeforeSend = function (event) {
         } catch {
           prefersDark = false;
         }
-        const mode = isThemeMode(stored) ? stored : "system";
-        const theme = isResolvedTheme(mode)
-          ? mode
-          : prefersDark
-            ? "dark"
-            : "light";
+        const theme = prefersDark ? "dark" : "light";
         document.firstElementChild?.setAttribute("data-theme", theme);
-        document.firstElementChild?.setAttribute("data-theme-mode", mode);
+        document.firstElementChild?.setAttribute("data-theme-mode", "system");
         // Expose value so theme.ts can skip re-detection.
-        window.__theme = { mode, value: theme };
+        window.__theme = { mode: "system", value: theme };
       })();
     </script>
 

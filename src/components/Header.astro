@@ -2,9 +2,6 @@
 import { getRelativeLocaleUrl } from "astro:i18n";
 import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
 import IconStar from "@/assets/icons/IconStar.svg";
-import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
-import IconMoon from "@/assets/icons/IconMoon.svg";
-import IconDeviceDesktop from "@/assets/icons/IconDeviceDesktop.svg";
 import IconX from "@/assets/icons/IconX.svg";
 import { stripBase, stripLocale } from "@/utils/withBase";
 import { useTranslations } from "@/i18n";
@@ -60,26 +57,6 @@ const isActive = (path: string) => {
       {features.showArchives && <a href={getRelativeLocaleUrl(locale, "archives")} class:list={["py-1 text-base font-bold", { "text-accent": isActive("/archives") }]}>{t.nav.archives}</a>}
       {features.search !== false && <a href={getRelativeLocaleUrl(locale, "search")} class:list={["py-1 text-base font-bold", { "text-accent": isActive("/search") }]}>{t.nav.search}</a>}
       <a href={getRelativeLocaleUrl(locale, "about")} class:list={["py-1 text-base font-bold", { "text-accent": isActive("/about") }]}>{t.nav.about}</a>
-      {
-        features.lightAndDarkMode && (
-          <button
-            id="theme-btn"
-            class="hover:[&>svg]:stroke-accent relative size-8 p-2"
-            title={t.a11y.toggleTheme}
-            aria-label={t.a11y.toggleTheme}
-            aria-live="polite"
-            data-label-toggle={t.a11y.toggleTheme}
-            data-label-current={t.a11y.themeCurrent}
-            data-label-system={t.a11y.themeSystem}
-            data-label-light={t.a11y.themeLight}
-            data-label-dark={t.a11y.themeDark}
-          >
-            <IconDeviceDesktop data-theme-icon="system" class="absolute top-1/2 left-1/2 size-6" aria-hidden="true" />
-            <IconSunHigh data-theme-icon="light" class="absolute top-1/2 left-1/2 size-6" aria-hidden="true" />
-            <IconMoon data-theme-icon="dark" class="absolute top-1/2 left-1/2 size-6" aria-hidden="true" />
-          </button>
-        )
-      }
     </nav>
 
     <!-- Mobile hamburger -->
