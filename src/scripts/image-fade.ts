@@ -17,13 +17,10 @@ function setupImageFade(): void {
       img.classList.add("img-fade", "loaded");
     } else {
       img.classList.add("img-fade");
-      img.addEventListener(
-        "load",
-        () => {
-          img.classList.add("loaded");
-        },
-        { once: true }
-      );
+      const markLoaded = () => img.classList.add("loaded");
+
+      img.addEventListener("load", markLoaded, { once: true });
+      img.addEventListener("error", markLoaded, { once: true });
     }
   }
 }
@@ -33,6 +30,7 @@ setupImageFade();
 if (!window.__astroPaperImageFadeReady) {
   window.__astroPaperImageFadeReady = true;
   document.addEventListener("astro:page-load", setupImageFade);
+  document.addEventListener("astro:after-swap", setupImageFade);
 }
 
 export {};

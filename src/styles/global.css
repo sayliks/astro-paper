@@ -36,15 +36,6 @@
     overscroll-behavior-y: contain;
   }
 
-  /* Optimize scroll performance — only on hover-capable devices */
-  @media (hover: hover) {
-    .card-grid,
-    .card-grid-item,
-    .card-grid-card {
-      will-change: transform;
-    }
-  }
-
   /* Improve touch feedback on mobile */
   @media (hover: none) and (pointer: coarse) {
     a:active,
@@ -163,8 +154,6 @@
 
 .card-grid-card {
   background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 0.5rem;
   overflow: hidden;
@@ -214,42 +203,8 @@
   }
 }
 
-.card-grid-card {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 0.5rem;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.card-grid-card:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
-[data-theme="light"] .card-grid-card {
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-[data-theme="light"] .card-grid-card:hover {
-  background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(0, 0, 0, 0.12);
-}
-
 /* Mobile improvements */
 @media (hover: none) and (pointer: coarse) {
-  .card-grid-card {
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-  }
-
   .card-grid-tag {
     font-size: 0.6875rem;
     padding: 0.2rem 0.4rem;
