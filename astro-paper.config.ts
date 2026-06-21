@@ -29,7 +29,7 @@ export default defineAstroPaperConfig({
       url: "https://github.com/sayliks/astro-paper/edit/main/",
     },
     search: "pagefind",
-    speedInsights: true,
+    speedInsights: false,
   },
   socials: [],
   shareLinks: [

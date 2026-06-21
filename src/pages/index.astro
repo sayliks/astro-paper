@@ -34,6 +34,10 @@ const recentFeedItems = getRecentFeedItems({
 ---
 
 <Layout clientRouter={false}>
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://v1.hitokoto.cn" crossorigin />
+  </Fragment>
+
   <Header />
   <main id="main-content" data-back-url={homePath} class="app-layout">
     <section id="hero" class="reveal-section pt-2 pb-2">
