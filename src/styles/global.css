@@ -31,15 +31,6 @@
     padding-right: env(safe-area-inset-right, 0px);
   }
 
-  /* Grid background pattern */
-  body {
-    background-image:
-      linear-gradient(var(--color-border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
-    background-size: 40px 40px;
-    background-position: center center;
-  }
-
   /* Prevent pull-to-refresh on mobile */
   body {
     overscroll-behavior-y: contain;
