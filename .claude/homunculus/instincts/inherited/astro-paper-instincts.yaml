@@ -1,0 +1,410 @@
+# Instincts generated from https://github.com/sayliks/astro-paper
+# Generated: 2026-06-18T12:50:16.437Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: astro-paper-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: https://github.com/sayliks/astro-paper
+---
+
+# Astro Paper Commit Conventional
+
+## Action
+
+Use conventional commit format with prefixes: feat, fix
+
+## Evidence
+
+- 4 commits analyzed
+- Detected conventional commit pattern
+- Examples: feat: refactor homepage to glassmorphism aesthetic, fix: improve mobile UX with hamburger alignment, card sizing, and reduced blur
+
+---
+id: astro-paper-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/sayliks/astro-paper
+---
+
+# Astro Paper Commit Length
+
+## Action
+
+Write moderate-length commit messages (~61 characters)
+
+## Evidence
+
+- Average commit message length: 61 chars
+- Based on 4 commits
+
+---
+id: astro-paper-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/sayliks/astro-paper
+---
+
+# Astro Paper Naming Files
+
+## Action
+
+Use PascalCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: PascalCase
+
+---
+id: astro-paper-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/sayliks/astro-paper
+---
+
+# Astro Paper Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: astro-paper-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/sayliks/astro-paper
+---
+
+# Astro Paper Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: astro-paper-arch-type-based
+trigger: "when adding new code"
+confidence: 0.8
+domain: architecture
+source: repo-analysis
+source_repo: https://github.com/sayliks/astro-paper
+---
+
+# Astro Paper Arch Type Based
+
+## Action
+
+Place code in the appropriate type folder (components/, services/, utils/, etc.)
+
+## Evidence
+
+- Type-based module organization detected
+- Folders: components, scripts, styles
+
+---
+id: astro-paper-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/sayliks/astro-paper
+---
+
+# Astro Paper Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: astro-paper-workflow-ui-style-update-header-and-global-css
+trigger: "when doing ui style update header and global css"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/sayliks/astro-paper
+---
+
+# Astro Paper Workflow Ui Style Update Header And Global Css
+
+## Action
+
+Follow the ui-style-update-header-and-global-css workflow:
+1. Edit src/components/Header.astro to change header structure, classes, or behavior.
+2. Edit src/styles/global.css to update global CSS variables, classes, or responsive rules.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: src/components/Header.astro, src/styles/global.css
+
+---
+id: astro-paper-workflow-mobile-menu-behavior-update
+trigger: "when doing mobile menu behavior update"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/sayliks/astro-paper
+---
+
+# Astro Paper Workflow Mobile Menu Behavior Update
+
+## Action
+
+Follow the mobile-menu-behavior-update workflow:
+1. Edit src/components/Header.astro to adjust menu markup and classes.
+2. Optionally edit src/scripts/header-menu.ts to update menu logic.
+3. Optionally edit src/styles/global.css for related style tweaks.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: src/components/Header.astro, src/scripts/header-menu.ts, src/styles/global.css
+
+---
+id: astro-paper-instinct-file-naming
+trigger: "When creating a new file in the codebase"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct File Naming
+
+## Action
+
+Name the file using PascalCase (e.g., Header.astro, HeaderMenu.ts)
+
+## Evidence
+
+- Pattern in src/components/Header.astro
+- Pattern in src/scripts/header-menu.ts
+
+---
+id: astro-paper-instinct-function-naming
+trigger: "When defining a new function"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Function Naming
+
+## Action
+
+Use camelCase for function names
+
+## Evidence
+
+- Pattern in src/scripts/header-menu.ts
+
+---
+id: astro-paper-instinct-class-naming
+trigger: "When defining a new class"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Class Naming
+
+## Action
+
+Use PascalCase for class names
+
+## Evidence
+
+- Pattern in src/scripts/header-menu.ts
+
+---
+id: astro-paper-instinct-constant-naming
+trigger: "When declaring a constant"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Constant Naming
+
+## Action
+
+Use SCREAMING_SNAKE_CASE for constant names
+
+## Evidence
+
+- Pattern in src/scripts/header-menu.ts
+
+---
+id: astro-paper-instinct-import-style
+trigger: "When importing modules"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Import Style
+
+## Action
+
+Use relative import paths
+
+## Evidence
+
+- Pattern in src/scripts/header-menu.ts
+- Pattern in src/components/Header.astro
+
+---
+id: astro-paper-instinct-export-style
+trigger: "When exporting functions or components"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Export Style
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in src/scripts/header-menu.ts
+
+---
+id: astro-paper-instinct-test-location
+trigger: "When adding or updating tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Test Location
+
+## Action
+
+Place test files in a separate test directory, not alongside source files
+
+## Evidence
+
+- Pattern in architecture: testLocation is 'separate'
+
+---
+id: astro-paper-instinct-commit-format
+trigger: "When writing a git commit message"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Commit Format
+
+## Action
+
+Use conventional commit format with 'feat' or 'fix' prefix, followed by a colon and a concise description
+
+## Evidence
+
+- Seen in commit: 'feat: refactor homepage to glassmorphism aesthetic'
+- Seen in commit: 'fix: use fixed fullscreen overlay for mobile menu dropdown'
+
+---
+id: astro-paper-instinct-commit-length
+trigger: "When writing a git commit message"
+confidence: 0.8
+domain: git
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Commit Length
+
+## Action
+
+Keep the commit message concise, averaging around 60 characters
+
+## Evidence
+
+- Pattern: average commit length is 61 characters
+
+---
+id: astro-paper-instinct-ui-style-update-header-and-global-css
+trigger: "When someone wants to change the header's appearance or behavior and ensure global styles are consistent"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Ui Style Update Header And Global Css
+
+## Action
+
+Edit src/components/Header.astro to change header structure, classes, or behavior, and edit src/styles/global.css to update global CSS variables, classes, or responsive rules
+
+## Evidence
+
+- Workflow: ui-style-update-header-and-global-css
+- Seen in commit: 'feat: refactor homepage to glassmorphism aesthetic'
+- Files: src/components/Header.astro, src/styles/global.css
+
+---
+id: astro-paper-instinct-mobile-menu-behavior-update
+trigger: "When someone wants to improve or fix the mobile navigation menu's appearance or functionality"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: sayliks/astro-paper
+---
+
+# Astro Paper Instinct Mobile Menu Behavior Update
+
+## Action
+
+Edit src/components/Header.astro to adjust menu markup and classes; optionally edit src/scripts/header-menu.ts to update menu logic; optionally edit src/styles/global.css for related style tweaks
+
+## Evidence
+
+- Workflow: mobile-menu-behavior-update
+- Seen in commit: 'fix: use fixed fullscreen overlay for mobile menu dropdown'
+- Files: src/components/Header.astro, src/scripts/header-menu.ts, src/styles/global.css
+
